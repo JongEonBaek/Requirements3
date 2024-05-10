@@ -11,7 +11,7 @@ public class GameModeLabel1 extends JPanel implements KeyListener {
     private int currentIndex = 0; // 현재 선택된 메뉴 인덱스
     private final String cursorSymbol = "> "; // 현재 선택된 메뉴를 따라갈 커서
     private final String nonSelected = "  "; // 커서가 없는 위치
-    private final String[] labels = {"Classic Mode", "Item Mode", "Back"}; // 게임 모드 메뉴
+    private final String[] labels = {"Classic Mode", "Item Mode", "vs Mode", "Back"}; // 게임 모드 메뉴
     private List<JLabel> menuItems;
     private JLabel mainLabel;
     private JLabel keyMessage;
@@ -113,7 +113,12 @@ public class GameModeLabel1 extends JPanel implements KeyListener {
                 switchToScreen(Main.itemMode1);
                 // Item Mode에 대한 동작 추가
                 break;
-            case 2: // Back
+            case 2:
+                System.out.println("VS Mode Selected");
+                switchToScreen(Main.vsModeMenu);
+                // VS 모드를 선택했을 때 vs모드 메뉴로 이동
+                break;
+            case 3: // Back
                 System.out.println("Back to Main");
                 switchToScreen(Main.mainMenu1);
                 break;
