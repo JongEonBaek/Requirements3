@@ -29,6 +29,11 @@ public class Main {
     public static Board gamePanel;
     public static Board2 gamePanel2;
     public static Board3 gamePanel3;
+
+    public static vsBoard1 vsGamePanel;
+    public static vsBoard2 vsGamePanel2;
+    public static vsBoard3 vsGamePanel3;
+
     public static KeyControl1 keyControl1;
     public static ClassicScoreBoard1 classicScoreBoard1;
     public static ItemScoreBoard1 itemScoreBoard1;
@@ -121,6 +126,19 @@ public class Main {
         gamePanel3.setVisible(true);
         gamePanel3.setName("game3");
 
+        vsGamePanel = new vsBoard1();
+        vsGamePanel.setSize(SCREEN_WIDTH[1], SCREEN_HEIGHT[1]);
+        vsGamePanel.setVisible(true);
+        vsGamePanel.setName("vsgame");
+        vsGamePanel2 = new vsBoard2();
+        vsGamePanel2.setSize(SCREEN_WIDTH[2], SCREEN_HEIGHT[2]);
+        vsGamePanel2.setVisible(true);
+        vsGamePanel2.setName("vsgame2");
+        vsGamePanel3 = new vsBoard3();
+        vsGamePanel3.setSize(SCREEN_WIDTH[3], SCREEN_HEIGHT[3]);
+        vsGamePanel3.setVisible(true);
+        vsGamePanel3.setName("vsgame3");
+
 
         keyControl1 = new KeyControl1();
         keyControl1.setName("Control1");
@@ -155,6 +173,10 @@ public class Main {
         mainPanel.add(gamePanel, "game");
         mainPanel.add(gamePanel2, "game2");
         mainPanel.add(gamePanel3, "game3");
+
+        mainPanel.add(vsGamePanel, "vsgame");
+        mainPanel.add(vsGamePanel2, "vsgame2");
+        mainPanel.add(vsGamePanel3, "vsgame3");
 
         mainPanel.add(keyControl1, "Control1");
 
