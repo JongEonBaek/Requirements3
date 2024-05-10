@@ -33,6 +33,7 @@ public class Main {
     public static ClassicScoreBoard1 classicScoreBoard1;
     public static ItemScoreBoard1 itemScoreBoard1;
     public static ScoreBoardMenu1 scoreBoardMenu1;
+    public static vsModeLabel vsModeMenu;
 
 
     /////////////////////////////설정값들 관리.
@@ -121,9 +122,6 @@ public class Main {
         gamePanel3.setName("game3");
 
 
-
-
-
         keyControl1 = new KeyControl1();
         keyControl1.setName("Control1");
 
@@ -137,6 +135,9 @@ public class Main {
         scoreBoardMenu1 = new ScoreBoardMenu1();
         scoreBoardMenu1.setName("ScoreBoardMenu1");
 
+        vsModeMenu = new vsModeLabel();
+        vsModeMenu.setName("vsModeMenu");
+
         mainPanel.add(mainMenu1, "MainMenu1");
         mainPanel.add(optionMenu1, "Options1");
 
@@ -149,6 +150,7 @@ public class Main {
 
         mainPanel.add(itemMode1, "ItemMode1");
 
+        mainPanel.add(vsModeMenu, "vsModeMenu");
 
         mainPanel.add(gamePanel, "game");
         mainPanel.add(gamePanel2, "game2");
@@ -163,6 +165,8 @@ public class Main {
         mainPanel.add(itemScoreBoard1, "ItemScoreBoard1");
 
         mainPanel.add(scoreBoardMenu1, "ScoreBoardMenu1");
+
+
 
         cardLayout.show(mainPanel, "MainMenu1");
 
