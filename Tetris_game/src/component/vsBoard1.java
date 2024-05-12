@@ -35,6 +35,7 @@ public class vsBoard1 extends JPanel {
     private static final long serialVersionUID = 2434035659171694595L; // 이 클래스의 고유한 serialVersionUID
     private int initInterval = 1000; //블록이 자동으로 아래로 떨어지는 속도 제어 시간, 현재 1초
     private final KeyListener playerKeyListener; // 사용자의 키 입력을 처리하는 KeyListener 객체
+    private final KeyListener vsplayerKeyListener; // 사용자의 키 입력을 처리하는 KeyListener 객체
     private final SimpleAttributeSet styleSet; // 텍스트 스타일 설정하는 SimpleAttributeSet
     public final Timer timer; // 블록이 자동으로 아래로 떨어지게 하는 Timer
     int x[] = {3,3}; //Default Position. 현재 블록 위치
@@ -117,17 +118,20 @@ public class vsBoard1 extends JPanel {
             }
         } // color_board 초기화
         playerKeyListener = new PlayerKeyListener(); // 플레이어 키 리스너를 생성
+        vsplayerKeyListener = new vsPlayerKeyListener();
         addKeyListener(playerKeyListener); //키 리스너 추가
+        addKeyListener(vsplayerKeyListener); //키 리스너 추가
         setFocusable(true); // 키 입력을 받을 수 있도록 설정
         requestFocus(); //  입력 포커스 요청
 
         //Create the first block and draw.
         curr[0] = getRandomBlock(0); // 첫 번째 블록을 무작위로 선택
         curr[1] = getRandomBlock(1);
-        bricks[0]--;
+
 
         nextcurr[0] = getRandomBlock(0); // 다음 블록을 무작위로 선택
         nextcurr[1] = getRandomBlock(1);
+        bricks[0]--;
         bricks[1]--;
 
         placeBlock(board, color_board,0); //  선택된 블록을 배치합니다.
@@ -409,7 +413,7 @@ public class vsBoard1 extends JPanel {
         return true; // 모든 검사를 통과하면 이동할 수 있음
     }
 
-    protected boolean canMoveLeft(int p) {
+    protected boolean canMoveLeft(int[][] board1, int p) {
         // 블록을 왼쪽으로 이동할 수 있는지 확인하는 메소드
         // 이 메소드는 블록의 왼쪽에 다른 블록이 없고, 블록이 게임 보드의 왼쪽 경계를 넘지 않는 경우에만 true를 반환합니다.
         if(curr_name[p].equals("WeightBlock"))
@@ -420,7 +424,7 @@ public class vsBoard1 extends JPanel {
         for (int i = 0; i < curr[p].height(); i++) {
             for (int j = 0; j < curr[p].width(); j++) {
                 if (curr[p].getShape(j, i) != 0) {
-                    if (x[p] + j - 1 < 0 || board[y[p] + i][x[p] + j - 1] != 0) {
+                    if (x[p] + j - 1 < 0 || board1[y[p] + i][x[p] + j - 1] != 0) {
                         return false;
                     }
                 }
@@ -429,7 +433,7 @@ public class vsBoard1 extends JPanel {
         return true;
     }
 
-    protected boolean canMoveRight(int p) {
+    protected boolean canMoveRight(int[][] board1, int p) {
         // 블록을 오른쪽으로 이동할 수 있는지 확인하는 메소드
         // 블록의 오른쪽에 다른 블록이 없고, 블록이 게임 보드의 오른쪽 경계를 넘지 않는 경우에만 true를 반환합니다.
         if(curr_name[p].equals("WeightBlock")) {
@@ -439,7 +443,7 @@ public class vsBoard1 extends JPanel {
         for (int i = 0; i < curr[p].height(); i++) {
             for (int j = 0; j < curr[p].width(); j++) {
                 if (curr[p].getShape(j, i) != 0) {
-                    if (x[p] + j + 1 >= WIDTH || board[y[p] + i][x[p] + j + 1] != 0) {
+                    if (x[p] + j + 1 >= WIDTH || board1[y[p] + i][x[p] + j + 1] != 0) {
                         return false;
                     }
                 }
@@ -448,14 +452,14 @@ public class vsBoard1 extends JPanel {
         return true;
     }
 
-    protected boolean canRotate(int p) {
+    protected boolean canRotate(int[][] board1, int p) {
         if(curr_name[p].equals("WeightBlock"))
             return false;
         curr[p].rotate();
         for (int i = 0; i < curr[p].height(); i++) {
             for (int j = 0; j < curr[p].width(); j++) {
                 if (curr[p].getShape(j, i) != 0) {
-                    if (x[p] + j < 0 || x[p] + j >= WIDTH || y[p] + i < 0 || y[p] + i >= HEIGHT || board[y[p] + i][x[p]+ j] != 0) {
+                    if (x[p] + j < 0 || x[p] + j >= WIDTH || y[p] + i < 0 || y[p] + i >= HEIGHT || board1[y[p] + i][x[p]+ j] != 0) {
                         curr[p].rotate();
                         curr[p].rotate();
                         curr[p].rotate();
@@ -649,24 +653,24 @@ public class vsBoard1 extends JPanel {
     }
 
 
-    protected void moveLeft(int p) {
+    protected void moveLeft(int[][] board1, Color[][] color_board1,int p) {
         // moveLeft 메서드는 현재 블록을 왼쪽으로 한 칸 이동시킵니다.
 
-        eraseCurr(board, p); // 현재 블록의 위치를 게임 보드에서 지웁니다.
-        if (canMoveLeft(p)) {
+        eraseCurr(board1, p); // 현재 블록의 위치를 게임 보드에서 지웁니다.
+        if (canMoveLeft(board1,p)) {
             x[p]--;
         }
-        placeBlock(board, color_board,p); // 게임 보드에 현재 블록의 새 위치를 표시합니다.
+        placeBlock(board1, color_board1,p); // 게임 보드에 현재 블록의 새 위치를 표시합니다.
     }
 
 
-    protected void moveRight(int p) {
+    protected void moveRight(int[][] board1, Color[][] color_board1,int p) {
         // moveRight 메서드는 현재 블록을 오른쪽으로 한 칸 이동시킵니다.
-        eraseCurr(board, p); // 현재 블록의 위치를 게임 보드에서 지웁니다.
-        if (canMoveRight(p)) {
+        eraseCurr(board1, p); // 현재 블록의 위치를 게임 보드에서 지웁니다.
+        if (canMoveRight(board1,p)) {
             x[p]++;
         }
-        placeBlock(board, color_board,p); // 게임 보드에 현재 블록의 새 위치를 표시합니다.
+        placeBlock(board1, color_board1,p); // 게임 보드에 현재 블록의 새 위치를 표시합니다.
     }
 
     private void placeBlock(int[][] board1, Color[][] color_board1, int p) {
@@ -1144,27 +1148,27 @@ public class vsBoard1 extends JPanel {
             int Linei = 0, Linej = 0;
             int keyCode = e.getKeyCode();
             // 키가 눌렸을 때의 동작을 정의합니다.
-            if(keyCode == ((Number)(Main.SettingObject.get("K_UP"))).intValue()) {
+            if(keyCode == 87) {
                 eraseCurr(board, 0); // 현재 블록을 지웁니다.
-                if (canRotate(0)) { // 블록이 회전 가능한 경우에만 회전을 수행합니다.
+                if (canRotate(board,0)) { // 블록이 회전 가능한 경우에만 회전을 수행합니다.
                     curr[0].rotate(); // 현재 블록을 회전시킵니다.
                     placeBlock(board, color_board, 0);
                 }
                 drawBoard(pane, nextpane,board, color_board, 0);
             }
-            else if(keyCode == ((Number)(Main.SettingObject.get("K_DOWN"))).intValue()) {
+            else if(keyCode == 83) {
                 moveDown(board, color_board, 0); // 아래 방향키가 눌렸을 때, 현재 블록을 아래로 이동시킵니다.
                 drawBoard(pane, nextpane, board, color_board,0);
             }
-            else if(keyCode == ((Number)(Main.SettingObject.get("K_RIGHT"))).intValue()) {
-                moveRight(0); // 오른쪽 방향키가 눌렸을 때, 현재 블록을 오른쪽으로 이동시킵니다.
+            else if(keyCode == 68) {
+                moveRight(board, color_board,0); // 오른쪽 방향키가 눌렸을 때, 현재 블록을 오른쪽으로 이동시킵니다.
                 drawBoard(pane, nextpane, board, color_board,0);
             }
-            else if(keyCode == ((Number)(Main.SettingObject.get("K_LEFT"))).intValue()) {
-                moveLeft(0); // 왼쪽 방향키가 눌렸을 때, 현재 블록을 왼쪽으로 이동시킵니다.
+            else if(keyCode == 65) {
+                moveLeft(board, color_board,0); // 왼쪽 방향키가 눌렸을 때, 현재 블록을 왼쪽으로 이동시킵니다.
                 drawBoard(pane, nextpane, board, color_board,0);
             }
-            else if(keyCode == ((Number)(Main.SettingObject.get("K_SPACE"))).intValue()) {
+            else if(keyCode == 32) {
                 isPaused = !isPaused; // 게임의 상태를 전환합니다.
                 if (isPaused) {
                     timer.stop(); // 게임이 일시 중지된 경우, 타이머를 중지합니다.
@@ -1173,7 +1177,7 @@ public class vsBoard1 extends JPanel {
                     timer.start(); // 게임이 재개된 경우, 타이머를 시작합니다.
                 }
             }
-            else if(keyCode == ((Number)(Main.SettingObject.get("K_ENTER"))).intValue()) {
+            else if(keyCode == 10) {
                 eraseCurr(board, 0);
                 if(curr_name[0].equals("WeightBlock"))
                 {
@@ -1297,5 +1301,185 @@ public class vsBoard1 extends JPanel {
             // 키가 떼어졌을 때의 동작을 정의할 수 있으나, 여기서는 사용하지 않습니다.
         }
     }
+
+    public class vsPlayerKeyListener implements KeyListener{
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+            // 키가 타이핑됐을 때의 동작을 정의할 수 있으나, 여기서는 사용하지 않습니다.
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            int Linei = 0, Linej = 0;
+            int keyCode1 = e.getKeyCode();
+            // 키가 눌렸을 때의 동작을 정의합니다.
+            if(keyCode1 == (38)) { //키보드 윗방향키
+                eraseCurr(vsboard, 1); // 현재 블록을 지웁니다.
+                if (canRotate(vsboard,1)) { // 블록이 회전 가능한 경우에만 회전을 수행합니다.
+                    curr[1].rotate(); // 현재 블록을 회전시킵니다.
+                    placeBlock(vsboard, vscolor_board, 1);
+                }
+                drawBoard(vspane, vsnextpane,vsboard, vscolor_board, 1);
+            }
+            else if(keyCode1 == 40) { //키보드 아랫방향키
+                moveDown(vsboard, vscolor_board, 1); // 아래 방향키가 눌렸을 때, 현재 블록을 아래로 이동시킵니다.
+                drawBoard(vspane, vsnextpane, vsboard, vscolor_board,1);
+            }
+            else if(keyCode1 == 39) { ////키보드 오른쪽방향키
+                moveRight(vsboard, vscolor_board,1); // 오른쪽 방향키가 눌렸을 때, 현재 블록을 오른쪽으로 이동시킵니다.
+                drawBoard(vspane, vsnextpane, vsboard, vscolor_board,1);
+            }
+            else if(keyCode1 == 37) { //키보드 왼쪽방향키
+                moveLeft(vsboard, vscolor_board,1); // 왼쪽 방향키가 눌렸을 때, 현재 블록을 왼쪽으로 이동시킵니다.
+                drawBoard(vspane, vsnextpane, vsboard, vscolor_board,1);
+            }
+            else if(keyCode1 == ((Number)(Main.SettingObject.get("K_SPACE"))).intValue()) {
+                //isPaused = !isPaused; // 게임의 상태를 전환합니다.
+                if (isPaused) {
+                    timer.stop(); // 게임이 일시 중지된 경우, 타이머를 중지합니다.
+                    vspane.setText(String.format("Game Paused\nPress %s to continue", KeyEvent.getKeyText(((Number)Main.SettingObject.get("K_SPACE")).intValue()))); // 게임이 일시 중지된 상태를 표시합니다.
+                } else {
+                    timer.start(); // 게임이 재개된 경우, 타이머를 시작합니다.
+                }
+            }
+            else if(keyCode1 == 34) {// 방향키 pageDown
+                eraseCurr(vsboard, 1);
+                if(curr_name[1].equals("WeightBlock"))
+                {
+                    while (canMoveDown(vsboard,1)) {
+                        y[1]++;
+                        for(int i=0;i<4;++i) {
+                            vsboard[y[1]+1][x[1]+i] = 0;
+                        }
+                    }
+                }
+                else if(curr_name[1].equals("BombBlock")) {
+                    while (canMoveDown(vsboard,1)) {
+                        y[1]++;
+                    }
+                }
+                else if(curr_name[1].equals("ItemLBlock"))
+                {
+                    while(canMoveDown(vsboard,1))
+                        y[1]++;
+                }
+                else if(curr_name[1].equals("ItemVBlock"))
+                {
+                    while(canMoveDown(vsboard,1))
+                        y[1]++;
+                }
+                else if(curr_name[1].equals("TimeBlock")) {
+                    while (canMoveDown(vsboard,1)) {
+                        y[1]++;
+                    }
+                }
+                else
+                {
+                    while (canMoveDown(vsboard,1)) {
+                        y[1]++;
+                        scores[1] += point[1]*2;
+                    }
+                }
+                placeBlock(vsboard, vscolor_board,1);
+                if(curr_name[1].equals("BombBlock"))
+                {
+                    for(int i=-1;i<3;++i)
+                    {
+                        for(int j= -1;j<3;++j)
+                        {
+                            if(y[1]+j < 0 || y[1]+ j > 19 || x[1]+i <0 || x[1]+i > 9)
+                                continue;
+                            board[y[1]+j][x[1]+i] = 0;
+                        }
+                    }
+                    eraseCurr(vsboard, 1);
+                }
+                else if(curr_name[1].equals("ItemLBlock"))
+                {
+                    System.out.println("당첨4");
+                    for(int i=0;i<curr[1].width();++i)
+                    {System.out.println("당첨5");
+                        for(int j=0;j<curr[1].height();++j)
+                        {
+                            System.out.println(String.format("%d %d", x[1], y[1]));
+                            if(curr[1].getShape(i, j) == 4)
+                            {System.out.println("당첨6");
+                                Linei = i;
+                                Linej = j;
+                            }
+                        }
+                    }
+                    for (int a = -9; a < 10; ++a) {
+                        if (x[1] + Linei + a < 0 || x[1] + Linei + a > 9)
+                            continue;
+                        vsboard[y[1] + Linej][x[1] + Linei + a] = 0;
+                    }
+                }
+                else if(curr_name[1].equals("ItemVBlock"))
+                {
+                    for(int i=0;i<curr[1].width();++i)
+                    {
+                        for(int j=0;j<curr[1].height();++j)
+                        {
+                            if(curr[1].getShape(i, j) == 5)
+                            {
+                                Linei = i;
+                                Linej = j;
+                            }
+                        }
+                    }
+                    for (int b = -19; b < 20; ++b) {
+                        if (y[1] + Linej + b < 0 || y[1] + Linej + b > 19)
+                            continue;
+                        vsboard[y[1] + Linej + b][x[1] + Linei] = 0;
+                    }
+                }
+                else if(curr_name[1].equals("TimeBlock"))
+                {
+                    timer.stop();
+                    timer.setDelay(initInterval); // 기본 속도 1000으로 초기화
+                    timer.start();
+                }
+                checkLines(vsboard, vscolor_board,1);
+                curr[1] = nextcurr[1];
+                nextcurr[1] = getRandomBlock(1);
+                x[1] = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
+                y[1] = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
+                placeBlock(vsboard, vscolor_board,1);
+                drawBoard(vspane, vsnextpane, vsboard, vscolor_board,1);
+            }
+            else if(keyCode1 == ((Number)(Main.SettingObject.get("K_Q"))).intValue())
+            {
+                try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/src/Settings.json")) {
+                    file.write(Main.SettingObject.toJSONString());
+                    file.flush();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                System.exit(0); // 'q' 키가 눌렸을 때, 프로그램을 종료합니다.
+            }
+
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            // 키가 떼어졌을 때의 동작을 정의할 수 있으나, 여기서는 사용하지 않습니다.
+        }
+    }
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
 
