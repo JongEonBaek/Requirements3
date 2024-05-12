@@ -49,6 +49,8 @@ public class vsModeLabel extends JPanel implements KeyListener {
             startY += 50;
         }
 
+
+
         // 임시 메시지 레이블 설정
         keyMessage = new JLabel(" ");
         keyMessage.setFont(new Font("Arial", Font.BOLD, 40));
@@ -116,7 +118,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.frame.setSize(Main.SCREEN_WIDTH[1], Main.SCREEN_HEIGHT[1]);
                     Main.vsGamePanel.item = index; // Classic Mode라는 의미로 vsGamePanel에 보내줌.
                     Main.vsGamePanel.mode = 1;
-                    Main.vsGamePanel.GameInit();
+                    Main.vsGamePanel.GameInit(0);
                     switchToScreen(Main.vsGamePanel); // 여기를 vsBoard1으로 바꾸어주어야함.
                     Main.vsGamePanel.timer.start();
                     Main.vsGamePanel.setVisible(true);
@@ -144,8 +146,6 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 }
                 else
                     System.out.println("EORRORORORORORORORROROROROR!");
-
-
                 // 여기서 다음 화면으로 넘어가는 로직을 구현
                 break;
             case 1: // Item Mode
@@ -154,7 +154,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.frame.setSize(Main.SCREEN_WIDTH[1], Main.SCREEN_HEIGHT[1]);
                     Main.vsGamePanel.item = index;
                     Main.vsGamePanel.mode = 1;
-                    Main.vsGamePanel.GameInit();
+                    Main.vsGamePanel.GameInit(0);
                     switchToScreen(Main.vsGamePanel);
                     Main.vsGamePanel.timer.start();
                     Main.vsGamePanel.setVisible(true);
@@ -189,7 +189,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.frame.setSize(Main.SCREEN_WIDTH[1], Main.SCREEN_HEIGHT[1]);
                     Main.vsGamePanel.item = index;
                     Main.vsGamePanel.mode = 1; // 기본 난이도인 normal 모드로 실행하도록 함.-> 나중에 삭제해도 될듯.
-                    Main.vsGamePanel.GameInit();
+                    Main.vsGamePanel.GameInit(0);
                     switchToScreen(Main.vsGamePanel);
                     Main.vsGamePanel.timer.start();
                     Main.vsGamePanel.setVisible(true);

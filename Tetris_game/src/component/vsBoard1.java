@@ -46,15 +46,12 @@ public class vsBoard1 extends JPanel {
     int bricks[] = {0,0}; // 생성된 벽돌의 개수
     String name;
     boolean create_item = true;
-
     private boolean isPaused = false; // 게임이 일시 중지되었는지 나타내는 변수
     public static boolean colorBlindMode; // 색맹모드
-
     private final JTextPane pane; //게임 상태 표시하는 JTextPane 객체
     private JTextPane nextpane;// 넥스트블록 표시하는 판
     private JTextPane vspane;
     private JTextPane vsnextpane;
-
     private int[][] board; // 게임 보드의 상태를 나타내는 2차원 배열
     private Color[][] color_board;
     private int[][] vsboard; // 상대게임보드의 상태를 나타내는 2차원 배열
@@ -65,15 +62,13 @@ public class vsBoard1 extends JPanel {
     private String[] curr_name = {"",""};
     private String[] nextcurr_name = {"",""};
 
-
     public int mode = 1; // 난이도 설정 easy == 0, normal == 1, hard == 2;
     public int item = 0; // itemMode 0 == false(보통모드), 1 == true(아이템모드);
     public boolean gameOver = false; // 게임오버를 알려주는변수 true == 게임오버
-    public boolean isfirst = true;
-
+    public boolean isfirst[] = {true, true};
     public boolean weightblockLock = false;
-
     // 생성자 Board, 게임 창 설정 및 초기게임 보드 준비, 첫 번째 블록 생성하고, 타이머 시작
+    int slot[] = {0,0};
     public vsBoard1() {
         this.colorBlindMode = Main.isColorBlindnessMode;
         curr = new Block[2];
@@ -102,9 +97,8 @@ public class vsBoard1 extends JPanel {
         timer = new Timer(initInterval, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                moveDown(); // 블록 아래로 이동
-                drawBoard(pane, board, color_board);
-
+                moveDown(board, color_board, 0); // 블록 아래로 이동
+                drawBoard(pane, board, color_board,0);
             }
         });
 
@@ -122,75 +116,72 @@ public class vsBoard1 extends JPanel {
         requestFocus(); //  입력 포커스 요청
 
         //Create the first block and draw.
-        curr[0] = getRandomBlock(); // 첫 번째 블록을 무작위로 선택
+        curr[0] = getRandomBlock(0); // 첫 번째 블록을 무작위로 선택
         bricks[0]--;
+        nextcurr[0] = getRandomBlock(0); // 다음 블록을 무작위로 선택
 
-        nextcurr[0] = getRandomBlock(); // 다음 블록을 무작위로 선택
-
-        placeBlock(); //  선택된 블록을 배치합니다.
-        drawBoard(pane, board, color_board);
+        placeBlock(board, color_board,0); //  선택된 블록을 배치합니다.
+        drawBoard(pane, board, color_board,0);
         // timer.start(); // 타이머 시작
     }
 
-
-
-    private Block getRandomBlock() {
+    private Block getRandomBlock(int p) {
         Random rnd = new Random(System.currentTimeMillis());
-        isfirst = false;
-        bricks[0]++;
-        setLevel();
-        int slot = 0;
+        isfirst[p] = false;
+        bricks[p]++;
+        setLevel(p);
+        slot[p] = 0;
         if(item == 0)
         {
             switch (mode) {
 
                 case 0: //easy
-                    slot = rnd.nextInt(36); // 0부터 35사이의 난수를 생성 (총 36개 슬롯) 6 : 5 : 5 : 5 : 5 : 5 :5
-                    if (slot < 6) { // 0번 블럭을 6번 포함 (0, 1, 2, 3, 4, 5) 6
+                    slot[p] = rnd.nextInt(36); // 0부터 35사이의 난수를 생성 (총 36개 슬롯) 6 : 5 : 5 : 5 : 5 : 5 :5
+                    if (slot[p] < 6) { // 0번 블럭을 6번 포함 (0, 1, 2, 3, 4, 5) 6
                         return new IBlock(); // I 모양 블록 생성 반환
-                    } else if (slot < 11) { // 1번 블럭을 5번 포함 (6, 7, 8, 9, 10) 5
+                    } else if (slot[p] < 11) { // 1번 블럭을 5번 포함 (6, 7, 8, 9, 10) 5
                         return new JBlock(); // J 모양 블록 생성 반환
-                    } else if (slot < 16) { // 2번 블럭을 5번 포함 (11, 12, 13, 14, 15)5
+                    } else if (slot[p] < 16) { // 2번 블럭을 5번 포함 (11, 12, 13, 14, 15)5
                         return new LBlock(); // L 모양 블록 생성 반환
-                    } else if (slot < 21) { // 3번 블럭을 5번 포함 (16, 17, 18, 19, 20)5
+                    } else if (slot[p] < 21) { // 3번 블럭을 5번 포함 (16, 17, 18, 19, 20)5
                         return new ZBlock(); // Z 모양 블록 생성 반환
-                    } else if (slot < 26) { // 4번 블럭을 5번 포함 (21, 22, 23, 24, 25)5
+                    } else if (slot[p] < 26) { // 4번 블럭을 5번 포함 (21, 22, 23, 24, 25)5
                         return new SBlock(); // S 모양 블록 생성 반환
-                    } else if (slot < 31) { // 5번 블럭을 5번 포함 (26, 27, 28, 29, 30)5
+                    } else if (slot[p] < 31) { // 5번 블럭을 5번 포함 (26, 27, 28, 29, 30)5
                         return new TBlock(); // T 모양 블록 생성 반환
                     } else { // 나머지는 6번 블럭 (31, 32, 33, 34, 35)
                         return new OBlock(); // O 모양 블록 생성 반환
                     }
                 case 1: //normal
-                    slot = rnd.nextInt(7);
-                    if (slot == 0) { // 0번 블럭을 4번 포함 (0, 1, 2, 3)
+                    slot[p] = rnd.nextInt(7);
+                    if (slot[p] == 0) { // 0번 블럭을 4번 포함 (0, 1, 2, 3)
                         return new IBlock();
-                    } else if (slot == 1) { // 1번 블럭
+                    } else if (slot[p] == 1) { // 1번 블럭
                         return new JBlock();
-                    } else if (slot == 2) { // 2번 블럭
+                    } else if (slot[p] == 2) { // 2번 블럭
                         return new LBlock();
-                    } else if (slot == 3) { // 3번 블럭
+                    } else if (slot[p] == 3) { // 3번 블럭
                         return new ZBlock();
-                    } else if (slot == 4) { // 4번 블럭
+                    } else if (slot[p] == 4) { // 4번 블럭
                         return new SBlock();
-                    } else if (slot == 5) { // 5번 블럭
+                    } else if (slot[p] == 5) { // 5번 블럭
                         return new TBlock();
                     } else { // 나머지는 6번 블럭
                         return new OBlock();
                     }
                 case 2: //hard //8 : 10 : 10 : 10 : 10 : 10 : 10  -> 4 : 5 : 5 : 5 : 5 : 5 :5
-                    slot = rnd.nextInt(34); // 0부터 33사이의 난수를 생성 (총 34개 슬롯)
-                    if (slot < 4) { // 0번 블럭을 4번 포함 (0, 1, 2, 3)
+                    slot[p] = rnd.nextInt(34); // 0부터 33사이의 난수를 생성 (총 34개 슬롯)
+                    if (slot[p] < 4) { // 0번 블럭을 4번 포함 (0, 1, 2, 3)
                         return new IBlock();
-                    } else if (slot < 9) { // 1번 블럭을 5번 포함 (4, 5, 6, 7, 8)
+                    } else if (slot[p] < 9) { // 1번 블럭을 5번 포함 (4, 5, 6, 7, 8)
                         return new JBlock();
-                    } else if (slot < 14) { // 2번 블럭을 5번 포함 (9, 10, 11, 12, 13)
+                    } else if (slot[p] < 14) { // 2번 블럭을 5번 포함 (9, 10, 11, 12, 13)
                         return new LBlock();
-                    } else if (slot < 19) { // 3번 블럭을 5번 포함 (14, 15, 16, 17, 18)
+                    } else if (slot[p] < 19) { // 3번 블럭을 5번 포함 (14, 15, 16, 17, 18)
                         return new ZBlock();
-                    } else if (slot < 24) { // 4번 블럭을 5번 포함 (19, 20, 21, 22, 23)
+                    } else if (slot[p] < 24) { // 4번 블럭을 5번 포함 (19, 20, 21, 22, 23)
                         return new SBlock();
-                    } else if (slot < 29) { // 5번 블럭을 5번 포함 (24, 25, 26, 27, 28)
+                    } else if (slot[p] < 29) { // 5번 블럭을 5번 포함 (24, 25, 26, 27, 28)
                         return new TBlock();
                     } else { // 나머지는 6번 블럭 (29, 30, 31, 32, 33)
                         return new OBlock();
@@ -199,143 +190,143 @@ public class vsBoard1 extends JPanel {
         }
         else if(item == 1)
         {
-            if(create_item && lines[0] != 0 && lines[0] % 10 == 0) // 일단은 10번째마다 무게추 블록이 나오도록. 나중에 변경 예정.
+            if(create_item && lines[p] != 0 && lines[p] % 10 == 0) // 일단은 10번째마다 무게추 블록이 나오도록. 나중에 변경 예정.
             {
                 create_item = false;
-                slot = rnd.nextInt(5);
-                if(slot == 0) {
-                    curr_name[0] = nextcurr_name[0];
-                    nextcurr_name[0] = "WeightBlock";
+                slot[p] = rnd.nextInt(5);
+                if(slot[p] == 0) {
+                    curr_name[p] = nextcurr_name[p];
+                    nextcurr_name[p] = "WeightBlock";
                     return new WeightBlock();
                 }
-                else if(slot == 1)
+                else if(slot[p] == 1)
                 {
-                    curr_name[0] = nextcurr_name[0];
-                    nextcurr_name[0] = "BombBlock";
+                    curr_name[p] = nextcurr_name[p];
+                    nextcurr_name[p] = "BombBlock";
                     return new BombBlock();
                 }
-                else if(slot == 2)
+                else if(slot[p] == 2)
                 {
-                    curr_name[0] = nextcurr_name[0];
-                    nextcurr_name[0] = "TimeBlock";
+                    curr_name[p] = nextcurr_name[p];
+                    nextcurr_name[p] = "TimeBlock";
                     return new TimeBlock();
                 }
-                else if(slot == 3)
+                else if(slot[p] == 3)
                 {
                     item = 0;
-                    Block temp = getRandomBlock();
-                    bricks[0]--;
+                    Block temp = getRandomBlock(p);
+                    bricks[p]--;
                     replaceOneWithL(temp.shape);
                     item = 1;
-                    curr_name[0] = nextcurr_name[0];
-                    nextcurr_name[0] = "ItemLBlock";
+                    curr_name[p] = nextcurr_name[p];
+                    nextcurr_name[p] = "ItemLBlock";
                     return temp;
                 }
-                else if(slot == 4)
+                else if(slot[p] == 4)
                 {
                     item = 0;
-                    Block temp = getRandomBlock();
-                    bricks[0]--;
+                    Block temp = getRandomBlock(p);
+                    bricks[p]--;
                     replaceOneWithV(temp.shape);
                     item = 1;
-                    curr_name[0] = nextcurr_name[0];
-                    nextcurr_name[0] = "ItemVBlock";
+                    curr_name[p] = nextcurr_name[p];
+                    nextcurr_name[p] = "ItemVBlock";
                     return temp;
                 }
             }
             switch (mode) {
 
                 case 0: //easy
-                    slot = rnd.nextInt(36); // 0부터 35사이의 난수를 생성 (총 36개 슬롯) 6 : 5 : 5 : 5 : 5 : 5 :5
-                    if (slot < 6) { // 0번 블럭을 6번 포함 (0, 1, 2, 3, 4, 5) 6
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "I";
+                    slot[p] = rnd.nextInt(36); // 0부터 35사이의 난수를 생성 (총 36개 슬롯) 6 : 5 : 5 : 5 : 5 : 5 : 5
+                    if (slot[p] < 6) { // 0번 블럭을 6번 포함 (0, 1, 2, 3, 4, 5) 6
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "I";
                         return new IBlock(); // I 모양 블록 생성 반환
-                    } else if (slot < 11) { // 1번 블럭을 5번 포함 (6, 7, 8, 9, 10) 5
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "J";
+                    } else if (slot[p] < 11) { // 1번 블럭을 5번 포함 (6, 7, 8, 9, 10) 5
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "J";
                         return new JBlock(); // J 모양 블록 생성 반환
-                    } else if (slot < 16) { // 2번 블럭을 5번 포함 (11, 12, 13, 14, 15)5
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "L";
+                    } else if (slot[p] < 16) { // 2번 블럭을 5번 포함 (11, 12, 13, 14, 15)5
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "L";
                         return new LBlock(); // L 모양 블록 생성 반환
-                    } else if (slot < 21) { // 3번 블럭을 5번 포함 (16, 17, 18, 19, 20)5
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "Z";
+                    } else if (slot[p] < 21) { // 3번 블럭을 5번 포함 (16, 17, 18, 19, 20)5
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "Z";
                         return new ZBlock(); // Z 모양 블록 생성 반환
-                    } else if (slot < 26) { // 4번 블럭을 5번 포함 (21, 22, 23, 24, 25)5
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "S";
+                    } else if (slot[p] < 26) { // 4번 블럭을 5번 포함 (21, 22, 23, 24, 25)5
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "S";
                         return new SBlock(); // S 모양 블록 생성 반환
-                    } else if (slot < 31) { // 5번 블럭을 5번 포함 (26, 27, 28, 29, 30)5
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "T";
+                    } else if (slot[p] < 31) { // 5번 블럭을 5번 포함 (26, 27, 28, 29, 30)5
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "T";
                         return new TBlock(); // T 모양 블록 생성 반환
                     } else { // 나머지는 6번 블럭 (31, 32, 33, 34, 35)
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "O";
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "O";
                         return new OBlock(); // O 모양 블록 생성 반환
                     }
                 case 1: //normal
-                    slot = rnd.nextInt(7);
-                    if (slot == 0) { // 0번 블럭을 4번 포함 (0, 1, 2, 3)
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "I";
+                    slot[p] = rnd.nextInt(7);
+                    if (slot[p] == 0) { // 0번 블럭을 4번 포함 (0, 1, 2, 3)
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "I";
                         return new IBlock();
-                    } else if (slot == 1) { // 1번 블럭
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "J";
+                    } else if (slot[p] == 1) { // 1번 블럭
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "J";
                         return new JBlock();
-                    } else if (slot == 2) { // 2번 블럭
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "L";
+                    } else if (slot[p] == 2) { // 2번 블럭
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "L";
                         return new LBlock();
-                    } else if (slot == 3) { // 3번 블럭
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "Z";
+                    } else if (slot[p] == 3) { // 3번 블럭
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "Z";
                         return new ZBlock();
-                    } else if (slot == 4) { // 4번 블럭
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "S";
+                    } else if (slot[p] == 4) { // 4번 블럭
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "S";
                         return new SBlock();
-                    } else if (slot == 5) { // 5번 블럭
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "T";
+                    } else if (slot[p] == 5) { // 5번 블럭
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "T";
                         return new TBlock();
                     } else { // 나머지는 6번 블럭
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "O";
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "O";
                         return new OBlock();
                     }
                 case 2: //hard //8 : 10 : 10 : 10 : 10 : 10 : 10  -> 4 : 5 : 5 : 5 : 5 : 5 :5
-                    slot = rnd.nextInt(34); // 0부터 33사이의 난수를 생성 (총 34개 슬롯)
-                    if (slot < 4) { // 0번 블럭을 4번 포함 (0, 1, 2, 3)
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "I";
+                    slot[p] = rnd.nextInt(34); // 0부터 33사이의 난수를 생성 (총 34개 슬롯)
+                    if (slot[p] < 4) { // 0번 블럭을 4번 포함 (0, 1, 2, 3)
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "I";
                         return new IBlock();
-                    } else if (slot < 9) { // 1번 블럭을 5번 포함 (4, 5, 6, 7, 8)
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "J";
+                    } else if (slot[p] < 9) { // 1번 블럭을 5번 포함 (4, 5, 6, 7, 8)
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "J";
                         return new JBlock();
-                    } else if (slot < 14) { // 2번 블럭을 5번 포함 (9, 10, 11, 12, 13)
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "L";
+                    } else if (slot[p] < 14) { // 2번 블럭을 5번 포함 (9, 10, 11, 12, 13)
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "L";
                         return new LBlock();
-                    } else if (slot < 19) { // 3번 블럭을 5번 포함 (14, 15, 16, 17, 18)
-                        curr_name[0] = nextcurr_name[0];
+                    } else if (slot[p] < 19) { // 3번 블럭을 5번 포함 (14, 15, 16, 17, 18)
+                        curr_name[p] = nextcurr_name[p];
                         nextcurr_name[0] = "Z";
                         return new ZBlock();
-                    } else if (slot < 24) { // 4번 블럭을 5번 포함 (19, 20, 21, 22, 23)
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "S";
+                    } else if (slot[p] < 24) { // 4번 블럭을 5번 포함 (19, 20, 21, 22, 23)
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "S";
                         return new SBlock();
-                    } else if (slot < 29) { // 5번 블럭을 5번 포함 (24, 25, 26, 27, 28)
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "T";
+                    } else if (slot[p] < 29) { // 5번 블럭을 5번 포함 (24, 25, 26, 27, 28)
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "T";
                         return new TBlock();
                     } else { // 나머지는 6번 블럭 (29, 30, 31, 32, 33)
-                        curr_name[0] = nextcurr_name[0];
-                        nextcurr_name[0] = "O";
+                        curr_name[p] = nextcurr_name[p];
+                        nextcurr_name[p] = "O";
                         return new OBlock();
                     }
             }
@@ -344,12 +335,12 @@ public class vsBoard1 extends JPanel {
     }
 
 
-    private void eraseCurr() {
+    private void eraseCurr(int[][] board1, int p) {
         // 블록이 이동하거나 회전할 때 이전위치의 블록을 지우는 기능을 수행하는 메소드
-        for (int i = x[0]; i < x[0] + curr[0].width(); i++) {// 현재 블록의 너비만큼 반복합니다.
-            for (int j = y[0]; j < y[0] + curr[0].height(); j++) {// 현재 블록의 높이만큼 반복합니다.
-                if (curr[0].getShape(i - x[0], j - y[0]) != 0 && board[j][i] != 0) {// 현재 블록의 일부인 경우에만 발동
-                    board[j][i] = 0;// 게임 보드에서 현재 블록의 위치를 0으로 설정하여 지웁니다.
+        for (int i = x[p]; i < x[p] + curr[p].width(); i++) {// 현재 블록의 너비만큼 반복합니다.
+            for (int j = y[p]; j < y[p] + curr[p].height(); j++) {// 현재 블록의 높이만큼 반복합니다.
+                if (curr[p].getShape(i - x[p], j - y[p]) != 0 && board1[j][i] != 0) {// 현재 블록의 일부인 경우에만 발동
+                    board1[j][i] = 0;// 게임 보드에서 현재 블록의 위치를 0으로 설정하여 지웁니다.
 
                 }
             }
@@ -358,24 +349,24 @@ public class vsBoard1 extends JPanel {
 
 
 
-    private void checkLines() {
+    private void checkLines(int[][] board1, Color[][] color_board1,int p) {
         for (int i = HEIGHT - 1; i >= 0; i--) {
             boolean lineFull = true;
             for (int j = 0; j < WIDTH; j++) {
-                if (board[i][j] == 0) {
+                if (board1[i][j] == 0) {
                     lineFull = false;
                     break;
                 }
             }
             if (lineFull) {
                 for (int k = i; k > 0; k--) {
-                    board[k] = Arrays.copyOf(board[k - 1], WIDTH);
-                    color_board[k] = Arrays.copyOf(color_board[k - 1], WIDTH);
+                    board1[k] = Arrays.copyOf(board1[k - 1], WIDTH);
+                    color_board1[k] = Arrays.copyOf(color_board1[k - 1], WIDTH);
                 }
-                Arrays.fill(board[0], 0);
-                Arrays.fill(color_board[0], Color.WHITE);
-                scores[0] += 100;
-                lines[0]++; // 완성된 라인 수 증가
+                Arrays.fill(board1[0], 0);
+                Arrays.fill(color_board1[0], Color.WHITE);
+                scores[p] += 100;
+                lines[p]++; // 완성된 라인 수 증가
                 create_item = true;
                 i++; // 줄을 지운 후, 같은 줄을 다시 검사하기 위해 i 값을 증가시킵니다.
             }
@@ -383,18 +374,15 @@ public class vsBoard1 extends JPanel {
     }
 
 
-
-
     // 현재 블록을 아래로 이동할 수 있는지 확인하는 메소드
-    private boolean canMoveDown() {
+    private boolean canMoveDown(int[][] board1,int p) {
         // 블럭이 아래로 내려갈 수 있는지 확인하는 메소드
-        if (y[0] + curr[0].height() == HEIGHT) return false; // 바닥에 닿은 경우
-
-        for (int i = 0; i < curr[0].width(); i++) {
-            for (int j = 0; j < curr[0].height(); j++) {
-                if (curr[0].getShape(i, j) != 0) { // 블록의 일부인 경우
-                    if (board[y[0] + j + 1][x[0] + i] != 0) { // 아래 칸이 비어있지 않은 경우
-                        if(curr_name[0].equals("WeightBlock"))
+        if (y[p] + curr[p].height() == HEIGHT) return false; // 바닥에 닿은 경우
+        for (int i = 0; i < curr[p].width(); i++) {
+            for (int j = 0; j < curr[p].height(); j++) {
+                if (curr[p].getShape(i, j) != 0) { // 블록의 일부인 경우
+                    if (board1[y[p] + j + 1][x[p] + i] != 0) { // 아래 칸이 비어있지 않은 경우
+                        if(curr_name[p].equals("WeightBlock"))
                         {
                             weightblockLock = true;
                             return true; // 무게추 블록이면 여기선 true임.
@@ -408,18 +396,18 @@ public class vsBoard1 extends JPanel {
         return true; // 모든 검사를 통과하면 이동할 수 있음
     }
 
-    protected boolean canMoveLeft() {
+    protected boolean canMoveLeft(int p) {
         // 블록을 왼쪽으로 이동할 수 있는지 확인하는 메소드
         // 이 메소드는 블록의 왼쪽에 다른 블록이 없고, 블록이 게임 보드의 왼쪽 경계를 넘지 않는 경우에만 true를 반환합니다.
-        if(curr_name[0].equals("WeightBlock"))
+        if(curr_name[p].equals("WeightBlock"))
         {
             if(weightblockLock)
                 return false;
         }
-        for (int i = 0; i < curr[0].height(); i++) {
-            for (int j = 0; j < curr[0].width(); j++) {
-                if (curr[0].getShape(j, i) != 0) {
-                    if (x[0] + j - 1 < 0 || board[y[0] + i][x[0] + j - 1] != 0) {
+        for (int i = 0; i < curr[p].height(); i++) {
+            for (int j = 0; j < curr[p].width(); j++) {
+                if (curr[p].getShape(j, i) != 0) {
+                    if (x[p] + j - 1 < 0 || board[y[p] + i][x[p] + j - 1] != 0) {
                         return false;
                     }
                 }
@@ -428,17 +416,17 @@ public class vsBoard1 extends JPanel {
         return true;
     }
 
-    protected boolean canMoveRight() {
+    protected boolean canMoveRight(int p) {
         // 블록을 오른쪽으로 이동할 수 있는지 확인하는 메소드
         // 블록의 오른쪽에 다른 블록이 없고, 블록이 게임 보드의 오른쪽 경계를 넘지 않는 경우에만 true를 반환합니다.
-        if(curr_name[0].equals("WeightBlock")) {
+        if(curr_name[p].equals("WeightBlock")) {
             if (weightblockLock)
                 return false;
         }
-        for (int i = 0; i < curr[0].height(); i++) {
-            for (int j = 0; j < curr[0].width(); j++) {
-                if (curr[0].getShape(j, i) != 0) {
-                    if (x[0] + j + 1 >= WIDTH || board[y[0] + i][x[0] + j + 1] != 0) {
+        for (int i = 0; i < curr[p].height(); i++) {
+            for (int j = 0; j < curr[p].width(); j++) {
+                if (curr[p].getShape(j, i) != 0) {
+                    if (x[p] + j + 1 >= WIDTH || board[y[p] + i][x[p] + j + 1] != 0) {
                         return false;
                     }
                 }
@@ -447,25 +435,25 @@ public class vsBoard1 extends JPanel {
         return true;
     }
 
-    protected boolean canRotate() {
-        if(curr_name[0].equals("WeightBlock"))
+    protected boolean canRotate(int p) {
+        if(curr_name[p].equals("WeightBlock"))
             return false;
-        curr[0].rotate();
-        for (int i = 0; i < curr[0].height(); i++) {
-            for (int j = 0; j < curr[0].width(); j++) {
-                if (curr[0].getShape(j, i) != 0) {
-                    if (x[0] + j < 0 || x[0] + j >= WIDTH || y[0] + i < 0 || y[0] + i >= HEIGHT || board[y[0] + i][x[0]+ j] != 0) {
-                        curr[0].rotate();
-                        curr[0].rotate();
-                        curr[0].rotate();
+        curr[p].rotate();
+        for (int i = 0; i < curr[p].height(); i++) {
+            for (int j = 0; j < curr[p].width(); j++) {
+                if (curr[p].getShape(j, i) != 0) {
+                    if (x[p] + j < 0 || x[p] + j >= WIDTH || y[p] + i < 0 || y[p] + i >= HEIGHT || board[y[p] + i][x[p]+ j] != 0) {
+                        curr[p].rotate();
+                        curr[p].rotate();
+                        curr[p].rotate();
                         return false;
                     }
                 }
             }
         }
-        curr[0].rotate();
-        curr[0].rotate();
-        curr[0].rotate();
+        curr[p].rotate();
+        curr[p].rotate();
+        curr[p].rotate();
         return true;
     }
     public static void replaceOneWithV(int[][] board) {
@@ -492,7 +480,6 @@ public class vsBoard1 extends JPanel {
         board[selected[0]][selected[1]] = 5;
     }
 
-
     public static void replaceOneWithL(int[][] board) {
         // '1' 위치를 저장할 리스트 생성
         List<int[]> positions = new ArrayList<>();
@@ -518,61 +505,62 @@ public class vsBoard1 extends JPanel {
     }
 
     // 현재 블록을 아래로 한 칸 이동시킨다. 만약 블록이 바닥이나 다른 블록에 닿았다면, 그 위치에 블록을 고정하고 새로운 블록 생성
-    protected void moveDown() {
+    protected void moveDown(int[][] board1, Color[][] color_board1,int p) {
 
-        eraseCurr(); // 현재 블록의 위치를 한칸 내리기 위해 게임 보드에서 지웁니다.
+
+        eraseCurr(board1, p); // 현재 블록의 위치를 한칸 내리기 위해 게임 보드에서 지웁니다.
         int Linei = 0, Linej = 0;
-        if(curr_name[0].equals("WeightBlock"))
+        if(curr_name[p].equals("WeightBlock"))
         {
-            if(canMoveDown())
+            if(canMoveDown(board1,p))
             {
-                y[0]++;
+                y[p]++;
                 for(int i=0;i<4;++i) {
-                    board[y[0]+1][x[0]+i] = 0;
+                    board1[y[p]+1][x[p]+i] = 0;
                 }
-                placeBlock();
+                placeBlock(board1, color_board1,p);
             }
             else {
-                placeBlock(); // 현재 위치에 블록을 고정시킵니다.
-                checkLines(); // 완성된 라인이 있는지 확인합니다.
-                checkLines(); // 완성된 라인이 있는지 확인합니다.
-                curr[0] = nextcurr[0]; // 다음블록을 현재 블록으로 설정합니다.
-                nextcurr[0] = getRandomBlock(); // 새로운 블록을 무작위로 가져옵니다.
-                x[0] = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
-                y[0] = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
-                if (!canMoveDown()) { // 새 블록이 움직일 수 없는 경우 (게임 오버)
-                    GameOver();
+                placeBlock(board1, color_board1,p); // 현재 위치에 블록을 고정시킵니다.
+                checkLines(board1, color_board1,p); // 완성된 라인이 있는지 확인합니다.
+                checkLines(board1, color_board1,p); // 완성된 라인이 있는지 확인합니다.
+                curr[p] = nextcurr[p]; // 다음블록을 현재 블록으로 설정합니다.
+                nextcurr[p] = getRandomBlock(p); // 새로운 블록을 무작위로 가져옵니다.
+                x[p] = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
+                y[p] = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
+                if (!canMoveDown(board1, p)){ // 새 블록이 움직일 수 없는 경우 (게임 오버)
+                    GameOver(p);
                 }
             }
 
         }
-        else if (canMoveDown()) { // 아래로 이동할 수 있는 경우
-            y[0]++; // 블록을 아래로 이동
-            scores[0] += point[0];
-            placeBlock(); // 게임 보드에 현재 블록의 새 위치를 표시합니다.
+        else if (canMoveDown(board1, p)) { // 아래로 이동할 수 있는 경우
+            y[p]++; // 블록을 아래로 이동
+            scores[p] += point[p];
+            placeBlock(board1, color_board1,p); // 게임 보드에 현재 블록의 새 위치를 표시합니다.
 
         } else { // 아래로 이동할 수 없는 경우 (다른 블록에 닿거나 바닥에 닿은 경우)
-            if(curr_name[0].equals("BombBlock"))
+            if(curr_name[p].equals("BombBlock"))
             {
                 for(int i=-1;i<3;++i)
                 {
                     for(int j= -1;j<3;++j)
                     {
-                        if(y[0] + j < 0 || y[0] + j > 19 || x[0]+i <0 || x[0]+i > 9)
+                        if(y[p] + j < 0 || y[p] + j > 19 || x[p]+i <0 || x[p]+i > 9)
                             continue;
-                        board[y[0]+j][x[0]+i] = 0;
+                        board1[y[p]+j][x[p]+i] = 0;
                     }
                 }
-                eraseCurr();
+                eraseCurr(board1, p);
             }
-            else if(curr_name[0].equals("ItemLBlock"))
+            else if(curr_name[p].equals("ItemLBlock"))
             {
-                for(int i=0;i<curr[0].width();++i)
+                for(int i=0;i<curr[p].width();++i)
                 {
-                    for(int j=0;j<curr[0].height();++j)
+                    for(int j=0;j<curr[p].height();++j)
                     {
-                        System.out.println(String.format("%d %d", x[0], y[0]));
-                        if(curr[0].getShape(i, j) == 4)
+                        System.out.println(String.format("%d %d", x[p], y[p]));
+                        if(curr[p].getShape(i, j) == 4)
                         {
                             Linei = i;
                             Linej = j;
@@ -580,14 +568,14 @@ public class vsBoard1 extends JPanel {
                     }
                 }
             }
-            else if(curr_name[0].equals("ItemVBlock"))
+            else if(curr_name[p].equals("ItemVBlock"))
             {
-                for(int i=0;i<curr[0].width();++i)
+                for(int i=0;i<curr[p].width();++i)
                 {
-                    for(int j=0;j<curr[0].height();++j)
+                    for(int j=0;j<curr[p].height();++j)
                     {
-                        System.out.println(String.format("%d %d", x[0], y[0]));
-                        if(curr[0].getShape(i, j) == 5)
+                        System.out.println(String.format("%d %d", x[p], y[p]));
+                        if(curr[p].getShape(i, j) == 5)
                         {
                             Linei = i;
                             Linej = j;
@@ -595,53 +583,53 @@ public class vsBoard1 extends JPanel {
                     }
                 }
             }
-            else if(curr_name[0].equals("TimeBlock"))
+            else if(curr_name[p].equals("TimeBlock"))
             {
 
                 timer.stop();
                 timer.setDelay(initInterval); // 기본 속도 1000으로 초기화
                 timer.start();
             }
-            if(!curr_name[0].equals("BombBlock")) {
-                placeBlock(); // 현재 위치에 블록을 고정시킵니다.
+            if(!curr_name[p].equals("BombBlock")) {
+                placeBlock(board1, color_board1,0); // 현재 위치에 블록을 고정시킵니다.
 
-                if(curr_name[0].equals("ItemLBlock")) {
+                if(curr_name[p].equals("ItemLBlock")) {
                     for (int a = -9; a < 10; ++a) {
-                        if (x[0] + Linei + a < 0 || x[0] + Linei + a > 9)
+                        if (x[p] + Linei + a < 0 || x[p] + Linei + a > 9)
                             continue;
-                        board[y[0] + Linej][x[0] + Linei + a] = 0;
+                        board1[y[p] + Linej][x[p] + Linei + a] = 0;
 
                     }
-                    for (int k = y[0] + Linej; k > 0; k--) {
-                        board[k] = Arrays.copyOf(board[k - 1], WIDTH);
-                        color_board[k] = Arrays.copyOf(color_board[k - 1], WIDTH);
+                    for (int k = y[p] + Linej; k > 0; k--) {
+                        board1[k] = Arrays.copyOf(board1[k - 1], WIDTH);
+                        color_board1[k] = Arrays.copyOf(color_board1[k - 1], WIDTH);
                     }
 
 
 
                 }
 
-                if(curr_name[0].equals("ItemVBlock")) {
+                if(curr_name[p].equals("ItemVBlock")) {
                     for (int b = -19; b < 20; ++b) {
-                        if (y[0] + Linej + b < 0 || y[0] + Linej + b > 19)
+                        if (y[p] + Linej + b < 0 || y[p] + Linej + b > 19)
                             continue;
-                        board[y[0] + Linej+b][x[0] + Linei] = 0;
+                        board1[y[p] + Linej+b][x[p] + Linei] = 0;
                     }
 
                 }
             }
 
-            curr[0] = nextcurr[0]; // 다음블록을 현재 블록으로 설정합니다.
-            nextcurr[0] = getRandomBlock(); // 새로운 블록을 무작위로 가져옵니다.
-            x[0] = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
-            y[0] = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
+            curr[p] = nextcurr[p]; // 다음블록을 현재 블록으로 설정합니다.
+            nextcurr[p] = getRandomBlock(p); // 새로운 블록을 무작위로 가져옵니다.
+            x[p] = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
+            y[p] = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
 
-            checkLines(); // 완성된 라인이 있는지 확인합니다.
-            if (!canMoveDown()) { // 새 블록이 움직일 수 없는 경우 (게임 오버)
-                GameOver();
+            checkLines(board1, color_board1,p); // 완성된 라인이 있는지 확인합니다.
+            if (!canMoveDown(board1, p)) { // 새 블록이 움직일 수 없는 경우 (게임 오버)
+                GameOver(p);
             }
 
-            placeBlock();
+            placeBlock(board1, color_board1,p);
 
         }
 
@@ -649,32 +637,32 @@ public class vsBoard1 extends JPanel {
     }
 
 
-    protected void moveLeft() {
+    protected void moveLeft(int p) {
         // moveLeft 메서드는 현재 블록을 왼쪽으로 한 칸 이동시킵니다.
 
-        eraseCurr(); // 현재 블록의 위치를 게임 보드에서 지웁니다.
-        if (canMoveLeft()) {
-            x[0]--;
+        eraseCurr(board, p); // 현재 블록의 위치를 게임 보드에서 지웁니다.
+        if (canMoveLeft(p)) {
+            x[p]--;
         }
-        placeBlock(); // 게임 보드에 현재 블록의 새 위치를 표시합니다.
+        placeBlock(board, color_board,p); // 게임 보드에 현재 블록의 새 위치를 표시합니다.
     }
 
 
-    protected void moveRight() {
+    protected void moveRight(int p) {
         // moveRight 메서드는 현재 블록을 오른쪽으로 한 칸 이동시킵니다.
-        eraseCurr(); // 현재 블록의 위치를 게임 보드에서 지웁니다.
-        if (canMoveRight()) {
-            x[0]++;
+        eraseCurr(board, p); // 현재 블록의 위치를 게임 보드에서 지웁니다.
+        if (canMoveRight(p)) {
+            x[p]++;
         }
-        placeBlock(); // 게임 보드에 현재 블록의 새 위치를 표시합니다.
+        placeBlock(board, color_board,p); // 게임 보드에 현재 블록의 새 위치를 표시합니다.
     }
-    private void placeBlock() {
+    private void placeBlock(int[][] board1, Color[][] color_board1, int p) {
 
-        for (int j = 0; j < curr[0].height(); j++) {// 현재*/ 블록의 높이만큼 반복합니다.
-            for (int i = 0; i < curr[0].width(); i++) {// 현재 블록의 너비만큼 반복합니다.
-                if (curr[0].getShape(i, j) != 0 && board[y[0] + j][x[0] + i] == 0) {// 보드에 0이아니면 그대로 유지해야만 함. 아니면 내려가면서 다른 블럭 지움
-                    board[y[0] + j][x[0] + i] = curr[0].getShape(i, j);// 게임 보드 배열에 블록의 모양을 저장합니다.
-                    color_board[y[0]+j][x[0]+i] = curr[0].getColor();
+        for (int j = 0; j < curr[p].height(); j++) {// 현재*/ 블록의 높이만큼 반복합니다.
+            for (int i = 0; i < curr[p].width(); i++) {// 현재 블록의 너비만큼 반복합니다.
+                if (curr[p].getShape(i, j) != 0 && board1[y[p] + j][x[p] + i] == 0) {// 보드에 0이아니면 그대로 유지해야만 함. 아니면 내려가면서 다른 블럭 지움
+                    board1[y[p] + j][x[p] + i] = curr[p].getShape(i, j);// 게임 보드 배열에 블록의 모양을 저장합니다.
+                    color_board1[y[p]+j][x[p]+i] = curr[p].getColor();
                 }
             }
         }
@@ -704,7 +692,7 @@ public class vsBoard1 extends JPanel {
     }
 
 
-    public void drawBoard(JTextPane panel, int[][] board1,Color[][] color_board1) {
+    public void drawBoard(JTextPane panel, int[][] board1,Color[][] color_board1,int p) {
         // drawBoard() 메소드는 게임 보드의 현재 상태를 JTextPane에 그리는 역할을 합니다.
         StyledDocument doc = panel.getStyledDocument();
         StyleConstants.setForeground(styleSet, Color.WHITE);
@@ -764,10 +752,10 @@ public class vsBoard1 extends JPanel {
 
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false); // 가져온 문서에 스타일 속성을 적용합니다.
         panel.setStyledDocument(doc); // 스타일이 적용된 문서를 다시 JTextPane에 설정
-        NextBlocknscore(nextpane);
+        NextBlocknscore(nextpane, p);
     }
 
-    public void NextBlocknscore(JTextPane panel) {
+    public void NextBlocknscore(JTextPane panel, int p) {
 
         StyledDocument doc = panel.getStyledDocument();
         StyleConstants.setForeground(styleSet, Color.WHITE);
@@ -787,41 +775,41 @@ public class vsBoard1 extends JPanel {
             for (int i = 0; i < 2; i++) {
                 //NEXT 블럭 표시
 
-                if(nextcurr_name[0] == "WeightBlock")// WeightBlock
+                if(nextcurr_name[p] == "WeightBlock")// WeightBlock
                 {
-                    for (int k = 0; k < nextcurr[0].width(); k++) {
-                        if (nextcurr[0].getShape(k, i) == 1 ) {
+                    for (int k = 0; k < nextcurr[p].width(); k++) {
+                        if (nextcurr[p].getShape(k, i) == 1 ) {
                             doc.insertString(doc.getLength(), "O", styleSet);
                         }
                         else doc.insertString(doc.getLength(), " ", styleSet);
                     }
                 }
                 else {
-                    for (int k = 0; k < nextcurr[0].width(); k++) {
-                        if (nextcurr[0].width() == 4 && i == 1) // "OOOO"만 너비가 4이므로 따로 처리
+                    for (int k = 0; k < nextcurr[p].width(); k++) {
+                        if (nextcurr[p].width() == 4 && i == 1) // "OOOO"만 너비가 4이므로 따로 처리
                             break;
-                        if (nextcurr[0].getShape(k, i) == 1) {
-                            StyleConstants.setForeground(styleSet, nextcurr[0].getColor());
+                        if (nextcurr[p].getShape(k, i) == 1) {
+                            StyleConstants.setForeground(styleSet, nextcurr[p].getColor());
                             doc.insertString(doc.getLength(), "O", styleSet);
                             StyleConstants.setForeground(styleSet, Color.WHITE);
 
-                        } else if (nextcurr[0].getShape(k, i) == 2) {//BombBlock
-                            StyleConstants.setForeground(styleSet, nextcurr[0].getColor());
+                        } else if (nextcurr[p].getShape(k, i) == 2) {//BombBlock
+                            StyleConstants.setForeground(styleSet, nextcurr[p].getColor());
                             doc.insertString(doc.getLength(), "B", styleSet);
                             StyleConstants.setForeground(styleSet, Color.WHITE);
                         }
-                        else if (nextcurr[0].getShape(k, i) == 3) {//BombBlock
-                            StyleConstants.setForeground(styleSet, nextcurr[0].getColor());
+                        else if (nextcurr[p].getShape(k, i) == 3) {//BombBlock
+                            StyleConstants.setForeground(styleSet, nextcurr[p].getColor());
                             doc.insertString(doc.getLength(), "T", styleSet);
                             StyleConstants.setForeground(styleSet, Color.WHITE);
                         }
-                        else if (nextcurr[0].getShape(k, i) == 4){
-                            StyleConstants.setForeground(styleSet, nextcurr[0].getColor());
+                        else if (nextcurr[p].getShape(k, i) == 4){
+                            StyleConstants.setForeground(styleSet, nextcurr[p].getColor());
                             doc.insertString(doc.getLength(), "L", styleSet);
                             StyleConstants.setForeground(styleSet, Color.WHITE);
                         }
-                        else if (nextcurr[0].getShape(k, i) == 5){
-                            StyleConstants.setForeground(styleSet, nextcurr[0].getColor());
+                        else if (nextcurr[p].getShape(k, i) == 5){
+                            StyleConstants.setForeground(styleSet, nextcurr[p].getColor());
                             doc.insertString(doc.getLength(), "V", styleSet);
                             StyleConstants.setForeground(styleSet, Color.WHITE);
                         }
@@ -839,10 +827,10 @@ public class vsBoard1 extends JPanel {
                 doc.insertString(doc.getLength(), "\n", styleSet);
             }
 
-            String blockFormatted = String.format("%3d", bricks[0]);
-            String linesFormatted = String.format("%3d", lines[0]);
-            String scoresFormatted = String.format("%3d", scores[0]);
-            String levelFormatted = String.format("%3d", level[0]);
+            String blockFormatted = String.format("%3d", bricks[p]);
+            String linesFormatted = String.format("%3d", lines[p]);
+            String scoresFormatted = String.format("%3d", scores[p]);
+            String levelFormatted = String.format("%3d", level[p]);
 
             doc.insertString(doc.getLength(), "BLOCK : ", styleSet);
             if (colorBlindMode) {
@@ -887,14 +875,14 @@ public class vsBoard1 extends JPanel {
 
 
     //일정 점수 도달하면 레벨+, 속도+, 얻는 점수+ 조정하는 함수, moveDown(), TimerAction에 호출됨
-    public void setLevel() {
+    public void setLevel(int p) {
         double decreaseTime = 200; // 일정 블럭 수 도달 시 감소할 값(속도 증가)
 
         switch (mode) {
             case 0:  //easy
-                if (bricks[0] == 20 || bricks[0] == 40 || bricks[0] == 60 || bricks[0] == 80) {
-                    level[0]++;
-                    point[0]++;
+                if (bricks[p] == 20 || bricks[p] == 40 || bricks[p] == 60 || bricks[p] == 80) {
+                    level[p]++;
+                    point[p]++;
                     timer.stop();
                     initInterval = (int) (initInterval - decreaseTime);
                     timer.setDelay(initInterval);
@@ -902,9 +890,9 @@ public class vsBoard1 extends JPanel {
                 }
                 break;
             case 1:
-                if (bricks[0] == 20 || bricks[0] == 40 || bricks[0] == 60 || bricks[0] == 80) {
-                    level[0]++;
-                    point[0]++;
+                if (bricks[p] == 20 || bricks[p] == 40 || bricks[p] == 60 || bricks[p] == 80) {
+                    level[p]++;
+                    point[p]++;
                     timer.stop();
                     initInterval = (int) (initInterval - (decreaseTime * 0.8));
                     timer.setDelay(initInterval);
@@ -912,9 +900,9 @@ public class vsBoard1 extends JPanel {
                 }
                 break;
             case 2:
-                if (bricks[0] == 20 || bricks[0] == 40 || bricks[0] == 60 || bricks[0] == 80) {
-                    level[0]++;
-                    point[0]++;
+                if (bricks[p] == 20 || bricks[p] == 40 || bricks[p] == 60 || bricks[p] == 80) {
+                    level[p]++;
+                    point[p]++;
                     timer.stop();
                     initInterval = (int) (initInterval - (decreaseTime * 1.2));
                     timer.setDelay(initInterval);
@@ -929,7 +917,7 @@ public class vsBoard1 extends JPanel {
         colorBlindMode = A;
     }
 
-    public void GameInit(){
+    public void GameInit(int p){
         initInterval = 1000; //블록이 자동으로 아래로 떨어지는 속도 제어 시간, 현재 1초
         timer.setDelay(initInterval);
 
@@ -938,17 +926,17 @@ public class vsBoard1 extends JPanel {
         } else {
             StyleConstants.setForeground(styleSet, Color.GREEN);}
 
-        x[0] = 3; //Default Position. 현재 블록 위치
-        y[0] = 0; // 현재 블록 위치
-        scores[0] = 0; // 현재 스코어
-        point[0] = 1; // 한칸 떨어질때 얻는 점수
-        level[0] = 0; // 현재 레벨
-        lines[0] = 0; // 현재 지워진 라인 수
-        bricks[0] = 0; // 생성된 벽돌의 개수
+        x[p] = 3; //Default Position. 현재 블록 위치
+        y[p] = 0; // 현재 블록 위치
+        scores[p] = 0; // 현재 스코어
+        point[p] = 1; // 한칸 떨어질때 얻는 점수
+        level[p] = 0; // 현재 레벨
+        lines[p] = 0; // 현재 지워진 라인 수
+        bricks[p] = 0; // 생성된 벽돌의 개수
         isPaused = false; // 게임이 일시 중지되었는지 나타내는 변수
-        curr[0] =  getRandomBlock();// 현재 움직이고 있는 블록
-        bricks[0]--;
-        nextcurr[0] = getRandomBlock(); // 다음 블럭
+        curr[p] =  getRandomBlock(p);// 현재 움직이고 있는 블록
+        bricks[p]--;
+        nextcurr[p] = getRandomBlock(p); // 다음 블럭
         gameOver = false; // 게임오버를 알려주는변수 true == 게임오버
 
         for(int i = 0; i<HEIGHT; i++) {
@@ -957,8 +945,8 @@ public class vsBoard1 extends JPanel {
         }
 
         //timer.start();
-        placeBlock(); //  선택된 블록을 배치합니다.
-        drawBoard(pane, board, color_board); // 보드를 그린다.
+        placeBlock(board, color_board, p); //  선택된 블록을 배치합니다.
+        drawBoard(pane, board, color_board, p); // 보드를 그린다.
     }
 
     public void switchToScreen(JPanel newScreen) {
@@ -969,7 +957,7 @@ public class vsBoard1 extends JPanel {
 
 
     // 게임 종료 이벤트
-    public void GameOver() {
+    public void GameOver(int p) {
         timer.stop(); // 타이머를 멈춥니다.
         gameOver = true;
         if(item == 0) {
@@ -1006,7 +994,7 @@ public class vsBoard1 extends JPanel {
                     // 새 데이터 추가
                     JSONObject scoreData = new JSONObject();
                     scoreData.put("mode", mode);
-                    scoreData.put("scores[0]", scores[0]); // 'scores' 변수의 실제 타입에 따라 적절히 처리해야 함
+                    scoreData.put("scores[0]", scores[p]); // 'scores' 변수의 실제 타입에 따라 적절히 처리해야 함
                     scoreData.put("name", name);
                     scoreData.put("item", item);
                     scoreData.put("recent", 1); // 가장 최근에 끝난 게임임을 알려주는 심볼
@@ -1073,7 +1061,7 @@ public class vsBoard1 extends JPanel {
                     // 새 데이터 추가
                     JSONObject scoreData = new JSONObject();
                     scoreData.put("mode", mode);
-                    scoreData.put("scores", scores[0]); // 'scores' 변수의 실제 타입에 따라 적절히 처리해야 함
+                    scoreData.put("scores", scores[p]); // 'scores' 변수의 실제 타입에 따라 적절히 처리해야 함
                     scoreData.put("name", name);
                     scoreData.put("item", item);
                     scoreData.put("recent", 1); // 가장 최근에 끝난 게임임을 알려주는 심볼
@@ -1107,7 +1095,7 @@ public class vsBoard1 extends JPanel {
 
             }
         }
-        GameInit();
+        GameInit(p);
     }
 
 
@@ -1127,24 +1115,24 @@ public class vsBoard1 extends JPanel {
             int keyCode = e.getKeyCode();
             // 키가 눌렸을 때의 동작을 정의합니다.
             if(keyCode == ((Number)(Main.SettingObject.get("K_UP"))).intValue()) {
-                eraseCurr(); // 현재 블록을 지웁니다.
-                if (canRotate()) { // 블록이 회전 가능한 경우에만 회전을 수행합니다.
+                eraseCurr(board, 0); // 현재 블록을 지웁니다.
+                if (canRotate(0)) { // 블록이 회전 가능한 경우에만 회전을 수행합니다.
                     curr[0].rotate(); // 현재 블록을 회전시킵니다.
-                    placeBlock();
+                    placeBlock(board, color_board, 0);
                 }
-                drawBoard(pane, board, color_board);
+                drawBoard(pane, board, color_board, 0);
             }
             else if(keyCode == ((Number)(Main.SettingObject.get("K_DOWN"))).intValue()) {
-                moveDown(); // 아래 방향키가 눌렸을 때, 현재 블록을 아래로 이동시킵니다.
-                drawBoard(pane, board, color_board);
+                moveDown(board, color_board, 0); // 아래 방향키가 눌렸을 때, 현재 블록을 아래로 이동시킵니다.
+                drawBoard(pane, board, color_board,0);
             }
             else if(keyCode == ((Number)(Main.SettingObject.get("K_RIGHT"))).intValue()) {
-                moveRight(); // 오른쪽 방향키가 눌렸을 때, 현재 블록을 오른쪽으로 이동시킵니다.
-                drawBoard(pane, board, color_board);
+                moveRight(0); // 오른쪽 방향키가 눌렸을 때, 현재 블록을 오른쪽으로 이동시킵니다.
+                drawBoard(pane, board, color_board,0);
             }
             else if(keyCode == ((Number)(Main.SettingObject.get("K_LEFT"))).intValue()) {
-                moveLeft(); // 왼쪽 방향키가 눌렸을 때, 현재 블록을 왼쪽으로 이동시킵니다.
-                drawBoard(pane, board, color_board);
+                moveLeft(0); // 왼쪽 방향키가 눌렸을 때, 현재 블록을 왼쪽으로 이동시킵니다.
+                drawBoard(pane, board, color_board,0);
             }
             else if(keyCode == ((Number)(Main.SettingObject.get("K_SPACE"))).intValue()) {
                 isPaused = !isPaused; // 게임의 상태를 전환합니다.
@@ -1156,10 +1144,10 @@ public class vsBoard1 extends JPanel {
                 }
             }
             else if(keyCode == ((Number)(Main.SettingObject.get("K_ENTER"))).intValue()) {
-                eraseCurr();
+                eraseCurr(board, 0);
                 if(curr_name[0].equals("WeightBlock"))
                 {
-                    while (canMoveDown()) {
+                    while (canMoveDown(board,0)) {
                         y[0]++;
                         for(int i=0;i<4;++i) {
                             board[y[0]+1][x[0]+i] = 0;
@@ -1167,33 +1155,33 @@ public class vsBoard1 extends JPanel {
                     }
                 }
                 else if(curr_name[0].equals("BombBlock")) {
-                    while (canMoveDown()) {
+                    while (canMoveDown(board,0)) {
                         y[0]++;
                     }
                 }
                 else if(curr_name[0].equals("ItemLBlock"))
                 {
-                    while(canMoveDown())
+                    while(canMoveDown(board,0))
                         y[0]++;
                 }
                 else if(curr_name[0].equals("ItemVBlock"))
                 {
-                    while(canMoveDown())
+                    while(canMoveDown(board,0))
                         y[0]++;
                 }
                 else if(curr_name[0].equals("TimeBlock")) {
-                    while (canMoveDown()) {
+                    while (canMoveDown(board,0)) {
                         y[0]++;
                     }
                 }
                 else
                 {
-                    while (canMoveDown()) {
+                    while (canMoveDown(board,0)) {
                         y[0]++;
                         scores[0] += point[0]*2;
                     }
                 }
-                placeBlock();
+                placeBlock(board, color_board,0);
                 if(curr_name[0].equals("BombBlock"))
                 {
                     for(int i=-1;i<3;++i)
@@ -1205,7 +1193,7 @@ public class vsBoard1 extends JPanel {
                             board[y[0]+j][x[0]+i] = 0;
                         }
                     }
-                    eraseCurr();
+                    eraseCurr(board, 0);
                 }
                 else if(curr_name[0].equals("ItemLBlock"))
                 {
@@ -1253,13 +1241,13 @@ public class vsBoard1 extends JPanel {
                     timer.setDelay(initInterval); // 기본 속도 1000으로 초기화
                     timer.start();
                 }
-                checkLines();
+                checkLines(board, color_board,0);
                 curr[0] = nextcurr[0];
-                nextcurr[0] = getRandomBlock();
+                nextcurr[0] = getRandomBlock(0);
                 x[0] = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
                 y[0] = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
-                placeBlock();
-                drawBoard(pane, board, color_board);
+                placeBlock(board, color_board,0);
+                drawBoard(pane, board, color_board,0);
             }
             else if(keyCode == ((Number)(Main.SettingObject.get("K_Q"))).intValue())
             {
