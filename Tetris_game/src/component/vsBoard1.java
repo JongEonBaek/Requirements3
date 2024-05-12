@@ -98,16 +98,22 @@ public class vsBoard1 extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 moveDown(board, color_board, 0); // 블록 아래로 이동
-                drawBoard(pane, board, color_board,0);
+                drawBoard(pane, nextpane, board, color_board,0);
+                moveDown(vsboard,vscolor_board,1);
+                drawBoard(vspane, vsnextpane,vsboard, vscolor_board,1);
             }
         });
 
         //Initialize board for the game.
         board = new int[HEIGHT][WIDTH]; // 게임 보드 초기화
         color_board = new Color[HEIGHT][WIDTH];
+        vsboard = new int[HEIGHT][WIDTH]; // 게임 보드 초기화
+        vscolor_board = new Color[HEIGHT][WIDTH];
+
         for(int i=0;i<HEIGHT;i++){
             for(int j=0;j<WIDTH;j++){
                 color_board[i][j]=Color.white;
+                vscolor_board[i][j] = Color.white;
             }
         } // color_board 초기화
         playerKeyListener = new PlayerKeyListener(); // 플레이어 키 리스너를 생성
@@ -117,11 +123,18 @@ public class vsBoard1 extends JPanel {
 
         //Create the first block and draw.
         curr[0] = getRandomBlock(0); // 첫 번째 블록을 무작위로 선택
+        curr[1] = getRandomBlock(1);
         bricks[0]--;
+
         nextcurr[0] = getRandomBlock(0); // 다음 블록을 무작위로 선택
+        nextcurr[1] = getRandomBlock(1);
+        bricks[1]--;
 
         placeBlock(board, color_board,0); //  선택된 블록을 배치합니다.
-        drawBoard(pane, board, color_board,0);
+        drawBoard(pane, nextpane,board, color_board,0);
+        placeBlock(vsboard, vscolor_board,1); //  선택된 블록을 배치합니다.
+        drawBoard(vspane, vsnextpane, vsboard, vscolor_board,1);
+
         // timer.start(); // 타이머 시작
     }
 
@@ -633,7 +646,6 @@ public class vsBoard1 extends JPanel {
 
         }
 
-
     }
 
 
@@ -656,6 +668,7 @@ public class vsBoard1 extends JPanel {
         }
         placeBlock(board, color_board,p); // 게임 보드에 현재 블록의 새 위치를 표시합니다.
     }
+
     private void placeBlock(int[][] board1, Color[][] color_board1, int p) {
 
         for (int j = 0; j < curr[p].height(); j++) {// 현재*/ 블록의 높이만큼 반복합니다.
@@ -692,7 +705,7 @@ public class vsBoard1 extends JPanel {
     }
 
 
-    public void drawBoard(JTextPane panel, int[][] board1,Color[][] color_board1,int p) {
+    public void drawBoard(JTextPane panel, JTextPane nextpanel,int[][] board1,Color[][] color_board1,int p) {
         // drawBoard() 메소드는 게임 보드의 현재 상태를 JTextPane에 그리는 역할을 합니다.
         StyledDocument doc = panel.getStyledDocument();
         StyleConstants.setForeground(styleSet, Color.WHITE);
@@ -752,7 +765,7 @@ public class vsBoard1 extends JPanel {
 
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false); // 가져온 문서에 스타일 속성을 적용합니다.
         panel.setStyledDocument(doc); // 스타일이 적용된 문서를 다시 JTextPane에 설정
-        NextBlocknscore(nextpane, p);
+        NextBlocknscore(nextpanel, p);
     }
 
     public void NextBlocknscore(JTextPane panel, int p) {
@@ -818,9 +831,6 @@ public class vsBoard1 extends JPanel {
                 }
                 doc.insertString(doc.getLength(), "\n", styleSet);
             }
-
-
-
 
             //공백추가
             for (int i = 0; i < 7; i++) {
@@ -945,8 +955,10 @@ public class vsBoard1 extends JPanel {
         }
 
         //timer.start();
-        placeBlock(board, color_board, p); //  선택된 블록을 배치합니다.
-        drawBoard(pane, board, color_board, p); // 보드를 그린다.
+        placeBlock(board, color_board, 0); //  선택된 블록을 배치합니다.
+        drawBoard(pane, nextpane,board, color_board, 0); // 보드를 그린다.
+        placeBlock(vsboard, vscolor_board, 1); //  선택된 블록을 배치합니다.
+        drawBoard(vspane, vsnextpane,vsboard, vscolor_board, 1); // 보드를 그린다.
     }
 
     public void switchToScreen(JPanel newScreen) {
@@ -1120,19 +1132,19 @@ public class vsBoard1 extends JPanel {
                     curr[0].rotate(); // 현재 블록을 회전시킵니다.
                     placeBlock(board, color_board, 0);
                 }
-                drawBoard(pane, board, color_board, 0);
+                drawBoard(pane, nextpane,board, color_board, 0);
             }
             else if(keyCode == ((Number)(Main.SettingObject.get("K_DOWN"))).intValue()) {
                 moveDown(board, color_board, 0); // 아래 방향키가 눌렸을 때, 현재 블록을 아래로 이동시킵니다.
-                drawBoard(pane, board, color_board,0);
+                drawBoard(pane, nextpane, board, color_board,0);
             }
             else if(keyCode == ((Number)(Main.SettingObject.get("K_RIGHT"))).intValue()) {
                 moveRight(0); // 오른쪽 방향키가 눌렸을 때, 현재 블록을 오른쪽으로 이동시킵니다.
-                drawBoard(pane, board, color_board,0);
+                drawBoard(pane, nextpane, board, color_board,0);
             }
             else if(keyCode == ((Number)(Main.SettingObject.get("K_LEFT"))).intValue()) {
                 moveLeft(0); // 왼쪽 방향키가 눌렸을 때, 현재 블록을 왼쪽으로 이동시킵니다.
-                drawBoard(pane, board, color_board,0);
+                drawBoard(pane, nextpane, board, color_board,0);
             }
             else if(keyCode == ((Number)(Main.SettingObject.get("K_SPACE"))).intValue()) {
                 isPaused = !isPaused; // 게임의 상태를 전환합니다.
@@ -1247,7 +1259,7 @@ public class vsBoard1 extends JPanel {
                 x[0] = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
                 y[0] = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
                 placeBlock(board, color_board,0);
-                drawBoard(pane, board, color_board,0);
+                drawBoard(pane, nextpane, board, color_board,0);
             }
             else if(keyCode == ((Number)(Main.SettingObject.get("K_Q"))).intValue())
             {
