@@ -927,7 +927,7 @@ public class vsBoard1 extends JPanel {
         colorBlindMode = A;
     }
 
-    public void GameInit(int p){
+    public void GameInit(){
         initInterval = 1000; //블록이 자동으로 아래로 떨어지는 속도 제어 시간, 현재 1초
         timer.setDelay(initInterval);
 
@@ -936,22 +936,39 @@ public class vsBoard1 extends JPanel {
         } else {
             StyleConstants.setForeground(styleSet, Color.GREEN);}
 
-        x[p] = 3; //Default Position. 현재 블록 위치
-        y[p] = 0; // 현재 블록 위치
-        scores[p] = 0; // 현재 스코어
-        point[p] = 1; // 한칸 떨어질때 얻는 점수
-        level[p] = 0; // 현재 레벨
-        lines[p] = 0; // 현재 지워진 라인 수
-        bricks[p] = 0; // 생성된 벽돌의 개수
+        x[0] = 3; //Default Position. 현재 블록 위치
+        y[0] = 0; // 현재 블록 위치
+        scores[0] = 0; // 현재 스코어
+        point[0] = 1; // 한칸 떨어질때 얻는 점수
+        level[0] = 0; // 현재 레벨
+        lines[0] = 0; // 현재 지워진 라인 수
+        bricks[0] = 0; // 생성된 벽돌의 개수
         isPaused = false; // 게임이 일시 중지되었는지 나타내는 변수
-        curr[p] =  getRandomBlock(p);// 현재 움직이고 있는 블록
-        bricks[p]--;
-        nextcurr[p] = getRandomBlock(p); // 다음 블럭
+        curr[0] =  getRandomBlock(0);// 현재 움직이고 있는 블록
+        bricks[0]--;
+        nextcurr[0] = getRandomBlock(0); // 다음 블럭
+
+        x[1] = 3; //Default Position. 현재 블록 위치
+        y[1] = 0; // 현재 블록 위치
+        scores[1] = 0; // 현재 스코어
+        point[1] = 1; // 한칸 떨어질때 얻는 점수
+        level[1] = 0; // 현재 레벨
+        lines[1] = 0; // 현재 지워진 라인 수
+        bricks[1] = 0; // 생성된 벽돌의 개수
+        isPaused = false; // 게임이 일시 중지되었는지 나타내는 변수
+        curr[1] =  getRandomBlock(1);// 현재 움직이고 있는 블록
+        bricks[1]--;
+        nextcurr[1] = getRandomBlock(1); // 다음 블럭
         gameOver = false; // 게임오버를 알려주는변수 true == 게임오버
 
         for(int i = 0; i<HEIGHT; i++) {
             for (int u = 0; u < WIDTH; u++)
                 board[i][u] = 0;
+        }
+
+        for(int i = 0; i<HEIGHT; i++) {
+            for (int u = 0; u < WIDTH; u++)
+                vsboard[i][u] = 0;
         }
 
         //timer.start();
@@ -1107,7 +1124,8 @@ public class vsBoard1 extends JPanel {
 
             }
         }
-        GameInit(p);
+        GameInit();
+
     }
 
 
@@ -1280,3 +1298,4 @@ public class vsBoard1 extends JPanel {
         }
     }
 }
+

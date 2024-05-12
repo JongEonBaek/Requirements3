@@ -118,7 +118,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.frame.setSize(Main.SCREEN_WIDTH[1], Main.SCREEN_HEIGHT[1]);
                     Main.vsGamePanel.item = index; // Classic Mode라는 의미로 vsGamePanel에 보내줌.
                     Main.vsGamePanel.mode = 1;
-                    Main.vsGamePanel.GameInit(0);
+                    Main.vsGamePanel.GameInit();
                     switchToScreen(Main.vsGamePanel); // 여기를 vsBoard1으로 바꾸어주어야함.
                     Main.vsGamePanel.timer.start();
                     Main.vsGamePanel.setVisible(true);
@@ -154,7 +154,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.frame.setSize(Main.SCREEN_WIDTH[1], Main.SCREEN_HEIGHT[1]);
                     Main.vsGamePanel.item = index;
                     Main.vsGamePanel.mode = 1;
-                    Main.vsGamePanel.GameInit(0);
+                    Main.vsGamePanel.GameInit();
                     switchToScreen(Main.vsGamePanel);
                     Main.vsGamePanel.timer.start();
                     Main.vsGamePanel.setVisible(true);
@@ -189,7 +189,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.frame.setSize(Main.SCREEN_WIDTH[1], Main.SCREEN_HEIGHT[1]);
                     Main.vsGamePanel.item = index;
                     Main.vsGamePanel.mode = 1; // 기본 난이도인 normal 모드로 실행하도록 함.-> 나중에 삭제해도 될듯.
-                    Main.vsGamePanel.GameInit(0);
+                    Main.vsGamePanel.GameInit();
                     switchToScreen(Main.vsGamePanel);
                     Main.vsGamePanel.timer.start();
                     Main.vsGamePanel.setVisible(true);
