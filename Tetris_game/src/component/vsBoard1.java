@@ -604,7 +604,7 @@ public class vsBoard1 extends JPanel {
                 timer.start();
             }
             if(!curr_name[p].equals("BombBlock")) {
-                placeBlock(board1, color_board1,0); // 현재 위치에 블록을 고정시킵니다.
+                placeBlock(board1, color_board1,p); // 현재 위치에 블록을 고정시킵니다.
 
                 if(curr_name[p].equals("ItemLBlock")) {
                     for (int a = -9; a < 10; ++a) {
@@ -956,8 +956,8 @@ public class vsBoard1 extends JPanel {
 
         //timer.start();
         placeBlock(board, color_board, 0); //  선택된 블록을 배치합니다.
-        drawBoard(pane, nextpane,board, color_board, 0); // 보드를 그린다.
         placeBlock(vsboard, vscolor_board, 1); //  선택된 블록을 배치합니다.
+        drawBoard(pane, nextpane,board, color_board, 0); // 보드를 그린다.
         drawBoard(vspane, vsnextpane,vsboard, vscolor_board, 1); // 보드를 그린다.
     }
 
