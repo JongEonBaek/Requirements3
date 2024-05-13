@@ -57,8 +57,11 @@ public class vsBoard1 extends JPanel {
     private JTextPane vssmallpane;
     private int[][] board; // 게임 보드의 상태를 나타내는 2차원 배열
     private Color[][] color_board;
+    private int[][] smallboard;
     private int[][] vsboard; // 상대게임보드의 상태를 나타내는 2차원 배열
     private Color[][] vscolor_board;
+
+    private int[][] vssmallboard;
     private Block curr[]; // 현재 움직이고 있는 블록
     private Block nextcurr[]; // 다음 블럭
 
@@ -128,6 +131,8 @@ public class vsBoard1 extends JPanel {
         color_board = new Color[HEIGHT][WIDTH];
         vsboard = new int[HEIGHT][WIDTH]; // 게임 보드 초기화
         vscolor_board = new Color[HEIGHT][WIDTH];
+        smallboard = new int[10][10];
+        vssmallboard = new int[10][10];
 
         for(int i=0;i<HEIGHT;i++){
             for(int j=0;j<WIDTH;j++){
@@ -135,6 +140,7 @@ public class vsBoard1 extends JPanel {
                 vscolor_board[i][j] = Color.white;
             }
         } // color_board 초기화
+
         playerKeyListener = new PlayerKeyListener(); // 플레이어 키 리스너를 생성
         vsplayerKeyListener = new vsPlayerKeyListener();
         addKeyListener(playerKeyListener); //키 리스너 추가
@@ -385,6 +391,7 @@ public class vsBoard1 extends JPanel {
 
 
     private void checkLines(int[][] board1, Color[][] color_board1,int p) {
+        int temp = 0;
         for (int i = HEIGHT - 1; i >= 0; i--) {
             boolean lineFull = true;
             for (int j = 0; j < WIDTH; j++) {
@@ -404,9 +411,30 @@ public class vsBoard1 extends JPanel {
                 lines[p]++; // 완성된 라인 수 증가
                 create_item = true;
                 i++; // 줄을 지운 후, 같은 줄을 다시 검사하기 위해 i 값을 증가시킵니다.
+                temp++;
             }
         }
+        if(temp>=2){
+            if(p == 0) {
+
+                // 블럭이동
+                System.out.println(temp + "줄이 Player2에게 이동");
+            }
+            else if(p == 1){
+                //블럭이동 
+                System.out.println(temp + "줄이 Player1에게 이동");
+
+            }
+
+        }
     }
+    
+    public void placesmallboard(){
+            
+        
+    }
+    
+    
 
 
     // 현재 블록을 아래로 이동할 수 있는지 확인하는 메소드
@@ -894,6 +922,34 @@ public class vsBoard1 extends JPanel {
 
         } catch(BadLocationException e)
         {
+            System.out.println(e);
+        }
+
+        doc.setParagraphAttributes(0, doc.getLength(), styleSet, false); // 가져온 문서에 스타일 속성을 적용합니다.
+        panel.setStyledDocument(doc); // 스타일이 적용된 문서를 다시 JTextPane에 설정
+    }
+
+
+    public void drawsmallboard(JTextPane panel, int[][] board1){
+        StyledDocument doc = panel.getStyledDocument();
+        StyleConstants.setForeground(styleSet, Color.GRAY);
+        // 상단 경계선을 그립니다.
+
+        try {
+            for (int i = 0; i < board1.length; i++) {
+                for (int j = 0; j < board1[i].length; j++) {
+
+                    if (board1[i][j] == 1) {
+                        doc.insertString(doc.getLength(), "O", styleSet);
+                    } else {
+                        doc.insertString(doc.getLength(), " ", styleSet);
+                    }
+                }
+                doc.insertString(doc.getLength(), "\n", styleSet);
+            }
+
+            // 하단 경계선을 그립니다.
+        } catch	(BadLocationException e){
             System.out.println(e);
         }
 
