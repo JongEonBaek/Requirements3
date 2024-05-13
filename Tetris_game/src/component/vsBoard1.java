@@ -72,6 +72,9 @@ public class vsBoard1 extends JPanel {
     public boolean weightblockLock = false;
     // 생성자 Board, 게임 창 설정 및 초기게임 보드 준비, 첫 번째 블록 생성하고, 타이머 시작
     int slot[] = {0,0};
+
+    public int vsSCREEN_WIDTH = Main.SCREEN_WIDTH[1]/2 - 10;
+    public int vsSCREEN_HEIGHT = Main.SCREEN_HEIGHT[1] -50;
     public vsBoard1() {
         this.colorBlindMode = Main.isColorBlindnessMode;
         curr = new Block[2];
@@ -84,20 +87,20 @@ public class vsBoard1 extends JPanel {
         smallpane = new JTextPane();
         vssmallpane = new JTextPane();
 
-        pane.setBounds(5,5,Main.SCREEN_WIDTH[1]/2 - 10,Main.SCREEN_HEIGHT[1] -50);
-        nextpane.setBounds(Main.SCREEN_WIDTH[1]/2 - 10 + 10,5,Main.SCREEN_WIDTH[1]/2 - 10,(Main.SCREEN_HEIGHT[1] -50)/3*2);
-        smallpane.setBounds(Main.SCREEN_WIDTH[1]/2 - 10 + 10,(Main.SCREEN_HEIGHT[1] -50)/3*2+5,Main.SCREEN_WIDTH[1]/2 - 10,(Main.SCREEN_HEIGHT[1] -50)/3);
-        vspane.setBounds((Main.SCREEN_WIDTH[1]/2 - 10)*2 + 15,5,Main.SCREEN_WIDTH[1]/2 - 10,Main.SCREEN_HEIGHT[1] -50);
-        vsnextpane.setBounds((Main.SCREEN_WIDTH[1]/2 - 10)*3 + 20,5,Main.SCREEN_WIDTH[1]/2 - 10,(Main.SCREEN_HEIGHT[1] -50)/3*2);
-        vssmallpane.setBounds((Main.SCREEN_WIDTH[1]/2 - 10)*3 + 20,(Main.SCREEN_HEIGHT[1] -50)/3*2+5,Main.SCREEN_WIDTH[1]/2 - 10,(Main.SCREEN_HEIGHT[1] -50)/3);
+        pane.setBounds(5,5,vsSCREEN_WIDTH,vsSCREEN_HEIGHT);
+        nextpane.setBounds(vsSCREEN_WIDTH+ 10,5,vsSCREEN_WIDTH,vsSCREEN_HEIGHT/3*2);
+        smallpane.setBounds(vsSCREEN_WIDTH+ 10,vsSCREEN_HEIGHT/3*2+5,vsSCREEN_WIDTH,vsSCREEN_HEIGHT/3);
+        vspane.setBounds(vsSCREEN_WIDTH*2 + 15,5,vsSCREEN_WIDTH,vsSCREEN_HEIGHT);
+        vsnextpane.setBounds(vsSCREEN_WIDTH*3 + 20,5,vsSCREEN_WIDTH,vsSCREEN_HEIGHT/3*2);
+        vssmallpane.setBounds(vsSCREEN_WIDTH*3 + 20,vsSCREEN_HEIGHT/3*2+5,vsSCREEN_WIDTH,vsSCREEN_HEIGHT/3);
 
         this.setLayout(null);
-        addBoard(pane, Color.BLACK, 20);
-        addBoard(nextpane, Color.GRAY, 10); // textpane인 sideBoard 생성
-        addBoard(smallpane, Color.BLACK, 10);
-        addBoard(vspane, Color.BLACK, 20);
-        addBoard(vsnextpane, Color.GRAY, 10); // Vspane의 side(점수) pane추가
-        addBoard(vssmallpane, Color.BLACK, 10);
+        addBoard(pane, Color.BLACK);
+        addBoard(nextpane, Color.GRAY); // textpane인 sideBoard 생성
+        addBoard(smallpane, Color.BLACK);
+        addBoard(vspane, Color.BLACK);
+        addBoard(vsnextpane, Color.GRAY); // Vspane의 side(점수) pane추가
+        addBoard(vssmallpane, Color.BLACK);
 
 
         //Document default style.
@@ -702,7 +705,7 @@ public class vsBoard1 extends JPanel {
 
 
 
-    public void addBoard(JTextPane panel, Color color,int width) {
+    public void addBoard(JTextPane panel, Color color) {
         // Next블럭을 그리기 위한 텍스트패널 생성
 
         //nextpane = new JTextPane(); // 텍스트 패널 생성
@@ -714,13 +717,7 @@ public class vsBoard1 extends JPanel {
                 BorderFactory.createLineBorder(Color.DARK_GRAY, 5)); // 복합 테두리 생성
         panel.setBorder(border); // 텍스트 패널에 테두리를 설정
 
-        Border innerPadding = new EmptyBorder(0, 0, 0, 0); // 상단, 왼쪽, 하단, 오른쪽 여백 설정
-        panel.setPreferredSize(new Dimension(Main.SCREEN_WIDTH[1]/2 - width, Main.SCREEN_HEIGHT[1] -50)); // 가로 300, 세로 200의 크기로 설정
-        // 기존 복합 테두리와 내부 여백을 결합한 새로운 복합 테두리 생성
-        CompoundBorder newBorder = new CompoundBorder(border, innerPadding);
-        // 텍스트 패널에 새로운 테두리 설정
-        panel.setBorder(newBorder);
-        this.add(panel, BorderLayout.WEST); // 텍스트 패널을 창의 EAST에 추가.this는 Board클래스의 인스턴스를 지칭
+        this.add(panel); // 텍스트 패널을 창의 EAST에 추가.this는 Board클래스의 인스턴스를 지칭
     }
 
 
