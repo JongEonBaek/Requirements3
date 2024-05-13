@@ -993,147 +993,18 @@ public class vsBoard1 extends JPanel {
     public void GameOver(int p) {
         timer.stop(); // 타이머를 멈춥니다.
         gameOver = true;
-        if(item == 0) {
-            Main.classicScoreBoard1.update();
-            Main.frame.setSize(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0]);
-            switchToScreen(Main.classicScoreBoard1);
-            int response = JOptionPane.showConfirmDialog(this, "점수를 저장하시겠습니까?", "Game Over", JOptionPane.YES_NO_OPTION);
 
-            if (response == JOptionPane.YES_OPTION) {
-                //점수 저장 구현 순위, 이름, 점수, 모드
-                name = JOptionPane.showInputDialog(this, "이름을 입력하세요:"); // 이름입력하는 대화상자
-                //정상적으로 이름을 입력했다면
-                if (name != null && !name.isEmpty()) {
-
-
-                    JSONArray scoreList = new JSONArray();
-                    JSONParser parser = new JSONParser();
-
-                    try {
-                        FileReader reader = new FileReader(String.format(Main.path) + "/Tetris_game/src/ClassicScoreData.json");
-                        Object obj = parser.parse(reader);
-                        scoreList = (JSONArray) obj;
-                        reader.close();
-                    } catch (Exception e) {
-                        // 파일이 없거나 읽을 수 없을 때 예외 처리
-                    }
-
-                    for (Object item : scoreList) // 최신 상태임을 나타내는 키값 recent에 대항하는 값을 기존의 모든 object들에 대하여 0으로 바꿔줌.
-                    {
-                        JSONObject gameData = (JSONObject) item;
-                        gameData.put("recent", 0);
-                    }
-
-                    // 새 데이터 추가
-                    JSONObject scoreData = new JSONObject();
-                    scoreData.put("mode", mode);
-                    scoreData.put("scores[0]", scores[p]); // 'scores' 변수의 실제 타입에 따라 적절히 처리해야 함
-                    scoreData.put("name", name);
-                    scoreData.put("item", item);
-                    scoreData.put("recent", 1); // 가장 최근에 끝난 게임임을 알려주는 심볼
-                    scoreList.add(scoreData);
-
-                    // 파일에 새 데이터 쓰기
-                    try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/src/ClassicScoreData.json")) {
-                        file.write(scoreList.toJSONString());
-                        file.flush();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    Main.classicScoreBoard1.update();
-                    switchToScreen(Main.classicScoreBoard1);
-
-                    System.out.println(name);
-                    System.out.println(scores[0]);
-                    System.out.println(mode);
-
-                } else // 빈칸을 입력했거나, 이름입력대화상자에서 취소 눌렀을 때
-                {
-                    Main.frame.setSize(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0]);
-                    switchToScreen(Main.mainMenu1);
-                }
-
-            } else if (response == JOptionPane.NO_OPTION || response == JOptionPane.CLOSED_OPTION) { //점수 저장하시겠습니까? -> No일 때
-                Main.frame.setSize(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0]);
-                switchToScreen(Main.mainMenu1);
-            }
+        // p의 값에 따라 다른 메시지를 띄웁니다.
+        if (p == 0) {
+            JOptionPane.showMessageDialog(this, "Player 2 Win", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        } else if (p == 1) {
+            JOptionPane.showMessageDialog(this, "Player 1 Win", "Game Over", JOptionPane.INFORMATION_MESSAGE);
         }
-        else if(item == 1)
-        {
-            Main.itemScoreBoard1.update();
-            Main.frame.setSize(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0]);
-            switchToScreen(Main.itemScoreBoard1);
-            int response = JOptionPane.showConfirmDialog(this, "점수를 저장하시겠습니까?", "Game Over", JOptionPane.YES_NO_OPTION);
+        Main.frame.setSize(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0]);
+        switchToScreen(Main.mainMenu1);
 
-            if (response == JOptionPane.YES_OPTION) {
-                //점수 저장 구현 순위, 이름, 점수, 모드
-                name = JOptionPane.showInputDialog(this, "이름을 입력하세요:"); // 이름입력하는 대화상자
-                //정상적으로 이름을 입력했다면
-                if (name != null && !name.isEmpty()) {
-
-
-                    JSONArray scoreList = new JSONArray();
-                    JSONParser parser = new JSONParser();
-
-                    try {
-                        FileReader reader = new FileReader(String.format(Main.path) + "/Tetris_game/src/ItemScoreData.json");
-                        Object obj = parser.parse(reader);
-                        scoreList = (JSONArray) obj;
-                        reader.close();
-                    } catch (Exception e) {
-                        // 파일이 없거나 읽을 수 없을 때 예외 처리
-                    }
-
-                    for (Object item : scoreList) // 최신 상태임을 나타내는 키값 recent에 대항하는 값을 기존의 모든 object들에 대하여 0으로 바꿔줌.
-                    {
-                        JSONObject gameData = (JSONObject) item;
-                        gameData.put("recent", 0);
-                    }
-
-                    // 새 데이터 추가
-                    JSONObject scoreData = new JSONObject();
-                    scoreData.put("mode", mode);
-                    scoreData.put("scores", scores[p]); // 'scores' 변수의 실제 타입에 따라 적절히 처리해야 함
-                    scoreData.put("name", name);
-                    scoreData.put("item", item);
-                    scoreData.put("recent", 1); // 가장 최근에 끝난 게임임을 알려주는 심볼
-                    scoreList.add(scoreData);
-
-                    // 파일에 새 데이터 쓰기
-                    try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/src/ItemScoreData.json")) {
-                        file.write(scoreList.toJSONString());
-                        file.flush();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    Main.itemScoreBoard1.update();
-
-                    switchToScreen(Main.itemScoreBoard1);
-
-                    System.out.println(name);
-                    System.out.println(scores[0]);
-                    System.out.println(mode);
-
-
-                } else { // 빈칸을 입력했거나, 이름입력대화상자에서 취소 눌렀을 때
-                    Main.frame.setSize(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0]);
-                    switchToScreen(Main.mainMenu1);
-                }
-
-            } else if (response == JOptionPane.NO_OPTION || response == JOptionPane.CLOSED_OPTION) { //점수 저장하시겠습니까? -> No일 때
-                Main.frame.setSize(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0]);
-                switchToScreen(Main.mainMenu1);
-
-            }
-        }
         GameInit();
-
     }
-
-
-
 
 
 
