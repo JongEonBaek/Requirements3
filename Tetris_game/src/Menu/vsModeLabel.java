@@ -115,7 +115,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 System.out.println("Classic Mode Selected");
                 if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[1])
                 {
-                    Main.frame.setSize(Main.SCREEN_WIDTH[1], Main.SCREEN_HEIGHT[1]);
+                    Main.frame.setSize(Main.SCREEN_WIDTH[1]*2, Main.SCREEN_HEIGHT[1]);
                     Main.vsGamePanel.item = index; // Classic Mode라는 의미로 vsGamePanel에 보내줌.
                     Main.vsGamePanel.mode = 1;
                     Main.vsGamePanel.GameInit();
@@ -125,7 +125,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 }
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[2])
                 {
-                    Main.frame.setSize(Main.SCREEN_WIDTH[2], Main.SCREEN_HEIGHT[2]);
+                    Main.frame.setSize(Main.SCREEN_WIDTH[2]*2, Main.SCREEN_HEIGHT[2]);
                     Main.vsGamePanel2.item = index;
                     Main.vsGamePanel2.mode = 1;
                     Main.vsGamePanel2.GameInit();
@@ -136,7 +136,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 }
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[3])
                 {
-                    Main.frame.setSize(Main.SCREEN_WIDTH[3], Main.SCREEN_HEIGHT[3]);
+                    Main.frame.setSize(Main.SCREEN_WIDTH[3]*2, Main.SCREEN_HEIGHT[3]);
                     Main.vsGamePanel3.item = index;
                     Main.vsGamePanel3.mode = 1;
                     Main.vsGamePanel3.GameInit();
@@ -151,7 +151,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
             case 1: // Item Mode
                 if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[1])
                 {
-                    Main.frame.setSize(Main.SCREEN_WIDTH[1], Main.SCREEN_HEIGHT[1]);
+                    Main.frame.setSize(Main.SCREEN_WIDTH[1]*2, Main.SCREEN_HEIGHT[1]);
                     Main.vsGamePanel.item = index;
                     Main.vsGamePanel.mode = 1;
                     Main.vsGamePanel.GameInit();
@@ -161,7 +161,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 }
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[2])
                 {
-                    Main.frame.setSize(Main.SCREEN_WIDTH[2], Main.SCREEN_HEIGHT[2]);
+                    Main.frame.setSize(Main.SCREEN_WIDTH[2]*2, Main.SCREEN_HEIGHT[2]);
                     Main.vsGamePanel2.item = index;
                     Main.vsGamePanel2.mode = 1;
                     Main.vsGamePanel2.GameInit();
@@ -171,7 +171,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 }
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[3])
                 {
-                    Main.frame.setSize(Main.SCREEN_WIDTH[3], Main.SCREEN_HEIGHT[3]);
+                    Main.frame.setSize(Main.SCREEN_WIDTH[3]*2, Main.SCREEN_HEIGHT[3]);
                     Main.vsGamePanel3.item = index;
                     Main.vsGamePanel3.mode = 1;
                     Main.vsGamePanel3.GameInit();
@@ -186,7 +186,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 System.out.println("Hard Selected");
                 if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[1])
                 {
-                    Main.frame.setSize(Main.SCREEN_WIDTH[1], Main.SCREEN_HEIGHT[1]);
+                    Main.frame.setSize(Main.SCREEN_WIDTH[1]*2, Main.SCREEN_HEIGHT[1]);
                     Main.vsGamePanel.item = index;
                     Main.vsGamePanel.mode = 1; // 기본 난이도인 normal 모드로 실행하도록 함.-> 나중에 삭제해도 될듯.
                     Main.vsGamePanel.GameInit();
@@ -196,7 +196,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 }
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[2])
                 {
-                    Main.frame.setSize(Main.SCREEN_WIDTH[2], Main.SCREEN_HEIGHT[2]);
+                    Main.frame.setSize(Main.SCREEN_WIDTH[2]*2, Main.SCREEN_HEIGHT[2]);
                     Main.vsGamePanel2.item = index;
                     Main.vsGamePanel2.mode = 1;
                     Main.vsGamePanel2.GameInit();
@@ -206,7 +206,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 }
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[3])
                 {
-                    Main.frame.setSize(Main.SCREEN_WIDTH[3], Main.SCREEN_HEIGHT[3]);
+                    Main.frame.setSize(Main.SCREEN_WIDTH[3]*2, Main.SCREEN_HEIGHT[3]);
                     Main.vsGamePanel3.item = index;
                     Main.vsGamePanel3.mode = 1;
                     Main.vsGamePanel3.GameInit();
