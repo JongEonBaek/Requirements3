@@ -53,6 +53,8 @@ public class vsBoard1 extends JPanel {
     private JTextPane nextpane;// 넥스트블록 표시하는 판
     private JTextPane vspane;
     private JTextPane vsnextpane;
+    private JTextPane smallpane;
+    private JTextPane vssmallpane;
     private int[][] board; // 게임 보드의 상태를 나타내는 2차원 배열
     private Color[][] color_board;
     private int[][] vsboard; // 상대게임보드의 상태를 나타내는 2차원 배열
@@ -79,10 +81,23 @@ public class vsBoard1 extends JPanel {
         nextpane = new JTextPane();
         vspane = new JTextPane();
         vsnextpane = new JTextPane();
+        smallpane = new JTextPane();
+        vssmallpane = new JTextPane();
+
+        pane.setBounds(5,5,Main.SCREEN_WIDTH[1]/2 - 10,Main.SCREEN_HEIGHT[1] -50);
+        nextpane.setBounds(Main.SCREEN_WIDTH[1]/2 - 10 + 10,5,Main.SCREEN_WIDTH[1]/2 - 10,(Main.SCREEN_HEIGHT[1] -50)/3*2);
+        smallpane.setBounds(Main.SCREEN_WIDTH[1]/2 - 10 + 10,(Main.SCREEN_HEIGHT[1] -50)/3*2+5,Main.SCREEN_WIDTH[1]/2 - 10,(Main.SCREEN_HEIGHT[1] -50)/3);
+        vspane.setBounds((Main.SCREEN_WIDTH[1]/2 - 10)*2 + 15,5,Main.SCREEN_WIDTH[1]/2 - 10,Main.SCREEN_HEIGHT[1] -50);
+        vsnextpane.setBounds((Main.SCREEN_WIDTH[1]/2 - 10)*3 + 20,5,Main.SCREEN_WIDTH[1]/2 - 10,(Main.SCREEN_HEIGHT[1] -50)/3*2);
+        vssmallpane.setBounds((Main.SCREEN_WIDTH[1]/2 - 10)*3 + 20,(Main.SCREEN_HEIGHT[1] -50)/3*2+5,Main.SCREEN_WIDTH[1]/2 - 10,(Main.SCREEN_HEIGHT[1] -50)/3);
+
+        this.setLayout(null);
         addBoard(pane, Color.BLACK, 20);
         addBoard(nextpane, Color.GRAY, 10); // textpane인 sideBoard 생성
+        addBoard(smallpane, Color.BLACK, 10);
         addBoard(vspane, Color.BLACK, 20);
         addBoard(vsnextpane, Color.GRAY, 10); // Vspane의 side(점수) pane추가
+        addBoard(vssmallpane, Color.BLACK, 10);
 
 
         //Document default style.
@@ -705,8 +720,10 @@ public class vsBoard1 extends JPanel {
         CompoundBorder newBorder = new CompoundBorder(border, innerPadding);
         // 텍스트 패널에 새로운 테두리 설정
         panel.setBorder(newBorder);
-        this.add(panel, BorderLayout.EAST); // 텍스트 패널을 창의 EAST에 추가.this는 Board클래스의 인스턴스를 지칭
+        this.add(panel, BorderLayout.WEST); // 텍스트 패널을 창의 EAST에 추가.this는 Board클래스의 인스턴스를 지칭
     }
+
+
 
 
     public void drawBoard(JTextPane panel, JTextPane nextpanel,int[][] board1,Color[][] color_board1,int p) {
@@ -837,7 +854,7 @@ public class vsBoard1 extends JPanel {
             }
 
             //공백추가
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 3; i++) {
                 doc.insertString(doc.getLength(), "\n", styleSet);
             }
 
