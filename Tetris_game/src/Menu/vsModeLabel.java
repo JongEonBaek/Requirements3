@@ -49,6 +49,8 @@ public class vsModeLabel extends JPanel implements KeyListener {
             startY += 50;
         }
 
+
+
         // 임시 메시지 레이블 설정
         keyMessage = new JLabel(" ");
         keyMessage.setFont(new Font("Arial", Font.BOLD, 40));
@@ -107,7 +109,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
 
     }
 
-    private void activateMenuItem(int index) { // 여기서 선택하는 난이도에 따라서 mode(index) = (0 : easy, 1 : normal, 2 : hard)로 넘겨주고 Screen크기에 맞게 (vsBaord1, 2, 3로 바꿔줌)
+    private void activateMenuItem(int index) { // 여기서 선택하는 난이도에 따라서 mode(index) = (0 : easy, 1 : normal, 2 : hard)로 넘겨주고 Screen크기에 맞게 (vsBoard1, 2, 3로 바꿔줌)
         switch (index) {
             case 0: // Classic Mode
                 System.out.println("Classic Mode Selected");
@@ -128,6 +130,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.vsGamePanel2.mode = 1;
                     Main.vsGamePanel2.GameInit();
                     switchToScreen(Main.vsGamePanel2); // vsBoard2를 완성한 뒤 인스턴스화 해서 바꾸어줌.
+
                     Main.vsGamePanel2.timer.start();
                     Main.vsGamePanel2.setVisible(true);
                 }
@@ -143,8 +146,6 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 }
                 else
                     System.out.println("EORRORORORORORORORROROROROR!");
-
-
                 // 여기서 다음 화면으로 넘어가는 로직을 구현
                 break;
             case 1: // Item Mode
