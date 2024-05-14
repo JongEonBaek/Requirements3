@@ -399,6 +399,7 @@ public class vsBoard1 extends JPanel {
     private void checkLines(int[][] board1, Color[][] color_board1,int p) {
         int temp = 0; // 지워진 줄 수
         int smallstart = 0; // smallboard startline
+
         for (int i = HEIGHT - 1; i >= 0; i--) {
             boolean lineFull = true;
             for (int j = 0; j < WIDTH; j++) {
@@ -408,17 +409,34 @@ public class vsBoard1 extends JPanel {
                 }
             }
             if (lineFull) {
-
-                System.out.println(HEIGHT - i + " 번째줄이 지워짐");
-                for(int j = 0; j<WIDTH; j++) {
+                temp++;
+                for (int j = 0; j < WIDTH; j++) {
                     if (currentboard[i][j] == 9)
                         board1[i][j] = currentboard[i][j];
                 }
 
-                for(int j = 0; j<WIDTH; j++) {
-                    smallboard[9 - smallstart][j] = board1[i][j];
-                    //System.out.println(smallboard[9 - smallstart][j]);
+            }
+        }
+        System.out.println(temp);
+        for (int i = HEIGHT - 1; i >= 0; i--) {
+            boolean lineFull = true;
+            for (int j = 0; j < WIDTH; j++) {
+                if (board1[i][j] == 0) {
+                    lineFull = false;
+                    break;
                 }
+            }
+            if (lineFull) {
+                if(temp>=2) {
+
+                    for(int j = 0; j<WIDTH; j++) {
+                        smallboard[9 - smallstart][j] = board1[i][j];
+                        //System.out.println(smallboard[9 - smallstart][j]);
+                    }
+
+                }
+
+
 
                 for(int j =0; j<10; j++)
                 {
@@ -430,18 +448,18 @@ public class vsBoard1 extends JPanel {
 
                 for (int k = i; k > 0; k--) {
                     board1[k] = Arrays.copyOf(board1[k - 1], WIDTH);
-                    currentboard[k] = Arrays.copyOf(currentboard[k-1], WIDTH);
+                    //currentboard[k] = Arrays.copyOf(currentboard[k-1], WIDTH);
                     color_board1[k] = Arrays.copyOf(color_board1[k - 1], WIDTH);
                 }
                 Arrays.fill(board1[0], 0);
-                Arrays.fill(currentboard[0],0);
+                //Arrays.fill(currentboard[0],0);
                 Arrays.fill(color_board1[0], Color.WHITE);
                 scores[p] += 100;
                 lines[p]++; // 완성된 라인 수 증가
                 create_item = true;
                 i++; // 줄을 지운 후, 같은 줄을 다시 검사하기 위해 i 값을 증가시킵니다.
                 smallstart++;
-                temp++;
+
 
             }
         }
