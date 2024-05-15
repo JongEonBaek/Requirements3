@@ -397,9 +397,11 @@ public class vsBoard1 extends JPanel {
 
 
     private void checkLines(int[][] board1, Color[][] color_board1,int p) {
-        int temp = 0; // 지워진 줄 수
-        int smallstart = 0; // smallboard startline
+        int temp = 0; // 꽉찬 줄 수
+        ArrayList<Integer> fullLines = new ArrayList<>(); // 꽉찬 줄 번호 저장 리스트
 
+
+        // 꽉찬줄 몇개인지, 몇번줄인지 파악 후 smallboard에 옮기는 부분
         for (int i = HEIGHT - 1; i >= 0; i--) {
             boolean lineFull = true;
             for (int j = 0; j < WIDTH; j++) {
@@ -410,14 +412,59 @@ public class vsBoard1 extends JPanel {
             }
             if (lineFull) {
                 temp++;
-                for (int j = 0; j < WIDTH; j++) {
-                    if (currentboard[i][j] == 9)
-                        board1[i][j] = currentboard[i][j];
+                fullLines.add(i);
+                if(p==0) {
+                    for (int j = 0; j < WIDTH; j++) {
+                        if (currentboard[i][j] == 9)
+                            board1[i][j] = currentboard[i][j]; // currentboard는 현재 블럭의 위치를 나타냄. 현재 블럭의 위치를 게임 board에 넣어서 현재블럭과 기존에 있던 블럭 구분함
+                    }
+                }
+                else if(p==1){
+                    for (int j = 0; j < WIDTH; j++) {
+                        if (vscurrentboard[i][j] == 9)
+                            board1[i][j] = vscurrentboard[i][j];
+                    }
                 }
 
             }
         }
-        System.out.println(temp);
+        if(temp>=2) // 꽉찬 line이 2개 이상이면 옮긴다
+        {
+            for(int j = temp-1; j>=0; j--) {
+                if (p == 1) {
+                    int smallstart = howlinesinsmallboard(smallboard); // 현재 plyer0의 smallboard에 몇줄있음?
+                    if (smallstart < 10) {
+                        for (int k = 0; k < 9; k++) {
+                            smallboard[k] = Arrays.copyOf(smallboard[k + 1], 10);
+                        }
+                        Arrays.fill(smallboard[9], 0);
+                        for (int k = 0; k < WIDTH; k++) {
+                            smallboard[9][k] = board1[fullLines.get(j)][k];
+                        }
+                    }
+                }
+                else if (p == 0) {
+                    int smallstart = howlinesinsmallboard(vssmallboard); // 현재 player1의 vssmallboard에 몇줄있음?
+                    if (smallstart < 10) { // 10줄이하면
+                        for (int k = 0; k < 9; k++) { // smallboard를 한칸씩 위로 올리고
+                            vssmallboard[k] = Arrays.copyOf(vssmallboard[k + 1], 10);
+                        }
+                        Arrays.fill(vssmallboard[9], 0);
+                        for (int k = 0; k < WIDTH; k++) { // 맨 아래줄에 꽉찬 line가져옴
+                            vssmallboard[9][k] = board1[fullLines.get(j)][k];
+                        }
+
+                    }
+                }
+            }
+
+        }
+        if(p==1) // player2면 player1의 smallboard그림
+            drawsmallboard(smallpane, smallboard);
+        else if(p==0)// player1이면 player2의 smallboard그림
+            drawsmallboard(vssmallpane, vssmallboard);
+
+        // 줄을 직접적으로 지우는 부분
         for (int i = HEIGHT - 1; i >= 0; i--) {
             boolean lineFull = true;
             for (int j = 0; j < WIDTH; j++) {
@@ -427,60 +474,40 @@ public class vsBoard1 extends JPanel {
                 }
             }
             if (lineFull) {
-                if(temp>=2) {
-
-                    for(int j = 0; j<WIDTH; j++) {
-                        smallboard[9 - smallstart][j] = board1[i][j];
-                        //System.out.println(smallboard[9 - smallstart][j]);
-                    }
-
-                }
-
-
-
-                for(int j =0; j<10; j++)
-                {
-                    for(int u = 0; u<10; u++)
-                        System.out.print(smallboard[j][u]);
-                    System.out.print("\n");
-                }
-                drawsmallboard(smallpane, smallboard);
-
                 for (int k = i; k > 0; k--) {
                     board1[k] = Arrays.copyOf(board1[k - 1], WIDTH);
-                    //currentboard[k] = Arrays.copyOf(currentboard[k-1], WIDTH);
+
                     color_board1[k] = Arrays.copyOf(color_board1[k - 1], WIDTH);
                 }
+
                 Arrays.fill(board1[0], 0);
-                //Arrays.fill(currentboard[0],0);
                 Arrays.fill(color_board1[0], Color.WHITE);
                 scores[p] += 100;
                 lines[p]++; // 완성된 라인 수 증가
                 create_item = true;
                 i++; // 줄을 지운 후, 같은 줄을 다시 검사하기 위해 i 값을 증가시킵니다.
-                smallstart++;
 
 
-            }
-        }
-        if(temp>=2){
-            if(p == 0) {
-
-                // 블럭이동
-                System.out.println(temp + "줄이 Player2에게 이동");
-            }
-            else if(p == 1){
-                //블럭이동 
-                System.out.println(temp + "줄이 Player1에게 이동");
 
             }
-
         }
     }
     
-    public void placesmallboard(){
-            
-        
+    public int howlinesinsmallboard(int[][] board1){
+        int exlines = 0;
+            for(int i =0; i <10; i++){
+                for(int j =0;j<10; j++)
+                {
+                    if(board1[i][j] == 1)
+                    {
+                        exlines++;
+                        break;
+                    }
+                }
+
+            }
+        System.out.println("1이 포함된 줄의 수: " + exlines);
+            return exlines;
     }
     
     
@@ -1010,7 +1037,7 @@ public class vsBoard1 extends JPanel {
     public void drawsmallboard(JTextPane panel, int[][] board1){
         StyledDocument doc = panel.getStyledDocument();
         StyleConstants.setForeground(styleSet, Color.GRAY);
-        StyleConstants.setFontSize(styleSet, 12);
+        StyleConstants.setFontSize(styleSet, 16);
         panel.setText("");
         // 상단 경계선을 그립니다.
 
@@ -1019,14 +1046,14 @@ public class vsBoard1 extends JPanel {
                 for (int j = 0; j < board1[i].length; j++) {
 
                     if (board1[i][j] != 9 && board1[i][j] != 0) {
-                        System.out.print("O");
+                        //System.out.print("O");
                         doc.insertString(doc.getLength(), "O", styleSet);
                     } else {
-                        System.out.print("X");
+                        //System.out.print("X");
                         doc.insertString(doc.getLength(), " ", styleSet);
                     }
                 }
-                System.out.print("\n");
+                //System.out.print("\n");
                 doc.insertString(doc.getLength(), "\n", styleSet);
             }
 
