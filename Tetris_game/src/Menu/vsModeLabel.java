@@ -127,7 +127,8 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[2])
                 {
                     Main.frame.setSize(Main.SCREEN_WIDTH[2]*2, Main.SCREEN_HEIGHT[2]);
-                    Main.vsGamePanel2.item = index;
+                    Main.vsGamePanel2.item[0] = 0;
+                    Main.vsGamePanel2.item[1] = 0;
                     Main.vsGamePanel2.mode = 1;
                     Main.vsGamePanel2.GameInit();
                     switchToScreen(Main.vsGamePanel2); // vsBoard2를 완성한 뒤 인스턴스화 해서 바꾸어줌.
@@ -137,7 +138,8 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[3])
                 {
                     Main.frame.setSize(Main.SCREEN_WIDTH[3]*2, Main.SCREEN_HEIGHT[3]);
-                    Main.vsGamePanel3.item = index;
+                    Main.vsGamePanel3.item[0] = 0;
+                    Main.vsGamePanel3.item[1] = 0;
                     Main.vsGamePanel3.mode = 1;
                     Main.vsGamePanel3.GameInit();
                     switchToScreen(Main.vsGamePanel3); // vsBoard3를 완성한 뒤 인스턴스화 해서 바꿔야함.
@@ -152,8 +154,8 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[1])
                 {
                     Main.frame.setSize(Main.SCREEN_WIDTH[1]*2, Main.SCREEN_HEIGHT[1]);
-                    Main.vsGamePanel.item[0] = index;
-                    Main.vsGamePanel.item[1] = index;
+                    Main.vsGamePanel.item[0] = 1;
+                    Main.vsGamePanel.item[1] = 1;
                     Main.vsGamePanel.mode = 1;
                     Main.vsGamePanel.GameInit();
                     switchToScreen(Main.vsGamePanel);
@@ -163,7 +165,8 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[2])
                 {
                     Main.frame.setSize(Main.SCREEN_WIDTH[2]*2, Main.SCREEN_HEIGHT[2]);
-                    Main.vsGamePanel2.item = index;
+                    Main.vsGamePanel2.item[0] = 1;
+                    Main.vsGamePanel2.item[1] = 1;
                     Main.vsGamePanel2.mode = 1;
                     Main.vsGamePanel2.GameInit();
                     switchToScreen(Main.vsGamePanel2);
@@ -173,7 +176,8 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[3])
                 {
                     Main.frame.setSize(Main.SCREEN_WIDTH[3]*2, Main.SCREEN_HEIGHT[3]);
-                    Main.vsGamePanel3.item = index;
+                    Main.vsGamePanel3.item[0] = 1;
+                    Main.vsGamePanel3.item[1] = 1;
                     Main.vsGamePanel3.mode = 1;
                     Main.vsGamePanel3.GameInit();
                     switchToScreen(Main.vsGamePanel3);
@@ -201,25 +205,27 @@ public class vsModeLabel extends JPanel implements KeyListener {
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[2])
                 {
                     Main.frame.setSize(Main.SCREEN_WIDTH[2]*2, Main.SCREEN_HEIGHT[2]);
-                    Main.vsGamePanel2.item = index;
-                    Main.vsGamePanel.TimeMode = true;
+                    Main.vsGamePanel2.item[0] = 0;
+                    Main.vsGamePanel2.item[1] = 0;
+                    Main.vsGamePanel2.TimeMode = true;
                     Main.vsGamePanel2.mode = 1;
                     Main.vsGamePanel2.GameInit();
                     switchToScreen(Main.vsGamePanel2);
                     Main.vsGamePanel2.timer.start();
-                    //Main.vsGamePanel2.gametimer.start();
+                    Main.vsGamePanel2.gametimer.start();
                     Main.vsGamePanel2.setVisible(true);
                 }
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[3])
                 {
                     Main.frame.setSize(Main.SCREEN_WIDTH[3]*2, Main.SCREEN_HEIGHT[3]);
-                    Main.vsGamePanel3.item = index;
-                    Main.vsGamePanel.TimeMode = true;
+                    Main.vsGamePanel3.item[0] = 0;
+                    Main.vsGamePanel3.item[1] = 0;
+                    Main.vsGamePanel3.TimeMode = true;
                     Main.vsGamePanel3.mode = 1;
                     Main.vsGamePanel3.GameInit();
                     switchToScreen(Main.vsGamePanel3);
                     Main.vsGamePanel3.timer.start();
-                    //Main.vsGamePanel3.gametimer.start();
+                    Main.vsGamePanel3.gametimer.start();
                     Main.vsGamePanel3.setVisible(true);
                 }
                 else

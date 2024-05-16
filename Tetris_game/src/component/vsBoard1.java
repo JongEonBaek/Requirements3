@@ -1226,6 +1226,7 @@ public class vsBoard1 extends JPanel {
     // 게임 종료 이벤트
     public void GameOver(int p) {
         timer.stop(); // 타이머를 멈춥니다.
+        gametimer.stop();
         gameOver = true;
 
         // p의 값에 따라 다른 메시지를 띄웁니다.
