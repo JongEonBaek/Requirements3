@@ -118,8 +118,13 @@ public class vsBoard1 extends JPanel {
         gametimer = new Timer(1000,new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 gameTime--;
-                if(gameTime == 0 && TimeMode)
-                    GameTimeOver();
+                if(TimeMode) {
+                    NextBlocknscore(nextpane, 0);
+                    NextBlocknscore(vsnextpane, 1);
+
+                    if(gameTime == 0)
+                        GameTimeOver();
+                }
                 System.out.println(gameTime);
             }
         });
@@ -1016,10 +1021,12 @@ public class vsBoard1 extends JPanel {
 
             doc.insertString(doc.getLength(), "\n", styleSet);
             //여기에다가 시간 넣으면 될 거 같은데?
-            String timeFormatted = String.format("%02d : %02d", gameTime / 60, gameTime % 60); // "분 : 초" 형태로 포매팅
-            StyleConstants.setForeground(styleSet, Color.ORANGE);
-            doc.insertString(doc.getLength(), timeFormatted, styleSet); // 포매팅된 시간 문자열을 문서에 추가
-            StyleConstants.setForeground(styleSet, Color.WHITE);
+            if(TimeMode) {
+                String timeFormatted = String.format("%02d : %02d", gameTime / 60, gameTime % 60); // "분 : 초" 형태로 포매팅
+                StyleConstants.setForeground(styleSet, Color.ORANGE);
+                doc.insertString(doc.getLength(), timeFormatted, styleSet); // 포매팅된 시간 문자열을 문서에 추가
+                StyleConstants.setForeground(styleSet, Color.WHITE);
+            }
             doc.insertString(doc.getLength(), "\n", styleSet);
             doc.insertString(doc.getLength(), "\n", styleSet);
 
