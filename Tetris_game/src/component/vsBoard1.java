@@ -125,7 +125,7 @@ public class vsBoard1 extends JPanel {
                     if(gameTime == 0)
                         GameTimeOver();
                 }
-                System.out.println(gameTime);
+                //System.out.println(gameTime);
             }
         });
 
@@ -515,7 +515,7 @@ public class vsBoard1 extends JPanel {
                 }
 
             }
-        System.out.println("1이 포함된 줄의 수: " + exlines);
+        //System.out.println("1이 포함된 줄의 수: " + exlines);
             return exlines;
     }
     
@@ -712,7 +712,7 @@ public class vsBoard1 extends JPanel {
                 {
                     for(int j=0;j<curr[p].height();++j)
                     {
-                        System.out.println(String.format("%d %d", x[p], y[p]));
+                        //System.out.println(String.format("%d %d", x[p], y[p]));
                         if(curr[p].getShape(i, j) == 4)
                         {
                             Linei = i;
@@ -727,7 +727,7 @@ public class vsBoard1 extends JPanel {
                 {
                     for(int j=0;j<curr[p].height();++j)
                     {
-                        System.out.println(String.format("%d %d", x[p], y[p]));
+                        //System.out.println(String.format("%d %d", x[p], y[p]));
                         if(curr[p].getShape(i, j) == 5)
                         {
                             Linei = i;
@@ -1226,6 +1226,7 @@ public class vsBoard1 extends JPanel {
     // 게임 종료 이벤트
     public void GameOver(int p) {
         timer.stop(); // 타이머를 멈춥니다.
+        gametimer.stop();
         gameOver = true;
 
         // p의 값에 따라 다른 메시지를 띄웁니다.
@@ -1354,14 +1355,14 @@ public class vsBoard1 extends JPanel {
                 }
                 else if(curr_name[0].equals("ItemLBlock"))
                 {
-                    System.out.println("당첨4");
+                    //System.out.println("당첨4");
                     for(int i=0;i<curr[0].width();++i)
-                    {System.out.println("당첨5");
+                    {//System.out.println("당첨5");
                         for(int j=0;j<curr[0].height();++j)
                         {
-                            System.out.println(String.format("%d %d", x[0], y[0]));
+                            //System.out.println(String.format("%d %d", x[0], y[0]));
                             if(curr[0].getShape(i, j) == 4)
-                            {System.out.println("당첨6");
+                            {//System.out.println("당첨6");
                                 Linei = i;
                                 Linej = j;
                             }
@@ -1521,14 +1522,14 @@ public class vsBoard1 extends JPanel {
                 }
                 else if(curr_name[1].equals("ItemLBlock"))
                 {
-                    System.out.println("당첨4");
+                    //System.out.println("당첨4");
                     for(int i=0;i<curr[1].width();++i)
-                    {System.out.println("당첨5");
+                    {//System.out.println("당첨5");
                         for(int j=0;j<curr[1].height();++j)
                         {
-                            System.out.println(String.format("%d %d", x[1], y[1]));
+                            //System.out.println(String.format("%d %d", x[1], y[1]));
                             if(curr[1].getShape(i, j) == 4)
-                            {System.out.println("당첨6");
+                            {//System.out.println("당첨6");
                                 Linei = i;
                                 Linej = j;
                             }
