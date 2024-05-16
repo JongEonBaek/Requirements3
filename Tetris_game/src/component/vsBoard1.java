@@ -4,9 +4,7 @@ import blocks.*;
 
 import javax.swing.*;
 import javax.swing.Timer;
-import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,10 +15,6 @@ import java.util.*;
 
 import Menu.Main;
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
-import org.json.simple.parser.JSONParser;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.List;
 
@@ -72,10 +66,10 @@ public class vsBoard1 extends JPanel {
     private String[] nextcurr_name = {"",""};
 
     public int mode = 1; // 난이도 설정 easy == 0, normal == 1, hard == 2;
-    public int item = 0; // itemMode 0 == false(보통모드), 1 == true(아이템모드);
+    public int item[] = {0,0}; // itemMode 0 == false(보통모드), 1 == true(아이템모드);
     public boolean gameOver = false; // 게임오버를 알려주는변수 true == 게임오버
-    public boolean isfirst[] = {true, true};
-    public boolean weightblockLock = false;
+
+    public boolean weightblockLock[] = {false,false};
     // 생성자 Board, 게임 창 설정 및 초기게임 보드 준비, 첫 번째 블록 생성하고, 타이머 시작
     int slot[] = {0,0};
 
@@ -174,11 +168,10 @@ public class vsBoard1 extends JPanel {
 
     private Block getRandomBlock(int p) {
         Random rnd = new Random(System.currentTimeMillis());
-        isfirst[p] = false;
         bricks[p]++;
         setLevel(p);
         slot[p] = 0;
-        if(item == 0)
+        if(item[p] == 0)
         {
             switch (mode) {
 
@@ -235,7 +228,7 @@ public class vsBoard1 extends JPanel {
                     }
             }
         }
-        else if(item == 1)
+        else if(item[p] == 1)
         {
             if(create_item[p] && lines[p] != 0 && lines[p] % 10 == 0) // 일단은 10번째마다 무게추 블록이 나오도록. 나중에 변경 예정.
             {
@@ -260,29 +253,28 @@ public class vsBoard1 extends JPanel {
                 }
                 else if(slot[p] == 3)
                 {
-                    item = 0;
+                    item[p] = 0;
                     Block temp = getRandomBlock(p);
                     bricks[p]--;
                     replaceOneWithL(temp.shape);
-                    item = 1;
+                    item[p] = 1;
                     curr_name[p] = nextcurr_name[p];
                     nextcurr_name[p] = "ItemLBlock";
                     return temp;
                 }
                 else if(slot[p] == 4)
                 {
-                    item = 0;
+                    item[p] = 0;
                     Block temp = getRandomBlock(p);
                     bricks[p]--;
                     replaceOneWithV(temp.shape);
-                    item = 1;
+                    item[p] = 1;
                     curr_name[p] = nextcurr_name[p];
                     nextcurr_name[p] = "ItemVBlock";
                     return temp;
                 }
             }
             switch (mode) {
-
                 case 0: //easy
                     slot[p] = rnd.nextInt(36); // 0부터 35사이의 난수를 생성 (총 36개 슬롯) 6 : 5 : 5 : 5 : 5 : 5 : 5
                     if (slot[p] < 6) { // 0번 블럭을 6번 포함 (0, 1, 2, 3, 4, 5) 6
@@ -393,8 +385,6 @@ public class vsBoard1 extends JPanel {
             }
         }
     }
-
-
 
     private void checkLines(int[][] board1, Color[][] color_board1,int p) {
         int temp = 0; // 꽉찬 줄 수
@@ -523,10 +513,10 @@ public class vsBoard1 extends JPanel {
                     if (board1[y[p] + j + 1][x[p] + i] != 0) { // 아래 칸이 비어있지 않은 경우
                         if(curr_name[p].equals("WeightBlock"))
                         {
-                            weightblockLock = true;
+                            weightblockLock[p] = true;
                             return true; // 무게추 블록이면 여기선 true임.
                         }
-                        weightblockLock = false;
+                        weightblockLock[p] = false;
                         return false; // 이동할 수 없음
                     }
                 }
@@ -540,7 +530,7 @@ public class vsBoard1 extends JPanel {
         // 이 메소드는 블록의 왼쪽에 다른 블록이 없고, 블록이 게임 보드의 왼쪽 경계를 넘지 않는 경우에만 true를 반환합니다.
         if(curr_name[p].equals("WeightBlock"))
         {
-            if(weightblockLock)
+            if(weightblockLock[p])
                 return false;
         }
         for (int i = 0; i < curr[p].height(); i++) {
@@ -559,7 +549,7 @@ public class vsBoard1 extends JPanel {
         // 블록을 오른쪽으로 이동할 수 있는지 확인하는 메소드
         // 블록의 오른쪽에 다른 블록이 없고, 블록이 게임 보드의 오른쪽 경계를 넘지 않는 경우에만 true를 반환합니다.
         if(curr_name[p].equals("WeightBlock")) {
-            if (weightblockLock)
+            if (weightblockLock[p])
                 return false;
         }
         for (int i = 0; i < curr[p].height(); i++) {
@@ -646,7 +636,6 @@ public class vsBoard1 extends JPanel {
     // 현재 블록을 아래로 한 칸 이동시킨다. 만약 블록이 바닥이나 다른 블록에 닿았다면, 그 위치에 블록을 고정하고 새로운 블록 생성
     protected void moveDown(int[][] board1, Color[][] color_board1,int p) {
 
-
         eraseCurr(board1, p); // 현재 블록의 위치를 한칸 내리기 위해 게임 보드에서 지웁니다.
         int Linei = 0, Linej = 0;
         if(curr_name[p].equals("WeightBlock"))
@@ -662,16 +651,22 @@ public class vsBoard1 extends JPanel {
             else {
                 placeBlock(board1, color_board1,p); // 현재 위치에 블록을 고정시킵니다.
                 checkLines(board1, color_board1,p); // 완성된 라인이 있는지 확인합니다.
-                checkLines(board1, color_board1,p); // 완성된 라인이 있는지 확인합니다.
+                //checkLines(board1, color_board1,p); // 완성된 라인이 있는지 확인합니다.
                 curr[p] = nextcurr[p]; // 다음블록을 현재 블록으로 설정합니다.
                 nextcurr[p] = getRandomBlock(p); // 새로운 블록을 무작위로 가져옵니다.
                 x[p] = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
                 y[p] = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
+
+                if(p==0){
+                    plusLine(board,color_board,smallboard); // smallboard에 있는거 board로 옮김
+                }
+                else if(p==1){
+                    plusLine(vsboard,vscolor_board,vssmallboard); // smallboard에 있는거 board로 옮김
+                }
                 if (!canMoveDown(board1, p)){ // 새 블록이 움직일 수 없는 경우 (게임 오버)
                     GameOver(p);
                 }
             }
-
         }
         else if (canMoveDown(board1, p)) { // 아래로 이동할 수 있는 경우
             y[p]++; // 블록을 아래로 이동
@@ -747,7 +742,6 @@ public class vsBoard1 extends JPanel {
 
 
                 }
-
                 if(curr_name[p].equals("ItemVBlock")) {
                     for (int b = -19; b < 20; ++b) {
                         if (y[p] + Linej + b < 0 || y[p] + Linej + b > 19)
@@ -798,10 +792,8 @@ public class vsBoard1 extends JPanel {
             }
             Arrays.fill(smallboard1[10 - i],0);
         }
-
         drawsmallboard(smallpane,smallboard);
         drawsmallboard(vssmallpane,vssmallboard);
-
     }
 
     protected void moveLeft(int[][] board1, Color[][] color_board1,int p) {
@@ -835,14 +827,14 @@ public class vsBoard1 extends JPanel {
             }
         }
         if(p == 0) {
-            placecurrBlcok(currentboard, p);
+            placecurrBlock(currentboard, p);
         }
         else if(p == 1) {
-            placecurrBlcok(vscurrentboard, p);
+            placecurrBlock(vscurrentboard, p);
         }
     }
 
-    private void placecurrBlcok(int[][] board1, int p){
+    private void placecurrBlock(int[][] board1, int p){
         for(int k = 0; k<20; k++)
         {
             for(int u = 0; u<10; u++)
@@ -1360,7 +1352,6 @@ public class vsBoard1 extends JPanel {
                 x[0] = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
                 y[0] = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
                 plusLine(board,color_board,smallboard);
-
                 placeBlock(board, color_board,0);
                 drawBoard(pane, nextpane, board, color_board,0);
             }
