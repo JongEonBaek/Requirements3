@@ -32,6 +32,7 @@ public class vsBoard1 extends JPanel {
     private final KeyListener vsplayerKeyListener; // 사용자의 키 입력을 처리하는 KeyListener 객체
     private final SimpleAttributeSet styleSet; // 텍스트 스타일 설정하는 SimpleAttributeSet
     public final Timer timer; // 블록이 자동으로 아래로 떨어지게 하는 Timer
+    public final Timer gametimer;
     int x[] = {3,3}; //Default Position. 현재 블록 위치
     int y[] = {0,0}; // 현재 블록 위치
     int point[] = {1,1}; // 한칸 떨어질때 얻는 점수
@@ -67,11 +68,13 @@ public class vsBoard1 extends JPanel {
 
     public int mode = 1; // 난이도 설정 easy == 0, normal == 1, hard == 2;
     public int item[] = {0,0}; // itemMode 0 == false(보통모드), 1 == true(아이템모드);
+    public boolean TimeMode = false;
     public boolean gameOver = false; // 게임오버를 알려주는변수 true == 게임오버
 
     public boolean weightblockLock[] = {false,false};
     // 생성자 Board, 게임 창 설정 및 초기게임 보드 준비, 첫 번째 블록 생성하고, 타이머 시작
-    int slot[] = {0,0};
+    private int slot[] = {0,0};
+    public int gameTime = 0;
 
     public int vsSCREEN_WIDTH = Main.SCREEN_WIDTH[1]/2 - 10;
     public int vsSCREEN_HEIGHT = Main.SCREEN_HEIGHT[1] -50;
@@ -112,6 +115,15 @@ public class vsBoard1 extends JPanel {
         StyleConstants.setAlignment(styleSet, StyleConstants.ALIGN_CENTER); // 텍스트 정렬을 가운데로 설정
 
 
+        gametimer = new Timer(1000,new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                gameTime--;
+                if(gameTime == 0 && TimeMode)
+                    GameTimeOver();
+                System.out.println(gameTime);
+            }
+        });
+
         //Set timer for block drops.
         timer = new Timer(initInterval, new ActionListener() {
             @Override
@@ -120,6 +132,7 @@ public class vsBoard1 extends JPanel {
                 drawBoard(pane, nextpane, board, color_board,0);
                 moveDown(vsboard,vscolor_board,1);
                 drawBoard(vspane, vsnextpane,vsboard, vscolor_board,1);
+
             }
         });
 
@@ -164,6 +177,7 @@ public class vsBoard1 extends JPanel {
         drawBoard(vspane, vsnextpane, vsboard, vscolor_board,1);
 
         // timer.start(); // 타이머 시작
+        // gametimer.start();
     }
 
     private Block getRandomBlock(int p) {
@@ -999,9 +1013,18 @@ public class vsBoard1 extends JPanel {
             }
 
             //공백추가
-            for (int i = 0; i < 3; i++) {
-                doc.insertString(doc.getLength(), "\n", styleSet);
-            }
+
+            doc.insertString(doc.getLength(), "\n", styleSet);
+            //여기에다가 시간 넣으면 될 거 같은데?
+            String timeFormatted = String.format("%02d : %02d", gameTime / 60, gameTime % 60); // "분 : 초" 형태로 포매팅
+            StyleConstants.setForeground(styleSet, Color.ORANGE);
+            doc.insertString(doc.getLength(), timeFormatted, styleSet); // 포매팅된 시간 문자열을 문서에 추가
+            StyleConstants.setForeground(styleSet, Color.WHITE);
+            doc.insertString(doc.getLength(), "\n", styleSet);
+            doc.insertString(doc.getLength(), "\n", styleSet);
+
+
+
 
             String blockFormatted = String.format("%3d", bricks[p]);
             String linesFormatted = String.format("%3d", lines[p]);
@@ -1133,6 +1156,7 @@ public class vsBoard1 extends JPanel {
     public void GameInit(){
         initInterval = 1000; //블록이 자동으로 아래로 떨어지는 속도 제어 시간, 현재 1초
         timer.setDelay(initInterval);
+        gameTime = 90;
 
         if (colorBlindMode) {
             StyleConstants.setForeground(styleSet, Color.PINK);
@@ -1165,13 +1189,17 @@ public class vsBoard1 extends JPanel {
         gameOver = false; // 게임오버를 알려주는변수 true == 게임오버
 
         for(int i = 0; i<HEIGHT; i++) {
-            for (int u = 0; u < WIDTH; u++)
+            for (int u = 0; u < WIDTH; u++) {
                 board[i][u] = 0;
-        }
-
-        for(int i = 0; i<HEIGHT; i++) {
-            for (int u = 0; u < WIDTH; u++)
                 vsboard[i][u] = 0;
+            }
+        }
+        for(int i =0; i<10; i++){
+            for(int j = 0; j<10; j++)
+            {
+                smallboard[i][j] = 0;
+                vssmallboard[i][j] = 0;
+            }
         }
 
         //timer.start();
@@ -1199,6 +1227,23 @@ public class vsBoard1 extends JPanel {
         } else if (p == 1) {
             JOptionPane.showMessageDialog(this, "Player 1 Win", "Game Over", JOptionPane.INFORMATION_MESSAGE);
         }
+        Main.frame.setSize(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0]);
+        switchToScreen(Main.mainMenu1);
+
+        GameInit();
+    }
+
+    public void GameTimeOver(){
+        timer.stop();
+        gametimer.stop();
+        gameOver = true;
+
+        if(scores[0]>scores[1])
+            JOptionPane.showMessageDialog(this, "Player 1 Win \n" + "Player 1 : " + scores[0] + ", Player 2 : " + scores[1], "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        else if(scores[1]> scores[0])
+            JOptionPane.showMessageDialog(this, "Player 2 Win \n" + "Player 1 : " + scores[0] + ", Player 2 : " + scores[1], "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        else
+            JOptionPane.showMessageDialog(this, "비겼습니다. \n" + "Player 1, 2 : " + scores[0], "Game Over", JOptionPane.INFORMATION_MESSAGE);
         Main.frame.setSize(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0]);
         switchToScreen(Main.mainMenu1);
 
