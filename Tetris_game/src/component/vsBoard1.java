@@ -68,7 +68,7 @@ public class vsBoard1 extends JPanel {
     public int mode = 1; // 난이도 설정 easy == 0, normal == 1, hard == 2;
     public int item[] = {0,0}; // itemMode 0 == false(보통모드), 1 == true(아이템모드);
     public boolean gameOver = false; // 게임오버를 알려주는변수 true == 게임오버
-    public boolean isfirst[] = {true, true};
+
     public boolean weightblockLock[] = {false,false};
     // 생성자 Board, 게임 창 설정 및 초기게임 보드 준비, 첫 번째 블록 생성하고, 타이머 시작
     int slot[] = {0,0};
@@ -168,7 +168,6 @@ public class vsBoard1 extends JPanel {
 
     private Block getRandomBlock(int p) {
         Random rnd = new Random(System.currentTimeMillis());
-        isfirst[p] = false;
         bricks[p]++;
         setLevel(p);
         slot[p] = 0;
