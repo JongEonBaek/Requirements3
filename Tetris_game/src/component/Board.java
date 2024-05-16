@@ -38,8 +38,8 @@ public class Board extends JPanel {
 	private final KeyListener playerKeyListener; // 사용자의 키 입력을 처리하는 KeyListener 객체
 	private final SimpleAttributeSet styleSet; // 텍스트 스타일 설정하는 SimpleAttributeSet
 	public final Timer timer; // 블록이 자동으로 아래로 떨어지게 하는 Timer
-	int x = 3; //Default Position. 현재 블록 위치
-	int y = 0; // 현재 블록 위치
+	public int x = 3; //Default Position. 현재 블록 위치
+	public int y = 0; // 현재 블록 위치
 	int point = 1; // 한칸 떨어질때 얻는 점수
 	int scores = 0; // 현재 스코어
 	int level = 0; // 현재 레벨
@@ -390,7 +390,7 @@ public class Board extends JPanel {
 
 
 	// 현재 블록을 아래로 이동할 수 있는지 확인하는 메소드
-	private boolean canMoveDown() {
+	protected boolean canMoveDown() {
 		// 블럭이 아래로 내려갈 수 있는지 확인하는 메소드
 		if (y + curr.height() == HEIGHT) return false; // 바닥에 닿은 경우
 
@@ -412,7 +412,7 @@ public class Board extends JPanel {
 		return true; // 모든 검사를 통과하면 이동할 수 있음
 	}
 
-	protected boolean canMoveLeft() {
+	public boolean canMoveLeft() {
 		// 블록을 왼쪽으로 이동할 수 있는지 확인하는 메소드
 		// 이 메소드는 블록의 왼쪽에 다른 블록이 없고, 블록이 게임 보드의 왼쪽 경계를 넘지 않는 경우에만 true를 반환합니다.
 		if(curr_name.equals("WeightBlock"))
@@ -472,6 +472,17 @@ public class Board extends JPanel {
 		curr.rotate();
 		return true;
 	}
+
+	public void ChangeCurrBlock(Block b)
+	{
+		curr = b;
+	}
+	public void ChangeCurrXY(int x, int y)
+	{
+		this.x = x;
+		this.y = y;
+	}
+
 	public static void replaceOneWithV(int[][] board) {
 		// '1' 위치를 저장할 리스트 생성
 		List<int[]> positions = new ArrayList<>();

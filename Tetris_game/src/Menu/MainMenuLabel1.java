@@ -16,6 +16,7 @@ public class MainMenuLabel1 extends JPanel implements KeyListener {
     public final JLabel mainLabel;
     private JLabel keyMessage;
     private javax.swing.Timer messageTimer;
+    private JPanel nextPanel;
     public MainMenuLabel1() {
         setSize(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0]);
         setLayout(null);
@@ -73,19 +74,36 @@ public class MainMenuLabel1 extends JPanel implements KeyListener {
 
     }
 
+    public int getCurrentIndex()
+    {
+        return currentIndex;
+    }
+
+    public JPanel getNextPanel()
+    {
+        return nextPanel;
+    }
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         if(keyCode == ((Number)(Main.SettingObject.get("K_UP"))).intValue())
+        {
             currentIndex = (currentIndex - 1 + menuItems.size()) % menuItems.size();
+        }
         else if(keyCode == ((Number)(Main.SettingObject.get("K_DOWN"))).intValue())
+        {
             currentIndex = (currentIndex + 1) % menuItems.size();
+        }
         else if(keyCode == ((Number)(Main.SettingObject.get("K_ENTER"))).intValue())
+        {
             activateMenuItem(currentIndex);
+        }
         else
+        {
             showTemporaryMessage(String.format("<html>Invalid Key Input. <br>Please press %s, %s, Enter</html>",
                     KeyEvent.getKeyText(((Number)Main.SettingObject.get("K_UP")).intValue()),
                     KeyEvent.getKeyText(((Number)Main.SettingObject.get("K_DOWN")).intValue())));
+        }
         updateMenuDisplay();
     }
 
@@ -98,18 +116,20 @@ public class MainMenuLabel1 extends JPanel implements KeyListener {
         switch (index) {
             case 0: // Start
                 System.out.println("Start Selected");
-                switchToScreen(Main.gameMode1);
-
+                nextPanel = Main.gameMode1;
+                switchToScreen(nextPanel);
                 // 여기서 다음 화면으로 넘어가는 로직을 구현
                 break;
             case 1: // Settings 버튼을 누르면 Setting을 하는 화면으로 넘어감.
                 System.out.println("Settings Selected");
-                switchToScreen(Main.optionMenu1);
+                nextPanel = Main.optionMenu1;
+                switchToScreen(nextPanel);
                 // 설정 화면 로직 구현
                 break;
             case 2:
                 System.out.println("ScoreBoard Selected");
-                switchToScreen(Main.scoreBoardMenu1);
+                nextPanel = Main.scoreBoardMenu1;
+                switchToScreen(nextPanel);
                 break;
             case 3: // Exits 버튼을 누르면 저장되게
                 System.out.println("Exit Selected");
@@ -119,6 +139,7 @@ public class MainMenuLabel1 extends JPanel implements KeyListener {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                nextPanel = null;
                 System.exit(0);
                 // 컨트롤 설명 화면 로직 구현
                 break;

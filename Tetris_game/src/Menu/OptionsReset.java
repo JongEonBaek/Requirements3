@@ -30,7 +30,6 @@ public class OptionsReset {
     public static JSONObject readInitialSettings() {
         JSONParser parser = new JSONParser();
         try (FileReader reader = new FileReader(String.format(Main.path) + "/Tetris_game/src/Settings.json")) {
-            //System.out.println("왜 안될까");
             return (JSONObject) parser.parse(reader);
 
         } catch (IOException | ParseException e) {
