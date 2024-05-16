@@ -46,7 +46,7 @@ public class vsBoard1 extends JPanel {
     int lines[] = {0,0}; // 현재 지워진 라인 수
     int bricks[] = {0,0}; // 생성된 벽돌의 개수
     String name;
-    boolean create_item = true;
+    boolean create_item[] = {true,true};
     private boolean isPaused = false; // 게임이 일시 중지되었는지 나타내는 변수
     public static boolean colorBlindMode; // 색맹모드
     private final JTextPane pane; //게임 상태 표시하는 JTextPane 객체
@@ -62,6 +62,9 @@ public class vsBoard1 extends JPanel {
     private Color[][] vscolor_board;
 
     private int[][] vssmallboard;
+
+    private int[][] currentboard;
+    private int[][] vscurrentboard;
     private Block curr[]; // 현재 움직이고 있는 블록
     private Block nextcurr[]; // 다음 블럭
 
@@ -127,6 +130,9 @@ public class vsBoard1 extends JPanel {
         });
 
         //Initialize board for the game.
+        currentboard = new int[HEIGHT][WIDTH];
+        vscurrentboard = new int[HEIGHT][WIDTH];
+
         board = new int[HEIGHT][WIDTH]; // 게임 보드 초기화
         color_board = new Color[HEIGHT][WIDTH];
         vsboard = new int[HEIGHT][WIDTH]; // 게임 보드 초기화
@@ -231,9 +237,9 @@ public class vsBoard1 extends JPanel {
         }
         else if(item == 1)
         {
-            if(create_item && lines[p] != 0 && lines[p] % 10 == 0) // 일단은 10번째마다 무게추 블록이 나오도록. 나중에 변경 예정.
+            if(create_item[p] && lines[p] != 0 && lines[p] % 10 == 0) // 일단은 10번째마다 무게추 블록이 나오도록. 나중에 변경 예정.
             {
-                create_item = false;
+                create_item[p] = false;
                 slot[p] = rnd.nextInt(5);
                 if(slot[p] == 0) {
                     curr_name[p] = nextcurr_name[p];
@@ -391,7 +397,74 @@ public class vsBoard1 extends JPanel {
 
 
     private void checkLines(int[][] board1, Color[][] color_board1,int p) {
-        int temp = 0;
+        int temp = 0; // 꽉찬 줄 수
+        ArrayList<Integer> fullLines = new ArrayList<>(); // 꽉찬 줄 번호 저장 리스트
+
+
+        // 꽉찬줄 몇개인지, 몇번줄인지 파악 후 smallboard에 옮기는 부분
+        for (int i = HEIGHT - 1; i >= 0; i--) {
+            boolean lineFull = true;
+            for (int j = 0; j < WIDTH; j++) {
+                if (board1[i][j] == 0) {
+                    lineFull = false;
+                    break;
+                }
+            }
+            if (lineFull) {
+                temp++;
+                fullLines.add(i);
+                if(p==0) {
+                    for (int j = 0; j < WIDTH; j++) {
+                        if (currentboard[i][j] == 9)
+                            board1[i][j] = currentboard[i][j]; // currentboard는 현재 블럭의 위치를 나타냄. 현재 블럭의 위치를 게임 board에 넣어서 현재블럭과 기존에 있던 블럭 구분함
+                    }
+                }
+                else if(p==1){
+                    for (int j = 0; j < WIDTH; j++) {
+                        if (vscurrentboard[i][j] == 9)
+                            board1[i][j] = vscurrentboard[i][j];
+                    }
+                }
+
+            }
+        }
+        if(temp>=2) // 꽉찬 line이 2개 이상이면 옮긴다
+        {
+            for(int j = temp-1; j>=0; j--) {
+                if (p == 1) {
+                    int smallstart = howlinesinsmallboard(smallboard); // 현재 plyer0의 smallboard에 몇줄있음?
+                    if (smallstart < 10) {
+                        for (int k = 0; k < 9; k++) {
+                            smallboard[k] = Arrays.copyOf(smallboard[k + 1], 10);
+                        }
+                        Arrays.fill(smallboard[9], 0);
+                        for (int k = 0; k < WIDTH; k++) {
+                            smallboard[9][k] = board1[fullLines.get(j)][k];
+                        }
+                    }
+                }
+                else if (p == 0) {
+                    int smallstart = howlinesinsmallboard(vssmallboard); // 현재 player1의 vssmallboard에 몇줄있음?
+                    if (smallstart < 10) { // 10줄이하면
+                        for (int k = 0; k < 9; k++) { // smallboard를 한칸씩 위로 올리고
+                            vssmallboard[k] = Arrays.copyOf(vssmallboard[k + 1], 10);
+                        }
+                        Arrays.fill(vssmallboard[9], 0);
+                        for (int k = 0; k < WIDTH; k++) { // 맨 아래줄에 꽉찬 line가져옴
+                            vssmallboard[9][k] = board1[fullLines.get(j)][k];
+                        }
+
+                    }
+                }
+            }
+
+        }
+        if(p==1) // player2면 player1의 smallboard그림
+            drawsmallboard(smallpane, smallboard);
+        else if(p==0)// player1이면 player2의 smallboard그림
+            drawsmallboard(vssmallpane, vssmallboard);
+
+        // 줄을 직접적으로 지우는 부분
         for (int i = HEIGHT - 1; i >= 0; i--) {
             boolean lineFull = true;
             for (int j = 0; j < WIDTH; j++) {
@@ -403,38 +476,41 @@ public class vsBoard1 extends JPanel {
             if (lineFull) {
                 for (int k = i; k > 0; k--) {
                     board1[k] = Arrays.copyOf(board1[k - 1], WIDTH);
+
                     color_board1[k] = Arrays.copyOf(color_board1[k - 1], WIDTH);
                 }
+
                 Arrays.fill(board1[0], 0);
                 Arrays.fill(color_board1[0], Color.WHITE);
                 scores[p] += 100;
                 lines[p]++; // 완성된 라인 수 증가
-                create_item = true;
+                create_item[p] = true;
                 i++; // 줄을 지운 후, 같은 줄을 다시 검사하기 위해 i 값을 증가시킵니다.
-                temp++;
+
+
+
             }
         }
-        if(temp>=2){
-            if(p == 0) {
+    }
 
-                // 블럭이동
-                System.out.println(temp + "줄이 Player2에게 이동");
-            }
-            else if(p == 1){
-                //블럭이동 
-                System.out.println(temp + "줄이 Player1에게 이동");
-
+    public int howlinesinsmallboard(int[][] board1){
+        int exlines = 0;
+        for(int i =0; i <10; i++){
+            for(int j =0;j<10; j++)
+            {
+                if(board1[i][j] == 1)
+                {
+                    exlines++;
+                    break;
+                }
             }
 
         }
+        System.out.println("1이 포함된 줄의 수: " + exlines);
+        return exlines;
     }
-    
-    public void placesmallboard(){
-            
-        
-    }
-    
-    
+
+
 
 
     // 현재 블록을 아래로 이동할 수 있는지 확인하는 메소드
@@ -688,6 +764,15 @@ public class vsBoard1 extends JPanel {
             y[p] = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
 
             checkLines(board1, color_board1,p); // 완성된 라인이 있는지 확인합니다.
+
+            if(p==0){
+                plusLine(board,color_board,smallboard); // smallboard에 있는거 board로 옮김
+            }
+            else if(p==1){
+                plusLine(vsboard,vscolor_board,vssmallboard); // smallboard에 있는거 board로 옮김
+            }
+
+
             if (!canMoveDown(board1, p)) { // 새 블록이 움직일 수 없는 경우 (게임 오버)
                 GameOver(p);
             }
@@ -695,9 +780,29 @@ public class vsBoard1 extends JPanel {
             placeBlock(board1, color_board1,p);
 
         }
+    }
+    public void plusLine(int[][] board1,Color[][] color_board1, int[][] smallboard1){
+        int howlines = howlinesinsmallboard(smallboard1); // 몇줄 board에 추가해야 됨?
+        for(int i =howlines; i>0; i--) // 추가해야 될 줄 line 수만큼 기존 board위로 올림. ex) 3줄 추가해야 되면 모든 줄 3칸씩 위로 올림
+        {
+            for(int j =0; j<19;j++) {
+                board1[j] = Arrays.copyOf(board1[j + 1], 10);
+                color_board1[j] = Arrays.copyOf(color_board1[j + 1], 10);
+            }
+            Arrays.fill(board1[19], 0);
+            Arrays.fill(color_board1[19], Color.GRAY);
+            for(int k = 0; k<10; k++) {
+                if(smallboard1[10-i][k] != 9) {
+                    board1[19][k] = smallboard1[10 - i][k];
+                }
+            }
+            Arrays.fill(smallboard1[10 - i],0);
+        }
+
+        drawsmallboard(smallpane,smallboard);
+        drawsmallboard(vssmallpane,vssmallboard);
 
     }
-
 
     protected void moveLeft(int[][] board1, Color[][] color_board1,int p) {
         // moveLeft 메서드는 현재 블록을 왼쪽으로 한 칸 이동시킵니다.
@@ -729,12 +834,35 @@ public class vsBoard1 extends JPanel {
                 }
             }
         }
+        if(p == 0) {
+            placecurrBlcok(currentboard, p);
+        }
+        else if(p == 1) {
+            placecurrBlcok(vscurrentboard, p);
+        }
+    }
+
+    private void placecurrBlcok(int[][] board1, int p){
+        for(int k = 0; k<20; k++)
+        {
+            for(int u = 0; u<10; u++)
+            {
+                board1[k][u] = 0;
+            }
+        }
+        for (int j = 0; j < curr[p].height(); j++) {// 현재*/ 블록의 높이만큼 반복합니다.
+            for (int i = 0; i < curr[p].width(); i++) {// 현재 블록의 너비만큼 반복합니다.
+                if (curr[p].getShape(i, j) != 0 && board1[y[p] + j][x[p] + i] == 0) {// 보드에 0이아니면 그대로 유지해야만 함. 아니면 내려가면서 다른 블럭 지움
+                    board1[y[p] + j][x[p] + i] = 9;// 게임 보드 배열에 블록의 모양을 저장합니다.
+                }
+            }
+        }
+
     }
 
 
 
     public void addBoard(JTextPane panel, Color color) {
-        // Next블럭을 그리기 위한 텍스트패널 생성
 
         //nextpane = new JTextPane(); // 텍스트 패널 생성
         panel.setEditable(false); // 텍스트 패널 편집 불가하도록 설정
@@ -745,7 +873,7 @@ public class vsBoard1 extends JPanel {
                 BorderFactory.createLineBorder(Color.DARK_GRAY, 5)); // 복합 테두리 생성
         panel.setBorder(border); // 텍스트 패널에 테두리를 설정
 
-        this.add(panel); // 텍스트 패널을 창의 EAST에 추가.this는 Board클래스의 인스턴스를 지칭
+        this.add(panel); // 텍스트 패널을 창에 추가.this는 Board클래스의 인스턴스를 지칭
     }
 
 
@@ -930,33 +1058,42 @@ public class vsBoard1 extends JPanel {
     }
 
 
+
+
     public void drawsmallboard(JTextPane panel, int[][] board1){
         StyledDocument doc = panel.getStyledDocument();
         StyleConstants.setForeground(styleSet, Color.GRAY);
+        StyleConstants.setFontSize(styleSet, 16);
+        panel.setText("");
         // 상단 경계선을 그립니다.
 
         try {
             for (int i = 0; i < board1.length; i++) {
                 for (int j = 0; j < board1[i].length; j++) {
 
-                    if (board1[i][j] == 1) {
+                    if (board1[i][j] != 9 && board1[i][j] != 0) {
+                        //System.out.print("O");
                         doc.insertString(doc.getLength(), "O", styleSet);
                     } else {
+                        //System.out.print("X");
                         doc.insertString(doc.getLength(), " ", styleSet);
                     }
                 }
+                //System.out.print("\n");
                 doc.insertString(doc.getLength(), "\n", styleSet);
             }
 
-            // 하단 경계선을 그립니다.
+
         } catch	(BadLocationException e){
             System.out.println(e);
         }
 
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false); // 가져온 문서에 스타일 속성을 적용합니다.
-        panel.setStyledDocument(doc); // 스타일이 적용된 문서를 다시 JTextPane에 설정
-    }
 
+        panel.setStyledDocument(doc); // 스타일이 적용된 문서를 다시 JTextPane에 설정
+        StyleConstants.setFontSize(styleSet, 25);
+
+    }
 
     //일정 점수 도달하면 레벨+, 속도+, 얻는 점수+ 조정하는 함수, moveDown(), TimerAction에 호출됨
     public void setLevel(int p) {
@@ -1075,6 +1212,7 @@ public class vsBoard1 extends JPanel {
 
         GameInit();
     }
+
 
 
 
@@ -1221,6 +1359,8 @@ public class vsBoard1 extends JPanel {
                 nextcurr[0] = getRandomBlock(0);
                 x[0] = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
                 y[0] = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
+                plusLine(board,color_board,smallboard);
+
                 placeBlock(board, color_board,0);
                 drawBoard(pane, nextpane, board, color_board,0);
             }
@@ -1387,6 +1527,7 @@ public class vsBoard1 extends JPanel {
                 nextcurr[1] = getRandomBlock(1);
                 x[1] = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
                 y[1] = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
+                plusLine(vsboard,vscolor_board,vssmallboard);
                 placeBlock(vsboard, vscolor_board,1);
                 drawBoard(vspane, vsnextpane, vsboard, vscolor_board,1);
             }
@@ -1416,11 +1557,3 @@ public class vsBoard1 extends JPanel {
 
 
 }
-
-
-
-
-
-
-
-
