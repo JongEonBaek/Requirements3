@@ -46,7 +46,7 @@ public class vsBoard1 extends JPanel {
     int lines[] = {0,0}; // 현재 지워진 라인 수
     int bricks[] = {0,0}; // 생성된 벽돌의 개수
     String name;
-    boolean create_item = true;
+    boolean create_item[] = {true,true};
     private boolean isPaused = false; // 게임이 일시 중지되었는지 나타내는 변수
     public static boolean colorBlindMode; // 색맹모드
     private final JTextPane pane; //게임 상태 표시하는 JTextPane 객체
@@ -237,9 +237,9 @@ public class vsBoard1 extends JPanel {
         }
         else if(item == 1)
         {
-            if(create_item && lines[p] != 0 && lines[p] % 10 == 0) // 일단은 10번째마다 무게추 블록이 나오도록. 나중에 변경 예정.
+            if(create_item[p] && lines[p] != 0 && lines[p] % 10 == 0) // 일단은 10번째마다 무게추 블록이 나오도록. 나중에 변경 예정.
             {
-                create_item = false;
+                create_item[p] = false;
                 slot[p] = rnd.nextInt(5);
                 if(slot[p] == 0) {
                     curr_name[p] = nextcurr_name[p];
@@ -484,7 +484,7 @@ public class vsBoard1 extends JPanel {
                 Arrays.fill(color_board1[0], Color.WHITE);
                 scores[p] += 100;
                 lines[p]++; // 완성된 라인 수 증가
-                create_item = true;
+                create_item[p] = true;
                 i++; // 줄을 지운 후, 같은 줄을 다시 검사하기 위해 i 값을 증가시킵니다.
 
 
@@ -836,12 +836,9 @@ public class vsBoard1 extends JPanel {
         }
         if(p == 0) {
             placecurrBlcok(currentboard, p);
-
-
         }
         else if(p == 1) {
             placecurrBlcok(vscurrentboard, p);
-
         }
     }
 
@@ -857,7 +854,6 @@ public class vsBoard1 extends JPanel {
             for (int i = 0; i < curr[p].width(); i++) {// 현재 블록의 너비만큼 반복합니다.
                 if (curr[p].getShape(i, j) != 0 && board1[y[p] + j][x[p] + i] == 0) {// 보드에 0이아니면 그대로 유지해야만 함. 아니면 내려가면서 다른 블럭 지움
                     board1[y[p] + j][x[p] + i] = 9;// 게임 보드 배열에 블록의 모양을 저장합니다.
-
                 }
             }
         }
@@ -867,7 +863,6 @@ public class vsBoard1 extends JPanel {
 
 
     public void addBoard(JTextPane panel, Color color) {
-        // Next블럭을 그리기 위한 텍스트패널 생성
 
         //nextpane = new JTextPane(); // 텍스트 패널 생성
         panel.setEditable(false); // 텍스트 패널 편집 불가하도록 설정
@@ -878,7 +873,7 @@ public class vsBoard1 extends JPanel {
                 BorderFactory.createLineBorder(Color.DARK_GRAY, 5)); // 복합 테두리 생성
         panel.setBorder(border); // 텍스트 패널에 테두리를 설정
 
-        this.add(panel); // 텍스트 패널을 창의 EAST에 추가.this는 Board클래스의 인스턴스를 지칭
+        this.add(panel); // 텍스트 패널을 창에 추가.this는 Board클래스의 인스턴스를 지칭
     }
 
 
@@ -1364,6 +1359,8 @@ public class vsBoard1 extends JPanel {
                 nextcurr[0] = getRandomBlock(0);
                 x[0] = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
                 y[0] = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
+                plusLine(board,color_board,smallboard);
+
                 placeBlock(board, color_board,0);
                 drawBoard(pane, nextpane, board, color_board,0);
             }
@@ -1530,6 +1527,7 @@ public class vsBoard1 extends JPanel {
                 nextcurr[1] = getRandomBlock(1);
                 x[1] = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
                 y[1] = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
+                plusLine(vsboard,vscolor_board,vssmallboard);
                 placeBlock(vsboard, vscolor_board,1);
                 drawBoard(vspane, vsnextpane, vsboard, vscolor_board,1);
             }
