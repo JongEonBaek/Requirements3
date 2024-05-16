@@ -764,6 +764,15 @@ public class vsBoard1 extends JPanel {
             y[p] = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
 
             checkLines(board1, color_board1,p); // 완성된 라인이 있는지 확인합니다.
+
+            if(p==0){
+                plusLine(board,color_board,smallboard); // smallboard에 있는거 board로 옮김
+            }
+            else if(p==1){
+                plusLine(vsboard,vscolor_board,vssmallboard); // smallboard에 있는거 board로 옮김
+            }
+
+
             if (!canMoveDown(board1, p)) { // 새 블록이 움직일 수 없는 경우 (게임 오버)
                 GameOver(p);
             }
@@ -771,9 +780,29 @@ public class vsBoard1 extends JPanel {
             placeBlock(board1, color_board1,p);
 
         }
+    }
+    public void plusLine(int[][] board1,Color[][] color_board1, int[][] smallboard1){
+        int howlines = howlinesinsmallboard(smallboard1); // 몇줄 board에 추가해야 됨?
+        for(int i =howlines; i>0; i--) // 추가해야 될 줄 line 수만큼 기존 board위로 올림. ex) 3줄 추가해야 되면 모든 줄 3칸씩 위로 올림
+        {
+            for(int j =0; j<19;j++) {
+                board1[j] = Arrays.copyOf(board1[j + 1], 10);
+                color_board1[j] = Arrays.copyOf(color_board1[j + 1], 10);
+            }
+            Arrays.fill(board1[19], 0);
+            Arrays.fill(color_board1[19], Color.GRAY);
+            for(int k = 0; k<10; k++) {
+                if(smallboard1[10-i][k] != 9) {
+                    board1[19][k] = smallboard1[10 - i][k];
+                }
+            }
+            Arrays.fill(smallboard1[10 - i],0);
+        }
+
+        drawsmallboard(smallpane,smallboard);
+        drawsmallboard(vssmallpane,vssmallboard);
 
     }
-
 
     protected void moveLeft(int[][] board1, Color[][] color_board1,int p) {
         // moveLeft 메서드는 현재 블록을 왼쪽으로 한 칸 이동시킵니다.
@@ -1034,6 +1063,8 @@ public class vsBoard1 extends JPanel {
     }
 
 
+
+
     public void drawsmallboard(JTextPane panel, int[][] board1){
         StyledDocument doc = panel.getStyledDocument();
         StyleConstants.setForeground(styleSet, Color.GRAY);
@@ -1186,6 +1217,7 @@ public class vsBoard1 extends JPanel {
 
         GameInit();
     }
+
 
 
 
