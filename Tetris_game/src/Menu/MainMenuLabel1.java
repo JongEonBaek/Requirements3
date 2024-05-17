@@ -147,4 +147,8 @@ public class MainMenuLabel1 extends JPanel implements KeyListener {
         newScreen.setFocusable(true); // 새 화면이 포커스를 받을 수 있도록 설정
         newScreen.requestFocusInWindow(); // 새 화면에게 포커스 요청
     }
+
+    public double getCurrentIndex() { // 테스트를 위한 함수
+        return currentIndex;
+    }
 }
