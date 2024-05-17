@@ -127,13 +127,7 @@ public class OptionsLabel1 extends JPanel implements KeyListener {
                     Main.SettingObject.put("Screen", Main.SCREEN_WIDTH[1]);
                 else
                     System.out.println("ERRORRORORORORORORORORORORO!!!!!!");
-
-                try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/src/Settings.json")) {
-                    file.write(SettingObject.toJSONString());
-                    file.flush();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                Main.SettingSave();
                 break;
             case 2: // Exits
                 System.out.println("Controls");
@@ -161,6 +155,8 @@ public class OptionsLabel1 extends JPanel implements KeyListener {
                 System.out.println("Reset");
                 optionsReset.resetOptions(); // 변경된 옵션 초기화
                 optionsReset.applyInitialSettings(); // 초기 설정 적용
+                Main.SettingSave();
+                break;
             default:
                 break;
         }

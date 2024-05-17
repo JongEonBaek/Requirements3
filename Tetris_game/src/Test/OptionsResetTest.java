@@ -39,7 +39,7 @@ class OptionsResetTest {
             assertEquals(65L, jsonObject.get("K_LEFT"));
             assertEquals(10L, jsonObject.get("K_ENTER"));
             assertEquals(32L, jsonObject.get("K_SPACE"));
-            assertEquals(368L, jsonObject.get("Screen"));
+            assertEquals(517L, jsonObject.get("Screen"));
             assertEquals(81L, jsonObject.get("K_Q"));
             assertEquals(87L, jsonObject.get("K_UP"));
             assertEquals(68L, jsonObject.get("K_RIGHT"));

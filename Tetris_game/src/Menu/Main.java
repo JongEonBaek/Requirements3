@@ -35,6 +35,7 @@ public class Main {
     public static vsBoard3 vsGamePanel3;
 
     public static KeyControl1 keyControl1;
+    public static KeyControl2p keyControl2p;
     public static ClassicScoreBoard1 classicScoreBoard1;
     public static ItemScoreBoard1 itemScoreBoard1;
     public static ScoreBoardMenu1 scoreBoardMenu1;
@@ -143,6 +144,8 @@ public class Main {
         keyControl1 = new KeyControl1();
         keyControl1.setName("Control1");
 
+        keyControl2p = new KeyControl2p();
+        keyControl2p.setName("Control2p");
 
         classicScoreBoard1 = new ClassicScoreBoard1();
         classicScoreBoard1.setName("NormalScoreBoard1");
@@ -179,6 +182,7 @@ public class Main {
         mainPanel.add(vsGamePanel3, "vsgame3");
 
         mainPanel.add(keyControl1, "Control1");
+        mainPanel.add(keyControl2p, "Control2p");
 
 
         mainPanel.add(classicScoreBoard1, "NormalScoreBoard1");
@@ -205,4 +209,14 @@ public class Main {
 
 
     }
+    public static void SettingSave()
+    {
+        try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/src/Settings.json")) {
+            file.write(SettingObject.toJSONString());
+            file.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
+

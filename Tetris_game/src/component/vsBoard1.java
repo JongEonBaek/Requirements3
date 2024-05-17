@@ -1272,7 +1272,7 @@ public class vsBoard1 extends JPanel {
             int Linei = 0, Linej = 0;
             int keyCode = e.getKeyCode();
             // 키가 눌렸을 때의 동작을 정의합니다.
-            if(keyCode == 87) {
+            if(keyCode == ((Number)(Main.SettingObject.get("K_UP"))).intValue()) {
                 eraseCurr(board, 0); // 현재 블록을 지웁니다.
                 if (canRotate(board,0)) { // 블록이 회전 가능한 경우에만 회전을 수행합니다.
                     curr[0].rotate(); // 현재 블록을 회전시킵니다.
@@ -1280,19 +1280,19 @@ public class vsBoard1 extends JPanel {
                 }
                 drawBoard(pane, nextpane,board, color_board, 0);
             }
-            else if(keyCode == 83) {
+            else if(keyCode == ((Number)(Main.SettingObject.get("K_DOWN"))).intValue()) {
                 moveDown(board, color_board, 0); // 아래 방향키가 눌렸을 때, 현재 블록을 아래로 이동시킵니다.
                 drawBoard(pane, nextpane, board, color_board,0);
             }
-            else if(keyCode == 68) {
+            else if(keyCode == ((Number)(Main.SettingObject.get("K_RIGHT"))).intValue()) {
                 moveRight(board, color_board,0); // 오른쪽 방향키가 눌렸을 때, 현재 블록을 오른쪽으로 이동시킵니다.
                 drawBoard(pane, nextpane, board, color_board,0);
             }
-            else if(keyCode == 65) {
+            else if(keyCode == ((Number)(Main.SettingObject.get("K_LEFT"))).intValue()) {
                 moveLeft(board, color_board,0); // 왼쪽 방향키가 눌렸을 때, 현재 블록을 왼쪽으로 이동시킵니다.
                 drawBoard(pane, nextpane, board, color_board,0);
             }
-            else if(keyCode == 32) {
+            else if(keyCode == ((Number)(Main.SettingObject.get("K_SPACE"))).intValue()) {
                 isPaused = !isPaused; // 게임의 상태를 전환합니다.
                 if (isPaused) {
                     timer.stop(); // 게임이 일시 중지된 경우, 타이머를 중지합니다.
@@ -1301,7 +1301,7 @@ public class vsBoard1 extends JPanel {
                     timer.start(); // 게임이 재개된 경우, 타이머를 시작합니다.
                 }
             }
-            else if(keyCode == 10) {
+            else if(keyCode == ((Number)(Main.SettingObject.get("K_ENTER"))).intValue()) {
                 eraseCurr(board, 0);
                 if(curr_name[0].equals("WeightBlock"))
                 {
@@ -1439,7 +1439,7 @@ public class vsBoard1 extends JPanel {
             int Linei = 0, Linej = 0;
             int keyCode1 = e.getKeyCode();
             // 키가 눌렸을 때의 동작을 정의합니다.
-            if(keyCode1 == (38)) { //키보드 윗방향키
+            if(keyCode1 == ((Number)(Main.SettingObject.get("K_UP2p"))).intValue()) { //키보드 윗방향키
                 eraseCurr(vsboard, 1); // 현재 블록을 지웁니다.
                 if (canRotate(vsboard,1)) { // 블록이 회전 가능한 경우에만 회전을 수행합니다.
                     curr[1].rotate(); // 현재 블록을 회전시킵니다.
@@ -1447,15 +1447,15 @@ public class vsBoard1 extends JPanel {
                 }
                 drawBoard(vspane, vsnextpane,vsboard, vscolor_board, 1);
             }
-            else if(keyCode1 == 40) { //키보드 아랫방향키
+            else if(keyCode1 == ((Number)(Main.SettingObject.get("K_DOWN2p"))).intValue()) { //키보드 아랫방향키
                 moveDown(vsboard, vscolor_board, 1); // 아래 방향키가 눌렸을 때, 현재 블록을 아래로 이동시킵니다.
                 drawBoard(vspane, vsnextpane, vsboard, vscolor_board,1);
             }
-            else if(keyCode1 == 39) { ////키보드 오른쪽방향키
+            else if(keyCode1 == ((Number)(Main.SettingObject.get("K_RIGHT2p"))).intValue()) { ////키보드 오른쪽방향키
                 moveRight(vsboard, vscolor_board,1); // 오른쪽 방향키가 눌렸을 때, 현재 블록을 오른쪽으로 이동시킵니다.
                 drawBoard(vspane, vsnextpane, vsboard, vscolor_board,1);
             }
-            else if(keyCode1 == 37) { //키보드 왼쪽방향키
+            else if(keyCode1 == ((Number)(Main.SettingObject.get("K_LEFT2p"))).intValue()) { //키보드 왼쪽방향키
                 moveLeft(vsboard, vscolor_board,1); // 왼쪽 방향키가 눌렸을 때, 현재 블록을 왼쪽으로 이동시킵니다.
                 drawBoard(vspane, vsnextpane, vsboard, vscolor_board,1);
             }
@@ -1468,7 +1468,7 @@ public class vsBoard1 extends JPanel {
                     timer.start(); // 게임이 재개된 경우, 타이머를 시작합니다.
                 }
             }
-            else if(keyCode1 == 34) {// 방향키 pageDown
+            else if(keyCode1 == ((Number)(Main.SettingObject.get("K_ENTER2p"))).intValue()) {// 방향키 pageDown
                 eraseCurr(vsboard, 1);
                 if(curr_name[1].equals("WeightBlock"))
                 {
@@ -1593,12 +1593,6 @@ public class vsBoard1 extends JPanel {
             // 키가 떼어졌을 때의 동작을 정의할 수 있으나, 여기서는 사용하지 않습니다.
         }
     }
-
-
-
-
-
-
 
 }
 
