@@ -44,6 +44,7 @@ public class Board3 extends JPanel {
 	int scores = 0; // 현재 스코어
 	int level = 0; // 현재 레벨
 	int lines = 0; // 현재 지워진 라인 수
+	int itemlines = 0;
 	int bricks = 0; // 생성된 벽돌의 개수
 	String name;
 	boolean create_item = true;
@@ -204,9 +205,10 @@ public class Board3 extends JPanel {
 		else if(item == 1)
 		{
 			System.out.println(bricks);
-			if(create_item && lines != 0 && lines % 10 == 0) // 일단은 10번째마다 무게추 블록이 나오도록. 나중에 변경 예정.
+			if(create_item && itemlines >= 10) // 일단은 10번째마다 무게추 블록이 나오도록. 나중에 변경 예정.
 			{
 				create_item = false;
+				itemlines-=10;
 				slot = rnd.nextInt(5);
 				if(slot == 0) {
 					curr_name = nextcurr_name;
@@ -364,6 +366,25 @@ public class Board3 extends JPanel {
 
 
 	private void checkLines() {
+		ArrayList<Integer> fullLines = new ArrayList<>(); // 꽉찬 줄 번호 저장 리스트
+
+
+		// 꽉찬줄 몇개인지, 몇번줄인지 파악 후 smallboard에 옮기는 부분
+		for (int i = HEIGHT - 1; i >= 0; i--) {
+			boolean lineFull = true;
+			for (int j = 0; j < WIDTH; j++) {
+				if (board[i][j] == 0) {
+					lineFull = false;
+					break;
+				}
+			}
+			if (lineFull) {
+				fullLines.add(i);
+			}
+		}
+		//animateLineDeletion(fullLines);
+
+
 		for (int i = HEIGHT - 1; i >= 0; i--) {
 			boolean lineFull = true;
 			for (int j = 0; j < WIDTH; j++) {
@@ -381,10 +402,42 @@ public class Board3 extends JPanel {
 				Arrays.fill(color_board[0], Color.WHITE);
 				scores += 100;
 				lines++; // 완성된 라인 수 증가
+				itemlines++;
 				create_item = true;
 				i++; // 줄을 지운 후, 같은 줄을 다시 검사하기 위해 i 값을 증가시킵니다.
 			}
 		}
+	}
+
+	private void animateLineDeletion(List<Integer> fullLines) { // 줄삭제 애니메이션 처리
+		Timer timer = new Timer(100, new ActionListener() {
+			int flashCount = 0;
+			boolean isVisible = true;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (flashCount < 3) { // 3번 깜빡이도록 설정합니다.
+					// 꽉 찬 줄을 깜빡이는 효과를 줍니다.
+					for (Integer line : fullLines) {
+						for (int col = 0; col < 10; col++) {
+							if (isVisible) {
+								color_board[line][col] = Color.WHITE; // 흰색으로 깜빡입니다.
+							} else {
+								color_board[line][col] = null; // 다시 비웁니다.
+							}
+						}
+					}
+					isVisible = !isVisible;
+					repaint(); // 화면을 갱신합니다.
+					flashCount++;
+				} else {
+					// 꽉 찬 줄을 지우고, 남은 블록들을 아래로 내립니다.
+					((Timer) e.getSource()).stop(); // 타이머를 중지합니다.
+				}
+			}
+		});
+
+		timer.start();
 	}
 
 
@@ -946,6 +999,7 @@ public class Board3 extends JPanel {
 		point = 1; // 한칸 떨어질때 얻는 점수
 		level = 0; // 현재 레벨
 		lines = 0; // 현재 지워진 라인 수
+		itemlines = 0;
 		bricks = 0; // 생성된 벽돌의 개수
 		isPaused = false; // 게임이 일시 중지되었는지 나타내는 변수
 		curr =  getRandomBlock();// 현재 움직이고 있는 블록

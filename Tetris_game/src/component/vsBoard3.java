@@ -39,6 +39,7 @@ public class vsBoard3 extends JPanel {
     int scores[] = {0,0}; // 현재 스코어
     int level[] = {0,0}; // 현재 레벨
     int lines[] = {0,0}; // 현재 지워진 라인 수
+    int itemlines[] = {0,0};
     int bricks[] = {0,0}; // 생성된 벽돌의 개수
     String name;
     boolean create_item[] = {true,true};
@@ -249,9 +250,10 @@ public class vsBoard3 extends JPanel {
         }
         else if(item[p] == 1)
         {
-            if(create_item[p] && lines[p] != 0 && lines[p] % 10 == 0) // 일단은 10번째마다 무게추 블록이 나오도록. 나중에 변경 예정.
+            if(create_item[p] && itemlines[p]>=10) // 일단은 10번째마다 무게추 블록이 나오도록. 나중에 변경 예정.
             {
                 create_item[p] = false;
+                itemlines[p]-=10;
                 slot[p] = rnd.nextInt(5);
                 if(slot[p] == 0) {
                     curr_name[p] = nextcurr_name[p];
@@ -493,6 +495,7 @@ public class vsBoard3 extends JPanel {
                 Arrays.fill(color_board1[0], Color.WHITE);
                 scores[p] += 100;
                 lines[p]++; // 완성된 라인 수 증가
+                itemlines[p]++;
                 create_item[p] = true;
                 i++; // 줄을 지운 후, 같은 줄을 다시 검사하기 위해 i 값을 증가시킵니다.
 
@@ -1176,6 +1179,7 @@ public class vsBoard3 extends JPanel {
         point[0] = 1; // 한칸 떨어질때 얻는 점수
         level[0] = 0; // 현재 레벨
         lines[0] = 0; // 현재 지워진 라인 수
+        itemlines[0] = 0;
         bricks[0] = 0; // 생성된 벽돌의 개수
         isPaused = false; // 게임이 일시 중지되었는지 나타내는 변수
         curr[0] =  getRandomBlock(0);// 현재 움직이고 있는 블록
@@ -1188,6 +1192,7 @@ public class vsBoard3 extends JPanel {
         point[1] = 1; // 한칸 떨어질때 얻는 점수
         level[1] = 0; // 현재 레벨
         lines[1] = 0; // 현재 지워진 라인 수
+        itemlines[1] = 0;
         bricks[1] = 0; // 생성된 벽돌의 개수
         isPaused = false; // 게임이 일시 중지되었는지 나타내는 변수
         curr[1] =  getRandomBlock(1);// 현재 움직이고 있는 블록
