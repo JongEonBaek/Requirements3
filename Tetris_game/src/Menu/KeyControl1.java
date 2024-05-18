@@ -5,6 +5,7 @@ import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileWriter;
 import java.util.*;
 
 public class KeyControl1 extends JPanel implements KeyListener {
@@ -19,6 +20,7 @@ public class KeyControl1 extends JPanel implements KeyListener {
             "ENTER KEY : now - ",
             "SPACE KEY : now - ",
             "Q KEY : now - ",
+            "2p Key Controls",
             "BACK"}; // 바꿀 수 있는 키들
 
     java.util.List<JLabel> menuItems;
@@ -134,6 +136,14 @@ public class KeyControl1 extends JPanel implements KeyListener {
                     menuItems.get(i).setText(nonSelected + labels[i] + qNow);
                 }
             }
+            else if(i == 7)
+            {
+                if (i == currentIndex) {
+                    menuItems.get(i).setText(cursorSymbol + labels[i]);
+                } else {
+                    menuItems.get(i).setText(nonSelected + labels[i]);
+                }
+            }
             else
             {
                 if (i == currentIndex) {
@@ -172,6 +182,12 @@ public class KeyControl1 extends JPanel implements KeyListener {
             Main.SettingObject.put(Main.currentChangingKey, keyCode);
             Main.isInputing = false;
             keyMessage.setVisible(false);
+            try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/src/Settings.json")) {
+                file.write(Main.SettingObject.toJSONString());
+                file.flush();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             updateMenuDisplay();
         }
     }
@@ -234,7 +250,10 @@ public class KeyControl1 extends JPanel implements KeyListener {
                 keyMessage.setVisible(true);
                 Main.currentChangingKey = "K_Q";
                 break;
-            case 7: // 다시 Option화면으로 이동하기
+            case 7: // 2p키 설정 화면으로 이동.
+                switchToScreen(Main.keyControl2p);
+                break;
+            case 8: // 다시 Option화면으로 이동하기
                 switchToScreen(Main.optionMenu1);
                 break;
         }

@@ -1266,12 +1266,7 @@ public class Board extends JPanel {
 			}
 			else if(keyCode == ((Number)(Main.SettingObject.get("K_Q"))).intValue())
 			{
-				try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/src/Settings.json")) {
-					file.write(Main.SettingObject.toJSONString());
-					file.flush();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
+				Main.SettingSave();
 				System.exit(0); // 'q' 키가 눌렸을 때, 프로그램을 종료합니다.
 			}
 
