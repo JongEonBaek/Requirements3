@@ -365,6 +365,24 @@ public class Board extends JPanel {
 
 
 	private void checkLines() {
+		ArrayList<Integer> fullLines = new ArrayList<>(); // 꽉찬 줄 번호 저장 리스트
+
+
+		// 꽉찬줄 몇개인지, 몇번줄인지 파악 후 smallboard에 옮기는 부분
+		for (int i = HEIGHT - 1; i >= 0; i--) {
+			boolean lineFull = true;
+			for (int j = 0; j < WIDTH; j++) {
+				if (board[i][j] == 0) {
+					lineFull = false;
+					break;
+				}
+			}
+			if (lineFull) {
+				fullLines.add(i);
+				}
+			}
+		//animateLineDeletion(fullLines);
+
 		for (int i = HEIGHT - 1; i >= 0; i--) {
 			boolean lineFull = true;
 			for (int j = 0; j < WIDTH; j++) {
@@ -387,6 +405,36 @@ public class Board extends JPanel {
 				i++; // 줄을 지운 후, 같은 줄을 다시 검사하기 위해 i 값을 증가시킵니다.
 			}
 		}
+	}
+	private void animateLineDeletion(List<Integer> fullLines) { // 줄삭제 애니메이션 처리
+		Timer timer = new Timer(100, new ActionListener() {
+			int flashCount = 0;
+			boolean isVisible = true;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (flashCount < 3) { // 3번 깜빡이도록 설정합니다.
+					// 꽉 찬 줄을 깜빡이는 효과를 줍니다.
+					for (Integer line : fullLines) {
+						for (int col = 0; col < 10; col++) {
+							if (isVisible) {
+								color_board[line][col] = Color.WHITE; // 흰색으로 깜빡입니다.
+							} else {
+								color_board[line][col] = null; // 다시 비웁니다.
+							}
+						}
+					}
+					isVisible = !isVisible;
+					repaint(); // 화면을 갱신합니다.
+					flashCount++;
+				} else {
+					// 꽉 찬 줄을 지우고, 남은 블록들을 아래로 내립니다.
+					((Timer) e.getSource()).stop(); // 타이머를 중지합니다.
+				}
+			}
+		});
+
+		timer.start();
 	}
 
 
@@ -890,6 +938,8 @@ public class Board extends JPanel {
 		doc.setParagraphAttributes(0, doc.getLength(), styleSet, false); // 가져온 문서에 스타일 속성을 적용합니다.
 		nextpane.setStyledDocument(doc); // 스타일이 적용된 문서를 다시 JTextPane에 설정
 	}
+
+
 
 
 	//일정 점수 도달하면 레벨+, 속도+, 얻는 점수+ 조정하는 함수, moveDown(), TimerAction에 호출됨
