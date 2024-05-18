@@ -44,6 +44,7 @@ public class Board extends JPanel {
 	int scores = 0; // 현재 스코어
 	int level = 0; // 현재 레벨
 	int lines = 0; // 현재 지워진 라인 수
+	int itemlines = 0; // 10줄마다 아이템생성 위한 라인생성
 	int bricks = 0; // 생성된 벽돌의 개수
 	String name;
 	boolean create_item = true;
@@ -203,9 +204,10 @@ public class Board extends JPanel {
 		}
 		else if(item == 1)
 		{
-			if(create_item && lines != 0 && lines % 10 == 0) // 일단은 10번째마다 무게추 블록이 나오도록. 나중에 변경 예정.
+			if(create_item && itemlines>=10) // 일단은 10번째마다 무게추 블록이 나오도록. 나중에 변경 예정.
 			{
 				create_item = false;
+				itemlines-=10;
 				slot = rnd.nextInt(5);
 				if(slot == 0) {
 					curr_name = nextcurr_name;
@@ -380,6 +382,7 @@ public class Board extends JPanel {
 				Arrays.fill(color_board[0], Color.WHITE);
 				scores += 100;
 				lines++; // 완성된 라인 수 증가
+				itemlines++;
 				create_item = true;
 				i++; // 줄을 지운 후, 같은 줄을 다시 검사하기 위해 i 값을 증가시킵니다.
 			}
@@ -947,6 +950,7 @@ public class Board extends JPanel {
 		point = 1; // 한칸 떨어질때 얻는 점수
 		level = 0; // 현재 레벨
 		lines = 0; // 현재 지워진 라인 수
+		itemlines = 0; // 아이템생성을 위한 line개수 일시저장 변수
 		bricks = 0; // 생성된 벽돌의 개수
 		isPaused = false; // 게임이 일시 중지되었는지 나타내는 변수
 		curr =  getRandomBlock();// 현재 움직이고 있는 블록
