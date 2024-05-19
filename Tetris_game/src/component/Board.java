@@ -69,6 +69,8 @@ public class Board extends JPanel {
 
 	public boolean weightblockLock = false;
 
+	public boolean isAnimating = false;
+
 	// 생성자 Board, 게임 창 설정 및 초기게임 보드 준비, 첫 번째 블록 생성하고, 타이머 시작
 	public Board() {
 		this.colorBlindMode = Main.isColorBlindnessMode;
@@ -381,8 +383,73 @@ public class Board extends JPanel {
 				fullLines.add(i);
 				}
 			}
-		//animateLineDeletion(fullLines);
 
+		if(!isAnimating) {
+			if (!fullLines.isEmpty()) {
+				// 줄 삭제 및 deletedLineCount 증가
+				animateLineDeletion(fullLines);
+			} else{
+				curr = nextcurr; // 다음블록을 현재 블록으로 설정합니다.
+				nextcurr = getRandomBlock(); // 새로운 블록을 무작위로 가져옵니다.
+				x = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
+				y = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
+				if (!canMoveDown()) { // 새 블록이 움직일 수 없는 경우 (게임 오버)
+					GameOver();
+				}
+				placeBlock();
+				drawBoard();
+			}
+		}
+
+	}
+	private void animateLineDeletion(List<Integer> fullLines) {
+		isAnimating = true;
+		removeKeyListener(playerKeyListener);
+		Timer timer = new Timer(20, new ActionListener() {
+			int flashCount = 0;
+			boolean isVisible = true;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (flashCount < 3) { // 3번 깜빡이도록 설정합니다.
+					// 꽉 찬 줄을 깜빡이는 효과를 줍니다.
+					for (Integer line : fullLines) {
+						for (int col = 0; col < 10; col++) {
+							if (isVisible) {
+								color_board[line][col] = Color.WHITE; // 흰색으로 깜빡입니다.
+							} else {
+								color_board[line][col] = Color.RED; // 다시 비웁니다.
+							}
+						}
+					}
+					isVisible = !isVisible;
+					drawBoard();
+					repaint(); // 화면을 갱신합니다.
+					flashCount++;
+				} else {
+					clearAnddDroplines();// 꽉 찬 줄을 지우고, 남은 블록들을 아래로 내립니다.
+					curr = nextcurr; // 다음블록을 현재 블록으로 설정합니다.
+					nextcurr = getRandomBlock(); // 새로운 블록을 무작위로 가져옵니다.
+					x = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
+					y = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
+					if (!canMoveDown()) { // 새 블록이 움직일 수 없는 경우 (게임 오버)
+						GameOver();
+					}
+					placeBlock();
+					drawBoard();
+					isAnimating = false;
+					addKeyListener(playerKeyListener);
+					setFocusable(true);
+
+					((Timer) e.getSource()).stop(); // 타이머를 중지합니다.
+				}
+			}
+		});
+
+		timer.start();
+	}
+
+	public void clearAnddDroplines(){
 		for (int i = HEIGHT - 1; i >= 0; i--) {
 			boolean lineFull = true;
 			for (int j = 0; j < WIDTH; j++) {
@@ -405,36 +472,6 @@ public class Board extends JPanel {
 				i++; // 줄을 지운 후, 같은 줄을 다시 검사하기 위해 i 값을 증가시킵니다.
 			}
 		}
-	}
-	private void animateLineDeletion(List<Integer> fullLines) { // 줄삭제 애니메이션 처리
-		Timer timer = new Timer(100, new ActionListener() {
-			int flashCount = 0;
-			boolean isVisible = true;
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (flashCount < 3) { // 3번 깜빡이도록 설정합니다.
-					// 꽉 찬 줄을 깜빡이는 효과를 줍니다.
-					for (Integer line : fullLines) {
-						for (int col = 0; col < 10; col++) {
-							if (isVisible) {
-								color_board[line][col] = Color.WHITE; // 흰색으로 깜빡입니다.
-							} else {
-								color_board[line][col] = null; // 다시 비웁니다.
-							}
-						}
-					}
-					isVisible = !isVisible;
-					repaint(); // 화면을 갱신합니다.
-					flashCount++;
-				} else {
-					// 꽉 찬 줄을 지우고, 남은 블록들을 아래로 내립니다.
-					((Timer) e.getSource()).stop(); // 타이머를 중지합니다.
-				}
-			}
-		});
-
-		timer.start();
 	}
 
 
@@ -590,14 +627,7 @@ public class Board extends JPanel {
 			else {
 				placeBlock(); // 현재 위치에 블록을 고정시킵니다.
 				checkLines(); // 완성된 라인이 있는지 확인합니다.
-				curr = nextcurr; // 다음블록을 현재 블록으로 설정합니다.
-				nextcurr = getRandomBlock(); // 새로운 블록을 무작위로 가져옵니다.
-				x = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
-				y = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
-				if (!canMoveDown()) { // 새 블록이 움직일 수 없는 경우 (게임 오버)
-					GameOver();
-				}
-				placeBlock();
+
 			}
 
 		}
@@ -686,16 +716,7 @@ public class Board extends JPanel {
 				}
 			}
 			checkLines(); // 완성된 라인이 있는지 확인합니다.
-			curr = nextcurr; // 다음블록을 현재 블록으로 설정합니다.
-			nextcurr = getRandomBlock(); // 새로운 블록을 무작위로 가져옵니다.
-			x = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
-			y = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
-			
-			if (!canMoveDown()) { // 새 블록이 움직일 수 없는 경우 (게임 오버)
-				GameOver();
-			}
 
-			placeBlock();
 
 		}
 
@@ -1310,12 +1331,6 @@ public class Board extends JPanel {
 					timer.start();
 				}
 				checkLines();
-				curr = nextcurr;
-				nextcurr = getRandomBlock();
-				x = 3; // 새 블록의 x좌표를 시작 x 좌표를 설정합니다.
-				y = 0; // 새 블록의 y좌표를 시작 y 좌표를 설정합니다.
-				placeBlock();
-				drawBoard();
 			}
 			else if(keyCode == ((Number)(Main.SettingObject.get("K_Q"))).intValue())
 			{
