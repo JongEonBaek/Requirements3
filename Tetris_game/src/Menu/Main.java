@@ -147,6 +147,10 @@ public class Main {
         keyControl2p = new KeyControl2p();
         keyControl2p.setName("Control2p");
 
+
+
+
+
         classicScoreBoard1 = new ClassicScoreBoard1();
         classicScoreBoard1.setName("NormalScoreBoard1");
 
