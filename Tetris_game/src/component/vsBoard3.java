@@ -500,6 +500,16 @@ public class vsBoard3 extends JPanel {
                 } else {
                     if(temp>=2) // 꽉찬 line이 2개 이상이면 옮긴다
                     {
+                        int HowManyLines = howlinesinsmallboard(vssmallboard);
+                        if (HowManyLines + temp > 10) { // 근데 합쳐서 10줄보다 많아지면
+                            int overTen = HowManyLines + temp - 10;
+                            for (int i = 9; i - overTen >= 0; i--) { // smallboard를 한 줄씩 overTen만큼 내리고(기존 최하단 줄을 지우고)
+                                vssmallboard[i] = Arrays.copyOf(vssmallboard[i - overTen], 10);
+                            }
+                            for (int i = 0; i < temp; i++) { // 맨 윗줄부터 temp만큼 지운다
+                                    Arrays.fill(vssmallboard[i], 0);
+                            }
+                        }
                         for(int j = temp-1; j>=0; j--) {
                             int smallstart = howlinesinsmallboard(vssmallboard); // 현재 player1의 vssmallboard에 몇줄있음?
                             if (smallstart < 10) { // 10줄이하면
@@ -571,6 +581,16 @@ public class vsBoard3 extends JPanel {
                 } else {
                     if(temp>=2) // 꽉찬 line이 2개 이상이면 옮긴다
                     {
+                        int HowManyLines = howlinesinsmallboard(smallboard);
+                        if (HowManyLines + temp > 10) { // 근데 합쳐서 10줄보다 많아지면
+                            int overTen = HowManyLines + temp - 10;
+                            for (int i = 9; i - overTen >= 0; i--) { // smallboard를 한 줄씩 overTen만큼 내리고(기존 최하단 줄을 지우고)
+                                smallboard[i] = Arrays.copyOf(smallboard[i - overTen], 10);
+                            }
+                            for (int i = 0; i < temp; i++) { // 맨 윗줄부터 temp만큼 지운다
+                                    Arrays.fill(smallboard[i], 0);
+                            }
+                        }
                         for(int j = temp-1; j>=0; j--) {
                             int smallstart = howlinesinsmallboard(smallboard); // 현재 player1의 vssmallboard에 몇줄있음?
                             if (smallstart < 10) { // 10줄이하면
