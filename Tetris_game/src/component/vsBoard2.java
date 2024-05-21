@@ -500,22 +500,9 @@ public class vsBoard2 extends JPanel {
                 } else {
                     if(temp>=2) // 꽉찬 line이 2개 이상이면 옮긴다
                     {
-                        int oneTimeTrigger = 0;
                         for(int j = temp-1; j>=0; j--) {
                             int smallstart = howlinesinsmallboard(vssmallboard); // 현재 player1의 vssmallboard에 몇줄있음?
                             if (smallstart < 10) { // 10줄이하면
-                                if (smallstart + temp + oneTimeTrigger > 10) { // 근데 합쳐서 10줄보다 많아지면
-                                    int overTen = smallstart + temp - 10;
-                                    for (int k = 9; k - overTen >= 0; k--) { // smallboard를 한 줄씩 overTen만큼 내리고
-                                        vssmallboard[k] = Arrays.copyOf(vssmallboard[k - overTen], 10);
-                                    }
-                                    for (int k = 0; k < overTen; k++) {
-                                        for (int l = 0; l < WIDTH; l++) {
-                                            vssmallboard[k][l] = 0;
-                                        }
-                                    }
-                                    oneTimeTrigger = -20; // 해당 if문은 재실행 X
-                                }
                                 for (int k = 0; k < 9; k++) { // smallboard를 한칸씩 위로 올리고
                                     vssmallboard[k] = Arrays.copyOf(vssmallboard[k + 1], 10);
                                 }
@@ -584,22 +571,9 @@ public class vsBoard2 extends JPanel {
                 } else {
                     if(temp>=2) // 꽉찬 line이 2개 이상이면 옮긴다
                     {
-                        int oneTimeTrigger = 10;
                         for(int j = temp-1; j>=0; j--) {
                             int smallstart = howlinesinsmallboard(smallboard); // 현재 player1의 vssmallboard에 몇줄있음?
                             if (smallstart < 10) { // 10줄이하면
-                                if (smallstart + temp + oneTimeTrigger > 10) { // 근데 합쳐서 10줄보다 많아지면
-                                    int overTen = smallstart + temp - 10;
-                                    for (int k = 9; k - overTen >= 0; k--) { // smallboard를 한 줄씩 overTen만큼 내리고
-                                        vssmallboard[k] = Arrays.copyOf(vssmallboard[k - overTen], 10);
-                                    }
-                                    for (int k = 0; k < overTen; k++) {
-                                        for (int l = 0; l < WIDTH; l++) {
-                                            vssmallboard[k][l] = 0;
-                                        }
-                                    }
-                                    oneTimeTrigger = -20; // 해당 if문은 재실행 X
-                                }
                                 for (int k = 0; k < 9; k++) { // smallboard를 한칸씩 위로 올리고
                                     smallboard[k] = Arrays.copyOf(smallboard[k + 1], 10);
                                 }
