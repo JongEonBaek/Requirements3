@@ -215,18 +215,18 @@ public class Main {
     }
 
     private static Path getResourceFilePath(String fileName) throws IOException {
-        ClassLoader classLoader = Main.class.getClassLoader();
-        URL resource = classLoader.getResource(fileName);
-
-        if (resource == null) {
-            throw new IOException(fileName + " 파일을 찾을 수 없습니다.");
+        Path persistentPath = Paths.get(System.getProperty("user.dir"), fileName);
+        if (!Files.exists(persistentPath)) {
+            // 리소스 파일을 영구 파일로 복사
+            ClassLoader classLoader = Main.class.getClassLoader();
+            URL resource = classLoader.getResource(fileName);
+            if (resource == null) {
+                throw new IOException(fileName + " 파일을 찾을 수 없습니다.");
+            }
+            try (InputStream inputStream = resource.openStream()) {
+                Files.copy(inputStream, persistentPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            }
         }
-
-        try (InputStream inputStream = resource.openStream()) {
-            Path tempDirectory = Files.createTempDirectory("tempResources");
-            Path tempFile = tempDirectory.resolve(fileName);
-            Files.copy(inputStream, tempFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-            return tempFile;
-        }
+        return persistentPath;
     }
 }
