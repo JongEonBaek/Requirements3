@@ -2,9 +2,6 @@
   <artifact type="jar" name="Requirements33:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/Requirements33_jar</output-path>
     <root id="archive" name="Requirements33.jar">
-      <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/Tetris_game/resources/META-INF/MANIFEST.MF" />
-      </element>
       <element id="module-output" name="Requirements33" />
       <element id="extracted-dir" path="$PROJECT_DIR$/json-simple-1.1.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter/5.8.1/junit-jupiter-5.8.1.jar" path-in-jar="/" />
