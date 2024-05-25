@@ -1,0 +1,88 @@
+
+
+Version:	3.50
+CmdLine:	C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\3team.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	1.017.000
+Java max ver:	
+Substitute:	JAVA_HOME = C:\Program Files\Java\jdk-17
+Substitute:	PATH = C:\Program Files\Java\jdk-17\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\opencv\build\x64\vc16\bin;C:\Windows\System32\quartz;C:\Program Files\Git\cmd;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.4\jbr\bin;C:\Program Files\dotnet\;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\user\AppData\Local\GitHubDesktop\bin;C:\Program Files\Java\jdk-17\bin
+JRE paths:	C:\Program Files\Java\jdk-17;C:\Program Files\Java\jdk-17\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\opencv\build\x64\vc16\bin;C:\Windows\System32\quartz;C:\Program Files\Git\cmd;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.4\jbr\bin;C:\Program Files\dotnet\;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\user\AppData\Local\GitHubDesktop\bin;C:\Program Files\Java\jdk-17\bin
+Check launcher:	C:\Program Files\Java\jdk-17\bin\javaw.exe (OK)
+Version string: 1.017.000_011 / 64-Bit (OK)
+Main class:	Menu.Main
+Add classpath:	C:\Users\user\Desktop\????3\Requirements3\json-simple-1.1.1.jar
+Launcher:	C:\Program Files\Java\jdk-17\bin\javaw.exe
+Launcher args:	-classpath "C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\3team.exe" Menu.Main
+Args length:	111/32768 chars
+Exit code:	0
+
+
+Version:	3.50
+CmdLine:	C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\3team.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	1.017.000
+Java max ver:	
+Substitute:	JAVA_HOME = C:\Program Files\Java\jdk-17
+Substitute:	PATH = C:\Program Files\Java\jdk-17\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\opencv\build\x64\vc16\bin;C:\Windows\System32\quartz;C:\Program Files\Git\cmd;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.4\jbr\bin;C:\Program Files\dotnet\;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\user\AppData\Local\GitHubDesktop\bin;C:\Program Files\Java\jdk-17\bin
+JRE paths:	C:\Program Files\Java\jdk-17;C:\Program Files\Java\jdk-17\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\opencv\build\x64\vc16\bin;C:\Windows\System32\quartz;C:\Program Files\Git\cmd;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.4\jbr\bin;C:\Program Files\dotnet\;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\user\AppData\Local\GitHubDesktop\bin;C:\Program Files\Java\jdk-17\bin
+Check launcher:	C:\Program Files\Java\jdk-17\bin\javaw.exe (OK)
+Version string: 1.017.000_011 / 64-Bit (OK)
+Main class:	Menu.Main
+Add classpath:	C:\Users\user\Desktop\????3\Requirements3\json-simple-1.1.1.jar
+Launcher:	C:\Program Files\Java\jdk-17\bin\javaw.exe
+Launcher args:	-classpath "C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\3team.exe" Menu.Main
+Args length:	111/32768 chars
+Exit code:	0
+
+
+Version:	3.50
+CmdLine:	C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\3team.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	1.017.000
+Java max ver:	
+Substitute:	JAVA_HOME = C:\Program Files\Java\jdk-17
+Substitute:	PATH = C:\Program Files\Java\jdk-17\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\opencv\build\x64\vc16\bin;C:\Windows\System32\quartz;C:\Program Files\Git\cmd;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.4\jbr\bin;C:\Program Files\dotnet\;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\user\AppData\Local\GitHubDesktop\bin;C:\Program Files\Java\jdk-17\bin
+JRE paths:	C:\Program Files\Java\jdk-17;C:\Program Files\Java\jdk-17\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\opencv\build\x64\vc16\bin;C:\Windows\System32\quartz;C:\Program Files\Git\cmd;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.4\jbr\bin;C:\Program Files\dotnet\;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\user\AppData\Local\GitHubDesktop\bin;C:\Program Files\Java\jdk-17\bin
+Check launcher:	C:\Program Files\Java\jdk-17\bin\javaw.exe (OK)
+Version string: 1.017.000_011 / 64-Bit (OK)
+Main class:	Menu.Main
+Add classpath:	C:\Users\user\Desktop\????3\Requirements3\json-simple-1.1.1.jar
+Launcher:	C:\Program Files\Java\jdk-17\bin\javaw.exe
+Launcher args:	-classpath "C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\3team.exe" Menu.Main
+Args length:	111/32768 chars
+Exit code:	0
+
+
+Version:	3.50
+CmdLine:	C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\3team.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	1.017.000
+Java max ver:	
+Substitute:	JAVA_HOME = C:\Program Files\Java\jdk-17
+Substitute:	PATH = C:\Program Files\Java\jdk-17\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\opencv\build\x64\vc16\bin;C:\Windows\System32\quartz;C:\Program Files\Git\cmd;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.4\jbr\bin;C:\Program Files\dotnet\;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\user\AppData\Local\GitHubDesktop\bin;C:\Program Files\Java\jdk-17\bin
+JRE paths:	C:\Program Files\Java\jdk-17;C:\Program Files\Java\jdk-17\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\opencv\build\x64\vc16\bin;C:\Windows\System32\quartz;C:\Program Files\Git\cmd;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.4\jbr\bin;C:\Program Files\dotnet\;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\user\AppData\Local\GitHubDesktop\bin;C:\Program Files\Java\jdk-17\bin
+Check launcher:	C:\Program Files\Java\jdk-17\bin\javaw.exe (OK)
+Version string: 1.017.000_011 / 64-Bit (OK)
+Main class:	Menu.Main
+Add classpath:	C:\Users\user\Desktop\????3\Requirements3\json-simple-1.1.1.jar
+Launcher:	C:\Program Files\Java\jdk-17\bin\javaw.exe
+Launcher args:	-classpath "C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\3team.exe" Menu.Main
+Args length:	111/32768 chars
+Exit code:	0
