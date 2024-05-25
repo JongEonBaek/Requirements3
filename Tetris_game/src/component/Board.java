@@ -1066,7 +1066,7 @@ public class Board extends JPanel {
 					JSONParser parser = new JSONParser();
 
 					try {
-						FileReader reader = new FileReader(String.format(Main.path) + "/Tetris_game/src/ClassicScoreData.json");
+						FileReader reader = new FileReader(Main.ClassicScore.toFile());
 						Object obj = parser.parse(reader);
 						scoreList = (JSONArray) obj;
 						reader.close();
@@ -1089,8 +1089,8 @@ public class Board extends JPanel {
 					scoreData.put("recent", 1); // 가장 최근에 끝난 게임임을 알려주는 심볼
 					scoreList.add(scoreData);
 
-					// 파일에 새 데이터 쓰기
-					try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/src/ClassicScoreData.json")) {
+					ImageIcon backgroundIcon = new ImageIcon(String.valueOf(Main.ImageFile.toFile()));					// 파일에 새 데이터 쓰기
+					try (FileWriter file = new FileWriter(Main.ClassicScore.toFile())) {
 						file.write(scoreList.toJSONString());
 						file.flush();
 					} catch (Exception e) {
@@ -1133,7 +1133,7 @@ public class Board extends JPanel {
 					JSONParser parser = new JSONParser();
 
 					try {
-						FileReader reader = new FileReader(String.format(Main.path) + "/Tetris_game/src/ItemScoreData.json");
+						FileReader reader = new FileReader(Main.ItemScore.toFile());
 						Object obj = parser.parse(reader);
 						scoreList = (JSONArray) obj;
 						reader.close();
@@ -1157,7 +1157,7 @@ public class Board extends JPanel {
 					scoreList.add(scoreData);
 
 					// 파일에 새 데이터 쓰기
-					try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/src/ItemScoreData.json")) {
+					try (FileWriter file = new FileWriter(Main.ItemScore.toFile())) {
 						file.write(scoreList.toJSONString());
 						file.flush();
 					} catch (Exception e) {

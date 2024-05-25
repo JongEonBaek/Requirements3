@@ -36,7 +36,7 @@ public class OptionsLabel1 extends JPanel implements KeyListener {
 
         menuItems = new ArrayList<>();
 
-        ImageIcon backgroundIcon = new ImageIcon(Main.path + "/Tetris_game/src/images/introBackground.jpg");
+        ImageIcon backgroundIcon = new ImageIcon(String.valueOf(Main.ImageFile.toFile()));
         optionLabel1 = new JLabel(new ImageIcon(backgroundIcon.getImage().getScaledInstance(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0], Image.SCALE_SMOOTH)));
         optionLabel1.setSize(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0]);
 

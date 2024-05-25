@@ -23,7 +23,7 @@ public class ScoreBoardMenu1 extends JPanel implements KeyListener {
 
         menuItems = new ArrayList<>();
 
-        ImageIcon backgroundIcon = new ImageIcon(Main.path + "/Tetris_game/src/images/introBackground.jpg");
+        ImageIcon backgroundIcon = new ImageIcon(String.valueOf(Main.ImageFile.toFile()));
         mainLabel = new JLabel(new ImageIcon(backgroundIcon.getImage().getScaledInstance(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0], Image.SCALE_SMOOTH)));
         mainLabel.setSize(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0]);
 
@@ -112,7 +112,7 @@ public class ScoreBoardMenu1 extends JPanel implements KeyListener {
                 break;
             case 2:
                 System.out.println("Classic ScoreBoard Reset");
-                String normalfile = String.format(Main.path) + "/Tetris_game/src/ClassicScoreData.json"; // JSON 파일 경로 지정
+                String normalfile = Main.ClassicScore.toString(); // JSON 파일 경로 지정
 
                 try (FileWriter fileWriter = new FileWriter(normalfile, false)) {
                     // 파일에 빈 JSONArray '[]'를 쓰기
@@ -125,7 +125,7 @@ public class ScoreBoardMenu1 extends JPanel implements KeyListener {
                 break;
             case 3:
                 System.out.println("Item ScoreBoard Reset");
-                String itemfile = String.format(Main.path) + "/Tetris_game/src/ItemScoreData.json"; // JSON 파일 경로 지정
+                String itemfile = Main.ItemScore.toString(); // JSON 파일 경로 지정
 
                 try (FileWriter fileWriter = new FileWriter(itemfile, false)) {
                     // 파일에 빈 JSONArray '[]'를 쓰기

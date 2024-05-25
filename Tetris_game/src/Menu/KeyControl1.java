@@ -34,7 +34,7 @@ public class KeyControl1 extends JPanel implements KeyListener {
 
         menuItems = new ArrayList<>();
 
-        ImageIcon backgroundIcon = new ImageIcon(Main.path + "/Tetris_game/src/images/introBackground.jpg");
+        ImageIcon backgroundIcon = new ImageIcon(String.valueOf(Main.ImageFile.toFile()));
         mainLabel = new JLabel(new ImageIcon(backgroundIcon.getImage().getScaledInstance(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0], Image.SCALE_SMOOTH)));
         mainLabel.setSize(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0]);
 
@@ -182,7 +182,7 @@ public class KeyControl1 extends JPanel implements KeyListener {
             Main.SettingObject.put(Main.currentChangingKey, keyCode);
             Main.isInputing = false;
             keyMessage.setVisible(false);
-            try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/src/Settings.json")) {
+            try (FileWriter file = new FileWriter(Main.SettingFile.toFile())) {
                 file.write(Main.SettingObject.toJSONString());
                 file.flush();
             } catch (Exception ex) {

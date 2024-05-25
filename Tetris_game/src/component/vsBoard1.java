@@ -1536,7 +1536,7 @@ public class vsBoard1 extends JPanel {
             }
             else if(keyCode == ((Number)(Main.SettingObject.get("K_Q"))).intValue())
             {
-                try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/src/Settings.json")) {
+                try (FileWriter file = new FileWriter(Main.SettingFile.toFile())) {
                     file.write(Main.SettingObject.toJSONString());
                     file.flush();
                 } catch (Exception ex) {
@@ -1697,7 +1697,7 @@ public class vsBoard1 extends JPanel {
             }
             else if(keyCode1 == ((Number)(Main.SettingObject.get("K_Q"))).intValue())
             {
-                try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/src/Settings.json")) {
+                try (FileWriter file = new FileWriter(Main.SettingFile.toFile())) {
                     file.write(Main.SettingObject.toJSONString());
                     file.flush();
                 } catch (Exception ex) {

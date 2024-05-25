@@ -5,9 +5,7 @@ import java.util.Random;
 
 
 public class IBlockTest
-
 {
-
     private void Test(int mode){
         Random rnd = new Random(); // 반복문 밖에서 Random 객체 생성
         for (int i = 0; i < 50000; i++) { // 1000번의 테스트 케이스 실행
