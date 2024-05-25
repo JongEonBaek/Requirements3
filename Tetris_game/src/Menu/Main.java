@@ -11,8 +11,16 @@ import org.json.simple.parser.JSONParser;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
 
 public class Main {
     public static JFrame frame;
@@ -41,25 +49,29 @@ public class Main {
     public static ScoreBoardMenu1 scoreBoardMenu1;
     public static vsModeLabel vsModeMenu;
 
-
     /////////////////////////////설정값들 관리.
     public static JSONParser parser;
     public static JSONObject SettingObject;
 
     public static boolean isColorBlindnessMode; // 색맹 모드 상태 저장
 
-
     public static boolean isInputing = false; // 사용자가 키값을 바꾸려고 할 때인가?
     public static String currentChangingKey = "";
     public static String path;
+    public static Path SettingFile;
+    public static Path ImageFile;
+    public static Path ClassicScore;
+    public static Path ItemScore;
 
     public static void main(String[] args) throws IOException {
         parser = new JSONParser();
-        System.out.println();
-        System.out.println(System.getProperty("user.dir"));
-        path = System.getProperty("user.dir");
 
-        try (FileReader reader = new FileReader(String.format(Main.path) + "/Tetris_game/src/Settings.json")) {
+        SettingFile = getResourceFilePath("Settings.json");
+        ImageFile = getResourceFilePath("introBackground.jpg");
+        ClassicScore = getResourceFilePath("ClassicScoreData.json");
+        ItemScore = getResourceFilePath("ItemScoreData.json");
+
+        try (FileReader reader = new FileReader(SettingFile.toFile())) {
             // 파일로부터 JSON 객체를 읽어오기
             SettingObject = (JSONObject) parser.parse(reader);
 
@@ -72,15 +84,15 @@ public class Main {
             System.out.println("color_blind : " + SettingObject.get("color_blind"));
 
             // "color_blind" 값 읽기
-            isColorBlindnessMode = SettingObject.get("color_blind").toString().equals("On") ? true : false;
+            isColorBlindnessMode = SettingObject.get("color_blind").toString().equals("On");
             Board.colorBlindMode = isColorBlindnessMode;
-            if(Board.colorBlindMode) {Board.setColorBlindMode(true);}
-
+            if (Board.colorBlindMode) {
+                Board.setColorBlindMode(true);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         frame = new JFrame("Tetris Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -91,7 +103,6 @@ public class Main {
         cardLayout = new CardLayout();
         mainPanel = new JPanel();
 
-
         mainPanel.setLayout(cardLayout);
 
         // 메뉴와 옵션 패널 추가
@@ -100,20 +111,15 @@ public class Main {
         optionMenu1 = new OptionsLabel1();
         optionMenu1.setName("Options1");
 
-
         gameMode1 = new GameModeLabel1();
         gameMode1.setName("GameMode1");
-
 
         classicMode1 = new ClassicModeLabel1();
         classicMode1.setName("ClassicMode1");
 
-
         itemMode1 = new ItemModeLabel1();
         itemMode1.setName("ItemMode1");
 
-
-        
         gamePanel = new Board();
         gamePanel.setSize(SCREEN_WIDTH[1], SCREEN_HEIGHT[1]);
         gamePanel.setVisible(true);
@@ -140,16 +146,11 @@ public class Main {
         vsGamePanel3.setVisible(true);
         vsGamePanel3.setName("vsgame3");
 
-
         keyControl1 = new KeyControl1();
         keyControl1.setName("Control1");
 
         keyControl2p = new KeyControl2p();
         keyControl2p.setName("Control2p");
-
-
-
-
 
         classicScoreBoard1 = new ClassicScoreBoard1();
         classicScoreBoard1.setName("NormalScoreBoard1");
@@ -166,12 +167,9 @@ public class Main {
         mainPanel.add(mainMenu1, "MainMenu1");
         mainPanel.add(optionMenu1, "Options1");
 
-
         mainPanel.add(gameMode1, "GameMode1");
 
-
         mainPanel.add(classicMode1, "ClassicMode1");
-
 
         mainPanel.add(itemMode1, "ItemMode1");
 
@@ -188,15 +186,11 @@ public class Main {
         mainPanel.add(keyControl1, "Control1");
         mainPanel.add(keyControl2p, "Control2p");
 
-
         mainPanel.add(classicScoreBoard1, "NormalScoreBoard1");
-
 
         mainPanel.add(itemScoreBoard1, "ItemScoreBoard1");
 
         mainPanel.add(scoreBoardMenu1, "ScoreBoardMenu1");
-
-
 
         cardLayout.show(mainPanel, "MainMenu1");
 
@@ -204,23 +198,35 @@ public class Main {
         frame.setVisible(true);
 
         // 밑에는 EXIT버튼이 아니라 종료버튼을 눌러서 나갔을 때 저장되게
-        try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/src/Settings.json")) {
-            file.write(SettingObject.toJSONString());
-            file.flush();
-        } catch (Exception e) {
-        e.printStackTrace();
-        }
-
-
+        saveSettings();
     }
-    public static void SettingSave()
-    {
-        try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/src/Settings.json")) {
+
+    public static void SettingSave() {
+        saveSettings();
+    }
+
+    private static void saveSettings() {
+        try (FileWriter file = new FileWriter(SettingFile.toFile())) {
             file.write(SettingObject.toJSONString());
             file.flush();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-}
 
+    private static Path getResourceFilePath(String fileName) throws IOException {
+        ClassLoader classLoader = Main.class.getClassLoader();
+        URL resource = classLoader.getResource(fileName);
+
+        if (resource == null) {
+            throw new IOException(fileName + " 파일을 찾을 수 없습니다.");
+        }
+
+        try (InputStream inputStream = resource.openStream()) {
+            Path tempDirectory = Files.createTempDirectory("tempResources");
+            Path tempFile = tempDirectory.resolve(fileName);
+            Files.copy(inputStream, tempFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            return tempFile;
+        }
+    }
+}

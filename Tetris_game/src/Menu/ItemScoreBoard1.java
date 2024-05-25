@@ -34,7 +34,7 @@ public class ItemScoreBoard1 extends JPanel implements KeyListener {
         this.sortedScoreArray = new JSONArray();
 
 
-        try (FileReader reader = new FileReader(String.format(Main.path) + "/Tetris_game/src/ItemScoreData.json")) {
+        try (FileReader reader = new FileReader(Main.ItemScore.toFile())) {
             JSONArray scoreArray = (JSONArray) scoreParser.parse(reader);
             List<JSONObject> scoreList = new ArrayList<>();
             for (Object item : scoreArray) {
@@ -126,7 +126,7 @@ public class ItemScoreBoard1 extends JPanel implements KeyListener {
         this.sortedScoreArray = new JSONArray();
 
 
-        try (FileReader reader = new FileReader(String.format(Main.path) + "/Tetris_game/src/ItemScoreData.json")) {
+        try (FileReader reader = new FileReader(Main.ItemScore.toFile())) {
             JSONArray scoreArray = (JSONArray) scoreParser.parse(reader);
             List<JSONObject> scoreList = new ArrayList<>();
             for (Object item : scoreArray) {

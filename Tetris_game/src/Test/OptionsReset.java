@@ -17,7 +17,7 @@ public class OptionsReset {
 
     // Reset 메서드 구현
     public static void resetOptions() {
-        try (FileWriter file = new FileWriter(String.format(Main.path) + "/Settings.json")) {
+        try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/resources/Settings.json")) {
             file.write(INITIAL_SETTINGS_JSON);
             file.flush();
             System.out.println("Options reset successfully.");
@@ -29,7 +29,7 @@ public class OptionsReset {
     // 초기 설정을 읽어오는 메서드
     public static JSONObject readInitialSettings() {
         JSONParser parser = new JSONParser();
-        try (FileReader reader = new FileReader(String.format(Main.path) + "/Settings.json")) {
+        try (FileReader reader = new FileReader(String.format(Main.path) + "/Tetris_game/resources/Settings.json")) {
             return (JSONObject) parser.parse(reader);
         } catch (IOException | ParseException e) {
             e.printStackTrace();

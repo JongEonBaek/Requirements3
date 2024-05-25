@@ -11,12 +11,12 @@ import java.io.IOException;
 public class OptionsReset {
 
     private static final String INITIAL_SETTINGS_JSON =
-            "{\"K_DOWN\":83,\"K_LEFT\":65,\"K_ENTER\":10,\"K_SPACE\":32,\"Screen\":517,\"K_Q\":81," +
+            "{\"K_DOWN\":83,\"K_LEFT\":65,\"K_ENTER\":10,\"K_SPACE\":32,\"Screen\":368,\"K_Q\":81," +
                     "\"K_UP\":87,\"K_RIGHT\":68,\"color_blind\":\"Off\", \"K_UP2p\":38,\"K_DOWN2p\":40,\"K_LEFT2p\":37, \"K_RIGHT2p\":39,\"K_ENTER2p\":34}";
 
     // Reset 메서드 구현
     public static void resetOptions() {
-        try (FileWriter file = new FileWriter(String.format(Main.path) + "/Tetris_game/src/Settings.json")) {
+        try (FileWriter file = new FileWriter(Main.SettingFile.toFile())) {
             file.write(INITIAL_SETTINGS_JSON);
             file.flush();
             System.out.println("Options reset successfully.");
@@ -29,7 +29,7 @@ public class OptionsReset {
     // 초기 설정을 읽어오는 메서드
     public static JSONObject readInitialSettings() {
         JSONParser parser = new JSONParser();
-        try (FileReader reader = new FileReader(String.format(Main.path) + "/Tetris_game/src/Settings.json")) {
+        try (FileReader reader = new FileReader(Main.SettingFile.toFile())) {
             //System.out.println("왜 안될까");
             return (JSONObject) parser.parse(reader);
 
