@@ -195,7 +195,9 @@ public class ClassicScoreBoard1 extends JPanel implements KeyListener {
         if(keyCode == ((Number)(Main.SettingObject.get("K_ENTER"))).intValue()) {
             this.switchToScreen(Main.scoreBoardMenu1);
         } else {
-            this.showTemporaryMessage("<html>Invalid Key Input. <br>If you want to exit, Press Enter</html>");
+            this.showTemporaryMessage(String.format("<html>Invalid Key Input. <br>If you want to exit, Press %s</html>",
+                    KeyEvent.getKeyText(((Number)Main.SettingObject.get("K_ENTER")).intValue())
+            ));
         }
 
     }
