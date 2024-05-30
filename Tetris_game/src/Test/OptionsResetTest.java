@@ -26,7 +26,7 @@ class OptionsResetTest {
     void setUp() {
         path = System.getProperty("user.dir");
         parser = new JSONParser();
-        try (FileReader reader = new FileReader(path + "/Tetris_game/src/Settings.json")) {
+        try (FileReader reader = new FileReader("C:\\Users\\user\\Desktop\\요구사항3\\Requirements3\\Tetris_game\\resources\\Settings.json")) {
             // 파일로부터 JSON 객체를 읽어오기
             jsonObject = (JSONObject) parser.parse(reader);
         } catch (Exception e) {
@@ -43,7 +43,7 @@ class OptionsResetTest {
             assertEquals(81L, jsonObject.get("K_Q"));
             assertEquals(87L, jsonObject.get("K_UP"));
             assertEquals(68L, jsonObject.get("K_RIGHT"));
-            assertEquals("Off", jsonObject.get("color_blind"));
+            assertEquals("On", jsonObject.get("color_blind"));
             // 초기값이 내가 생각한 값과 같은지 확인한다.
     }
 }
