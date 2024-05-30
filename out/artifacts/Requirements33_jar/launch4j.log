@@ -1,7 +1,7 @@
 
 
 Version:	3.50
-CmdLine:	C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\3team.exe --l4j-debug
+CmdLine:	C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\3_team.exe --l4j-debug
 JNI:		No
 WOW64:		Yes
 Working dir:	C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\.
@@ -17,6 +17,6 @@ Version string: 1.017.000_011 / 64-Bit (OK)
 Main class:	Menu.Main
 Add classpath:	C:\Users\user\Desktop\????3\Requirements3\json-simple-1.1.1.jar
 Launcher:	C:\Program Files\Java\jdk-17\bin\javaw.exe
-Launcher args:	-classpath "C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\3team.exe" Menu.Main
-Args length:	111/32768 chars
+Launcher args:	-classpath "C:\Users\user\Desktop\요구사항3\Requirements3\out\artifacts\Requirements33_jar\3_team.exe" Menu.Main
+Args length:	112/32768 chars
 Exit code:	0

@@ -98,9 +98,11 @@ public class OptionsLabel1 extends JPanel implements KeyListener {
             labels[3] = String.format("Color Blindness Mode : %s", SettingObject.get("color_blind").toString());
         }
         else
-            showTemporaryMessage(String.format("<html>Invalid Key Input. <br>Please press %s, %s, Enter</html>",
+            showTemporaryMessage(String.format("<html>Invalid Key Input. <br>Please press %s, %s, %s</html>",
                     KeyEvent.getKeyText(((Number)Main.SettingObject.get("K_UP")).intValue()),
-                    KeyEvent.getKeyText(((Number)Main.SettingObject.get("K_DOWN")).intValue())));
+                    KeyEvent.getKeyText(((Number)Main.SettingObject.get("K_DOWN")).intValue()),
+                    KeyEvent.getKeyText(((Number)Main.SettingObject.get("K_ENTER")).intValue())
+            ));
         labels[1] = String.format("Screen : %d x %d", ((Number)SettingObject.get("Screen")).intValue(), ((Number)SettingObject.get("Screen")).intValue()*37/23);
         updateMenuDisplay();
     }

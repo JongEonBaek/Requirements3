@@ -91,7 +91,11 @@ public class GameModeLabel1 extends JPanel implements KeyListener {
         else if(keyCode == ((Number)(Main.SettingObject.get("K_ENTER"))).intValue())
             activateMenuItem(currentIndex);
         else
-            showTemporaryMessage("<html>Invalid Key Input. <br>Please press W, S, Enter</html>");
+            showTemporaryMessage(String.format("<html>Invalid Key Input. <br>Please press %s, %s, %s</html>",
+                    KeyEvent.getKeyText(((Number)Main.SettingObject.get("K_UP")).intValue()),
+                    KeyEvent.getKeyText(((Number)Main.SettingObject.get("K_DOWN")).intValue()),
+                    KeyEvent.getKeyText(((Number)Main.SettingObject.get("K_ENTER")).intValue())
+            ));
         updateMenuDisplay();
     }
 
