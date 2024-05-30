@@ -886,7 +886,7 @@ public class vsBoard3 extends JPanel {
             {
 
                 timer.stop();
-                timer.setDelay(initInterval); // 기본 속도 1000으로 초기화
+                timer.setDelay(1000); // 기본 속도 1000으로 초기화
                 timer.start();
             }
             if(!curr_name[p].equals("BombBlock")) {
@@ -1527,7 +1527,7 @@ public class vsBoard3 extends JPanel {
                 else if(curr_name[0].equals("TimeBlock"))
                 {
                     timer.stop();
-                    timer.setDelay(initInterval); // 기본 속도 1000으로 초기화
+                    timer.setDelay(1000); // 기본 속도 1000으로 초기화
                     timer.start();
                 }
                 checkLines(board, color_board,0);
@@ -1687,7 +1687,7 @@ public class vsBoard3 extends JPanel {
                 else if(curr_name[1].equals("TimeBlock"))
                 {
                     timer.stop();
-                    timer.setDelay(initInterval); // 기본 속도 1000으로 초기화
+                    timer.setDelay(1000); // 기본 속도 1000으로 초기화
                     timer.start();
                 }
                 checkLines(vsboard, vscolor_board,1);
