@@ -28,10 +28,12 @@ public class vsBoard3 extends JPanel {
     public static final char BORDER_CHAR = 'X'; //게임 테두리 문자
     private static final long serialVersionUID = 2434035659171694595L; // 이 클래스의 고유한 serialVersionUID
     private int initInterval = 1000; //블록이 자동으로 아래로 떨어지는 속도 제어 시간, 현재 1초
+    private int vsinitInterval = 1000;
     private final KeyListener playerKeyListener; // 사용자의 키 입력을 처리하는 KeyListener 객체
     private final KeyListener vsplayerKeyListener; // 사용자의 키 입력을 처리하는 KeyListener 객체
     private final SimpleAttributeSet styleSet; // 텍스트 스타일 설정하는 SimpleAttributeSet
     public final Timer timer; // 블록이 자동으로 아래로 떨어지게 하는 Timer
+    public final Timer vstimer;
     public final Timer gametimer;
     int x[] = {3,3}; //Default Position. 현재 블록 위치
     int y[] = {0,0}; // 현재 블록 위치
@@ -138,6 +140,17 @@ public class vsBoard3 extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 moveDown(board, color_board, 0); // 블록 아래로 이동
                 drawBoard(pane, nextpane, board, color_board,0);
+                //moveDown(vsboard,vscolor_board,1);
+                //drawBoard(vspane, vsnextpane,vsboard, vscolor_board,1);
+
+            }
+        });
+
+        vstimer = new Timer(vsinitInterval, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //moveDown(board, color_board, 0); // 블록 아래로 이동
+                //drawBoard(pane, nextpane, board, color_board,0);
                 moveDown(vsboard,vscolor_board,1);
                 drawBoard(vspane, vsnextpane,vsboard, vscolor_board,1);
 
@@ -501,7 +514,7 @@ public class vsBoard3 extends JPanel {
                     if(temp>=2) // 꽉찬 line이 2개 이상이면 옮긴다
                     {
                         int HowManyLines = howlinesinsmallboard(vssmallboard);
-                        if(HowManyLines!= 10) {
+                        if(HowManyLines != 10) {
                             if (HowManyLines + temp > 10) { // 근데 합쳐서 10줄보다 많아지면
                                 int overTen = HowManyLines + temp - 10;
                                 for (int i = 9; i - overTen >= 0; i--) { // smallboard를 한 줄씩 overTen만큼 내리고(기존 최하단 줄을 지우고)
@@ -584,28 +597,30 @@ public class vsBoard3 extends JPanel {
                     if(temp>=2) // 꽉찬 line이 2개 이상이면 옮긴다
                     {
                         int HowManyLines = howlinesinsmallboard(smallboard);
-                        if (HowManyLines + temp > 10) { // 근데 합쳐서 10줄보다 많아지면
-                            int overTen = HowManyLines + temp - 10;
-                            for (int i = 9; i - overTen >= 0; i--) { // smallboard를 한 줄씩 overTen만큼 내리고(기존 최하단 줄을 지우고)
-                                smallboard[i] = Arrays.copyOf(smallboard[i - overTen], 10);
-                            }
-                            for (int i = 0; i < temp; i++) { // 맨 윗줄부터 temp만큼 지운다
+                        if(HowManyLines!= 10) {
+                            if (HowManyLines + temp > 10) { // 근데 합쳐서 10줄보다 많아지면
+                                int overTen = HowManyLines + temp - 10;
+                                for (int i = 9; i - overTen >= 0; i--) { // smallboard를 한 줄씩 overTen만큼 내리고(기존 최하단 줄을 지우고)
+                                    smallboard[i] = Arrays.copyOf(smallboard[i - overTen], 10);
+                                }
+                                for (int i = 0; i < temp; i++) { // 맨 윗줄부터 temp만큼 지운다
                                     Arrays.fill(smallboard[i], 0);
-                            }
-                        }
-                        for(int j = temp-1; j>=0; j--) {
-                            int smallstart = howlinesinsmallboard(smallboard); // 현재 player1의 vssmallboard에 몇줄있음?
-                            if (smallstart < 10) { // 10줄이하면
-                                for (int k = 0; k < 9; k++) { // smallboard를 한칸씩 위로 올리고
-                                    smallboard[k] = Arrays.copyOf(smallboard[k + 1], 10);
                                 }
-                                Arrays.fill(smallboard[9], 0);
-                                for (int k = 0; k < WIDTH; k++) { // 맨 아래줄에 꽉찬 line가져옴
-                                    smallboard[9][k] = vsboard[fullLines.get(j)][k];
+                            }
+                            for (int j = temp - 1; j >= 0; j--) {
+                                int smallstart = howlinesinsmallboard(smallboard); // 현재 player1의 vssmallboard에 몇줄있음?
+                                if (smallstart < 10) { // 10줄이하면
+                                    for (int k = 0; k < 9; k++) { // smallboard를 한칸씩 위로 올리고
+                                        smallboard[k] = Arrays.copyOf(smallboard[k + 1], 10);
+                                    }
+                                    Arrays.fill(smallboard[9], 0);
+                                    for (int k = 0; k < WIDTH; k++) { // 맨 아래줄에 꽉찬 line가져옴
+                                        smallboard[9][k] = vsboard[fullLines.get(j)][k];
+                                    }
+
                                 }
 
                             }
-
                         }
 
                     }
@@ -884,10 +899,17 @@ public class vsBoard3 extends JPanel {
             }
             else if(curr_name[p].equals("TimeBlock"))
             {
-
-                timer.stop();
-                timer.setDelay(1000); // 기본 속도 1000으로 초기화
-                timer.start();
+                if(p ==0) {
+                    timer.stop();
+                    timer.setDelay(1000); // 기본 속도 1000으로 초기화
+                    timer.start();
+                }
+                else if(p==1)
+                {
+                    vstimer.stop();
+                    vstimer.setDelay(1000); // 기본 속도 1000으로 초기화
+                    vstimer.start();
+                }
             }
             if(!curr_name[p].equals("BombBlock")) {
                 placeBlock(board1, color_board1,p); // 현재 위치에 블록을 고정시킵니다.
@@ -1255,30 +1277,53 @@ public class vsBoard3 extends JPanel {
                 if (bricks[p] == 20 || bricks[p] == 40 || bricks[p] == 60 || bricks[p] == 80) {
                     level[p]++;
                     point[p]++;
-                    timer.stop();
-                    initInterval = (int) (initInterval - decreaseTime);
-                    timer.setDelay(initInterval);
-                    timer.start();
+                    if(p==0) {
+                        timer.stop();
+                        initInterval = (int) (initInterval - decreaseTime);
+                        timer.setDelay(initInterval);
+                        timer.start();
+                    } else if (p == 1) {
+                        vstimer.stop();
+                        vsinitInterval = (int) (vsinitInterval - decreaseTime);
+                        vstimer.setDelay(vsinitInterval);
+                        vstimer.start();
+                    }
                 }
                 break;
             case 1:
                 if (bricks[p] == 20 || bricks[p] == 40 || bricks[p] == 60 || bricks[p] == 80) {
                     level[p]++;
                     point[p]++;
-                    timer.stop();
-                    initInterval = (int) (initInterval - (decreaseTime * 0.8));
-                    timer.setDelay(initInterval);
-                    timer.start();
+                    if(p==0) {
+                        timer.stop();
+                        initInterval = (int) (initInterval - (decreaseTime * 0.8));
+                        timer.setDelay(initInterval);
+                        timer.start();
+                    }else if (p == 1) {
+                        vstimer.stop();
+                        vsinitInterval = (int) (vsinitInterval - decreaseTime * 0.8);
+                        vstimer.setDelay(vsinitInterval);
+                        vstimer.start();
+                    }
                 }
                 break;
             case 2:
                 if (bricks[p] == 20 || bricks[p] == 40 || bricks[p] == 60 || bricks[p] == 80) {
                     level[p]++;
                     point[p]++;
-                    timer.stop();
-                    initInterval = (int) (initInterval - (decreaseTime * 1.2));
-                    timer.setDelay(initInterval);
-                    timer.start();
+                    if(p==0) {
+                        timer.stop();
+                        initInterval = (int) (initInterval - (decreaseTime * 1.2));
+                        timer.setDelay(initInterval);
+                        timer.start();
+                    }
+                    else if (p == 1) {
+                        vstimer.stop();
+                        vsinitInterval = (int) (vsinitInterval - decreaseTime * 1.2);
+                        vstimer.setDelay(vsinitInterval);
+                        vstimer.start();
+
+                    }
                 }
                 break;
         }
@@ -1291,7 +1336,9 @@ public class vsBoard3 extends JPanel {
 
     public void GameInit(){
         initInterval = 1000; //블록이 자동으로 아래로 떨어지는 속도 제어 시간, 현재 1초
+        vsinitInterval = 1000; //블록이 자동으로 아래로 떨어지는 속도 제어 시간, 현재 1초
         timer.setDelay(initInterval);
+        vstimer.setDelay(vsinitInterval);
         gameTime = 90;
 
         if (colorBlindMode) {
@@ -1358,6 +1405,7 @@ public class vsBoard3 extends JPanel {
     public void GameOver(int p) {
         timer.stop(); // 타이머를 멈춥니다.
         gametimer.stop();
+        vstimer.stop();
         gameOver = true;
 
         // p의 값에 따라 다른 메시지를 띄웁니다.
@@ -1375,6 +1423,7 @@ public class vsBoard3 extends JPanel {
     public void GameTimeOver(){
         timer.stop();
         gametimer.stop();
+        vstimer.stop();
         gameOver = true;
 
         if(scores[0]>scores[1])
@@ -1427,9 +1476,11 @@ public class vsBoard3 extends JPanel {
                 isPaused = !isPaused; // 게임의 상태를 전환합니다.
                 if (isPaused) {
                     timer.stop(); // 게임이 일시 중지된 경우, 타이머를 중지합니다.
+                    vstimer.stop();
                     pane.setText(String.format("Game Paused\nPress %s to continue", KeyEvent.getKeyText(((Number)Main.SettingObject.get("K_SPACE")).intValue()))); // 게임이 일시 중지된 상태를 표시합니다.
                 } else {
                     timer.start(); // 게임이 재개된 경우, 타이머를 시작합니다.
+                    vstimer.start();
                 }
             }
             else if(keyCode == ((Number)(Main.SettingObject.get("K_ENTER"))).intValue()) {
@@ -1587,9 +1638,11 @@ public class vsBoard3 extends JPanel {
                 //isPaused = !isPaused; // 게임의 상태를 전환합니다.
                 if (isPaused) {
                     timer.stop(); // 게임이 일시 중지된 경우, 타이머를 중지합니다.
+                    vstimer.stop();
                     vspane.setText(String.format("Game Paused\nPress %s to continue", KeyEvent.getKeyText(((Number)Main.SettingObject.get("K_SPACE")).intValue()))); // 게임이 일시 중지된 상태를 표시합니다.
                 } else {
                     timer.start(); // 게임이 재개된 경우, 타이머를 시작합니다.
+                    vstimer.start();
                 }
             }
             else if(keyCode1 == ((Number)(Main.SettingObject.get("K_ENTER2p"))).intValue()) {// 방향키 pageDown
@@ -1686,9 +1739,9 @@ public class vsBoard3 extends JPanel {
                 }
                 else if(curr_name[1].equals("TimeBlock"))
                 {
-                    timer.stop();
-                    timer.setDelay(1000); // 기본 속도 1000으로 초기화
-                    timer.start();
+                    vstimer.stop();
+                    vstimer.setDelay(1000); // 기본 속도 1000으로 초기화
+                    vstimer.start();
                 }
                 checkLines(vsboard, vscolor_board,1);
 
