@@ -122,6 +122,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.vsGamePanel.GameInit();
                     switchToScreen(Main.vsGamePanel); // 여기를 vsBoard1으로 바꾸어주어야함.
                     Main.vsGamePanel.timer.start();
+                    Main.vsGamePanel.vstimer.start();
                     Main.vsGamePanel.setVisible(true);
                 }
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[2])
@@ -133,6 +134,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.vsGamePanel2.GameInit();
                     switchToScreen(Main.vsGamePanel2); // vsBoard2를 완성한 뒤 인스턴스화 해서 바꾸어줌.
                     Main.vsGamePanel2.timer.start();
+                    Main.vsGamePanel2.vstimer.start();
                     Main.vsGamePanel2.setVisible(true);
                 }
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[3])
@@ -144,6 +146,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.vsGamePanel3.GameInit();
                     switchToScreen(Main.vsGamePanel3); // vsBoard3를 완성한 뒤 인스턴스화 해서 바꿔야함.
                     Main.vsGamePanel3.timer.start();
+                    Main.vsGamePanel3.vstimer.start();
                     Main.vsGamePanel3.setVisible(true);
                 }
                 else
@@ -160,6 +163,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.vsGamePanel.GameInit();
                     switchToScreen(Main.vsGamePanel);
                     Main.vsGamePanel.timer.start();
+                    Main.vsGamePanel.vstimer.start();
                     Main.vsGamePanel.setVisible(true);
                 }
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[2])
@@ -171,6 +175,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.vsGamePanel2.GameInit();
                     switchToScreen(Main.vsGamePanel2);
                     Main.vsGamePanel2.timer.start();
+                    Main.vsGamePanel2.vstimer.start();
                     Main.vsGamePanel2.setVisible(true);
                 }
                 else if(((Number)Main.SettingObject.get("Screen")).intValue() == Main.SCREEN_WIDTH[3])
@@ -182,6 +187,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.vsGamePanel3.GameInit();
                     switchToScreen(Main.vsGamePanel3);
                     Main.vsGamePanel3.timer.start();
+                    Main.vsGamePanel3.vstimer.start();
                     Main.vsGamePanel3.setVisible(true);
                 }
                 else
@@ -199,6 +205,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.vsGamePanel.GameInit();
                     switchToScreen(Main.vsGamePanel);
                     Main.vsGamePanel.timer.start();
+                    Main.vsGamePanel.vstimer.start();
                     Main.vsGamePanel.gametimer.start();
                     Main.vsGamePanel.setVisible(true);
                 }
@@ -212,6 +219,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.vsGamePanel2.GameInit();
                     switchToScreen(Main.vsGamePanel2);
                     Main.vsGamePanel2.timer.start();
+                    Main.vsGamePanel2.vstimer.start();
                     Main.vsGamePanel2.gametimer.start();
                     Main.vsGamePanel2.setVisible(true);
                 }
@@ -225,6 +233,7 @@ public class vsModeLabel extends JPanel implements KeyListener {
                     Main.vsGamePanel3.GameInit();
                     switchToScreen(Main.vsGamePanel3);
                     Main.vsGamePanel3.timer.start();
+                    Main.vsGamePanel3.vstimer.start();
                     Main.vsGamePanel3.gametimer.start();
                     Main.vsGamePanel3.setVisible(true);
                 }

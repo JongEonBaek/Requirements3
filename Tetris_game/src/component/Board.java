@@ -684,7 +684,7 @@ public class Board extends JPanel {
 			{
 
 				timer.stop();
-				timer.setDelay(initInterval); // 기본 속도 1000으로 초기화
+				timer.setDelay(1000); // 기본 속도 1000으로 초기화
 				timer.start();
 			}
 			if(!curr_name.equals("BombBlock")) {
@@ -1327,7 +1327,7 @@ public class Board extends JPanel {
 				else if(curr_name.equals("TimeBlock"))
 				{
 					timer.stop();
-					timer.setDelay(initInterval); // 기본 속도 1000으로 초기화
+					timer.setDelay(1000); // 기본 속도 1000으로 초기화
 					timer.start();
 				}
 				checkLines();
