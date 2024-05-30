@@ -17,9 +17,9 @@ public class KeyControl1 extends JPanel implements KeyListener {
             "DOWN KEY : now - ",
             "LEFT KEY : now - ",
             "RIGHT KEY : now - ",
-            "ENTER KEY : now - ",
-            "SPACE KEY : now - ",
-            "Q KEY : now - ",
+            "Enter/1p drop KEY : now - ",
+            "Pause KEY : now - ",
+            "Quit KEY : now - ",
             "2p Key Controls",
             "BACK"}; // 바꿀 수 있는 키들
 

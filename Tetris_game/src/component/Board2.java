@@ -207,7 +207,7 @@ public class Board2 extends JPanel {
 		else if(item == 1)
 		{
 			System.out.println(bricks);
-			if(create_item && itemlines>=0) // 일단은 10번째마다 무게추 블록이 나오도록. 나중에 변경 예정.
+			if(create_item && itemlines >= 10) // 일단은 10번째마다 무게추 블록이 나오도록. 나중에 변경 예정.
 			{
 				create_item = false;
 				itemlines-=10;
@@ -626,7 +626,6 @@ public class Board2 extends JPanel {
 			else {
 				placeBlock(); // 현재 위치에 블록을 고정시킵니다.
 				checkLines(); // 완성된 라인이 있는지 확인합니다.
-
 			}
 
 		}
@@ -715,7 +714,6 @@ public class Board2 extends JPanel {
 				}
 			}
 			checkLines(); // 완성된 라인이 있는지 확인합니다.
-
 		}
 
 

@@ -25,7 +25,7 @@ class KeyControl1Test {
     void setUp() {
         path = System.getProperty("user.dir");
         parser = new JSONParser();
-        try (FileReader reader = new FileReader(path + "/Tetris_game/src/Settings.json")) {
+        try (FileReader reader = new FileReader("Tetris_game/resources/Settings.json")) {
             // 파일로부터 JSON 객체를 읽어오기
             jsonObject = (JSONObject) parser.parse(reader);
         } catch (Exception e) {
