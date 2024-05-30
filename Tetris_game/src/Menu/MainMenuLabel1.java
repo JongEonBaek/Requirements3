@@ -22,7 +22,7 @@ public class MainMenuLabel1 extends JPanel implements KeyListener {
 
         menuItems = new ArrayList<>();
 
-        ImageIcon backgroundIcon = new ImageIcon("Tetris_game/resources/introBackground.jpg");
+        ImageIcon backgroundIcon = new ImageIcon(String.valueOf(Main.ImageFile.toFile()));
         mainLabel = new JLabel(new ImageIcon(backgroundIcon.getImage().getScaledInstance(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0], Image.SCALE_SMOOTH)));
         mainLabel.setSize(Main.SCREEN_WIDTH[0], Main.SCREEN_HEIGHT[0]);
 
